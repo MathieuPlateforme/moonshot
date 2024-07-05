@@ -71,7 +71,7 @@ To set up the project locally, follow these steps:
 4. **Run the Taskfile**:
    Taskfile will handle the Docker setup and running the containers. Run the following command:
    ```sh
-   task start
+   task up
    ```
 
 ## 🌍 Usage
@@ -122,7 +122,7 @@ Feel free to contribute to this project. Here's how you can do it:
 - **Elarif INZOUDINE** - [github](https://github.com/harrysCTB) [linkedin](https://www.linkedin.com/in/elarif-inzoudine)
 - **Félix HAUGER** - [github](https://github.com/felix-hauger) [linkedin](https://www.linkedin.com/in/félix-hauger)
 - **Hervé BEZIAT** - [github](https://github.com/herve-beziat) [linkedin](https://www.linkedin.com/in/hervé-beziat)
-- **Mathieu RUIZ** - [github](https://github.com/) [linkedin](https://www.linkedin.com/in/mathieu-ruiz-48719a251/)
+- **Mathieu RUIZ** - [github](https://github.com/MathieuPlateforme) [linkedin](https://www.linkedin.com/in/mathieu-ruiz-48719a251/)
 - **Yassine EL GHERRABI** - [github](https://github.com/yassineelg) [linkedin](https://www.linkedin.com/in/yassine-el-gherrabi)
 - **Yassine FELLOUS** - [github](https://github.com/yassine-fellous) [linkedin](https://www.linkedin.com/in/yassine-fellous)
 
