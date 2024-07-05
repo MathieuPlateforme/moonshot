@@ -1,0 +1,23 @@
+services:
+  krakend:
+    image: devopsfaith/krakend:2.6.3
+    container_name: krakend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./infra/krakend/krakend.json:/etc/krakend/krakend.json
+    networks:
+      - spotty-network
+
+  hello-world-api:
+    build: ./code/backend/hello_world_api
+    container_name: hello-world-api
+    ports:
+      - "8000:8000"
+    networks:
+      - spotty-network
+
+networks:
+  spotty-network:
+    name: spotty
+    driver: bridge
