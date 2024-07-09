@@ -38,5 +38,25 @@ class MediaController extends AbstractController
                 return new Response($e);
             }
         }
+
+        $videoFile = $request->files->get('video');
+        if ($videoFile) {
+            $originalFilename = pathinfo($videoFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $saveFilename = $originalFilename . '-' . uniqid() . '.' . $videoFile->guessExtension();
+            try {
+                $videoFile->move(
+                    $this->getParameter('kernel.project_dir') . '/assets/publication_medias',
+                    $saveFilename
+                );
+                $videoObj = new PublicationMedia();
+                $videoObj->setUrl($saveFilename);
+                $videoObj->setType('video');
+                $entityManager->persist($videoObj);
+                $entityManager->flush();
+                return new JsonResponse(['status' => 'ok']);
+            } catch (FileException $e) {
+                return new Response($e);
+            }
+        }
     }
 }

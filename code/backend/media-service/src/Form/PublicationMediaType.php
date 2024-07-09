@@ -20,10 +20,10 @@ class PublicationMediaType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            // ->add('video', FileType::class, [
-            //     'mapped' => false,
-            //     'required' => false,
-            // ])
+            ->add('video', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
