@@ -1,13 +1,24 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Home.css';
+import { useQuery } from '../../providers/QueryProvider';
+import { getCatsFact } from '../../libs/api';
+import ExploreContainer from '../../components/ExploreContainer';
+import './index.css';
 
-const Home: React.FC = () => {
+const Profile: React.FC = () => {
+
+  const { data: cat = {} } = useQuery(getCatsFact, {
+    key: 'cat',
+    variables: { country: 'fr' },
+  })
+
+  console.log(cat)
+
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Coucou</IonTitle>
+          <IonTitle>Mathieu</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -22,4 +33,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Profile;

@@ -14,4 +14,5 @@ Pour lancer l'émulateur
 - ionic cap copy
 - ionic cap sync
 - Lancer Android Studio
+- ionic cap open android (pour tout installer)
 - ionic cap run android -l --external
