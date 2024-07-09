@@ -1,6 +1,9 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { ROUTES_PATH, ACCESSES } from './config/constant';
+import { routes } from './config/routes';
+import { useAuth } from './providers/AuthProvider';
 import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
@@ -37,25 +40,25 @@ import Login from './pages/Login';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route exact path="/register">
-          <Register />
-          </Route>
-          <Route exact path="/login">
-          <Login />
-          </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  const { hasAccess } = useAuth();
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route path={ROUTES_PATH.HOME} component={Home} exact />
+          {routes.map(({ component: Component, path, accesses = [] }) => (
+            hasAccess(accesses) ? (
+              <Route key={path} path={path} component={Component} exact />
+            ) : (
+              <Redirect key={path} to={ROUTES_PATH.HOME} />
+            )
+          ))}
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
