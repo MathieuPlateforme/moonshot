@@ -8,8 +8,8 @@ const Login: React.FC = () => {
   const [password, setPassword] = React.useState("");
 
   const handleLogin = async () => {
-    // const request = await post("login", {email, password});
-    
+    const loginRequest = await post({url: "https://localhost:8000/tempLogin", data: {email, password}, options: {}});
+    console.log(loginRequest);
   };
   return (
     <IonPage>
