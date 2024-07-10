@@ -1,21 +1,14 @@
 import React from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonList } from "@ionic/react";
-import { dbPost } from "../api/network.js";
+// import { dbPost } from "../../api/network.js";
+import { post } from "../../../libs/utils"
 
 const Login: React.FC = () => {
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const handleLogin = async () => {
-    const loginForm = new FormData();
-    loginForm.append("_username", email);
-    loginForm.append("password", password);
-    const loginRequest = await dbPost("login", loginForm);
-    console.log(loginRequest);
+    // const request = await post("login", {email, password});
     
   };
   return (
@@ -23,8 +16,6 @@ const Login: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Login</IonTitle>
-          <IonButton routerLink="/register">Register</IonButton>
-          <IonButton routerLink="/login">Login</IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

@@ -1,6 +1,6 @@
 import React from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonList } from "@ionic/react";
-import { dbPost } from "../api/network.js";
+import { post } from "../../../libs/utils"
 
 const Register: React.FC = () => {
   const [firstName, setFirstName] = React.useState("");
@@ -11,23 +11,16 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const handleRegister = async () => {
-    const registerForm = new FormData();
-    registerForm.append("firstName", firstName);
-    registerForm.append("lastName", lastName);
-    registerForm.append("email", email);
-    registerForm.append("username", username);
-    registerForm.append("password", password);
-    const registerRequest = await dbPost("register", registerForm);
+    const registerRequest = await post({url: "https://localhost:8000/register", data: {firstName, lastName, email, username, password}, options: {}});
     console.log(registerRequest);
-    
   };
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Register</IonTitle>
-          <IonButton routerLink="/register">Register</IonButton>
-          <IonButton routerLink="/login">Login</IonButton>
+          {/* <IonButton routerLink="/register">Register</IonButton>
+          <IonButton routerLink="/login">Login</IonButton> */}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
