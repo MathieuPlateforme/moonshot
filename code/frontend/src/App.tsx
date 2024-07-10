@@ -47,11 +47,11 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route path={ROUTES_PATH.HOME} component={Home} exact />
           {routes.map(({ component: Component, path, accesses = [] }) => (
-            // hasAccess(accesses) ? (
+            hasAccess(accesses) ? (
               <Route key={path} path={path} component={Component} exact />
-            // ) : (
-            //   <Redirect key={path} to={ROUTES_PATH.HOME} />
-            // )
+            ) : (
+              <Redirect key={path} to={ROUTES_PATH.HOME} />
+            )
           ))}
         </IonRouterOutlet>
       </IonReactRouter>
