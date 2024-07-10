@@ -1,12 +1,11 @@
 import { get } from './utils';
 
-// const { REST_API } = process.env;
+const { VITE_REST_API } = import.meta.env;
 
 export const getCatsFact = {
   query: ({ country }: { country: string }) =>
     get({
-      // url: `${REST_API}/cat-fact`,
-      url: `https://catfact.ninja/fact`,
+      url: `${VITE_REST_API}/fact`,
       options: {
         params: {
           country,
