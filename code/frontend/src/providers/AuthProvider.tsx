@@ -13,8 +13,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [profile, setProfile, removeProfile] = useLocalStorage('profile');
 
-  const hasAccess = (accesses: string[] = []) =>
-    accesses.some((access) => profile === access);
+  const hasAccess = (accesses: string[] = []) => {
+    if (accesses.length === 0)
+      return true;
+    return accesses.some((access) => profile === access);
+  }
 
   return (
     <AuthContext.Provider
