@@ -2,14 +2,18 @@ import React from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonList } from "@ionic/react";
 // import { dbPost } from "../../api/network.js";
 import { post } from "../../../libs/utils"
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 const Login: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
+  const [token, setToken, removeToken] = useLocalStorage('token');
+  
   const handleLogin = async () => {
     const loginRequest = await post({url: "https://localhost:8000/tempLogin", data: {email, password}, options: {}});
-    console.log(loginRequest);
+    if(loginRequest.status === 200){
+      (setToken as (value: any) => void)(loginRequest.data);
+    }
   };
   return (
     <IonPage>
