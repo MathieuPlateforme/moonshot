@@ -5,6 +5,7 @@ import { ROUTES_PATH, ACCESSES } from './config/constant';
 import { routes } from './config/routes';
 import { useAuth } from './providers/AuthProvider';
 import Home from './pages/Home';
+import './theme/tailwind.css';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
