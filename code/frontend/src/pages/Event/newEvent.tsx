@@ -18,13 +18,16 @@ import {
 import { post, get } from "../../libs/utils";
 
 const NewEvent: React.FC = () => {
-  const [title, setTitle] = React.useState("");
-  const [content, setContent] = React.useState("");
-  const [type, setType] = React.useState("");
   const [typeOptions, setTypeOptions] = React.useState([]);
-  const [recurrent, setRecurrent] = React.useState("");
-  const [image, setImage] = React.useState("");
   const [eventId, setEventId] = React.useState("");
+  const [event, setEvent] = React.useState({
+    title: "",
+    description: "",
+    type: "",
+    recurrent: "",
+    media: "",
+  });
+  const [media, setMedia] = React.useState<Blob | null>(null);
   const [eventDate, setEventDate] = React.useState({
     event_id: "",
     start_date: "",
@@ -41,7 +44,24 @@ const NewEvent: React.FC = () => {
   }, [typeOptions]);
 
   const handleNewEvent = async () => {
-    const newEventRequest = await post({ url: "https://localhost:8001/event/new", data: { title, content, type, recurrent, image }, options: {} });
+    console.log(media);
+    // return;
+    
+    let tempFile = new Blob([media], { type: media.type });
+    const reader = new FileReader();
+      reader.readAsDataURL(tempFile);
+      reader.onloadend = () => {
+        event.media = reader.result;
+        // console.log(reader.result);
+        console.log(typeof(reader.result));
+        
+      };
+      // console.log(event.media);
+      return;
+      
+      // event.mediaName = `${(await getSession()).user.name} - ${form.start_date} - ${form.end_date}`
+    
+    const newEventRequest = await post({ url: "https://localhost:8001/event/new", data: { event }, options: {} });
     if (newEventRequest.status === 201) {
       setEventId(newEventRequest.data.id);
       setEventDate({ ...eventDate, event_id: newEventRequest.data.id});
@@ -70,26 +90,45 @@ const NewEvent: React.FC = () => {
         {eventId === "" && (
           <IonList>
             <IonItem>
-              <IonInput placeholder="Title" value={title} onIonChange={(e) => setTitle(e.detail.value!)}></IonInput>
+              <IonInput placeholder="Title" value={event.title} onIonChange={(e) => setEvent({ ...event, title: e.detail.value! })}></IonInput>
             </IonItem>
             <IonItem>
-              <IonInput placeholder="Description" value={content} onIonChange={(e) => setContent(e.detail.value!)}></IonInput>
+              <IonInput
+                placeholder="Description"
+                value={event.description}
+                onIonChange={(e) => setEvent({ ...event, description: e.detail.value! })}
+              ></IonInput>
             </IonItem>
             <IonItem>
-              <IonSelect label="Recurrence" labelPlacement="floating" value={recurrent} onIonChange={(e) => setRecurrent(e.detail.value)}>
-                <IonSelectOption value="0">Unique</IonSelectOption>
-                <IonSelectOption value="1">Recurrent</IonSelectOption>
+              <IonSelect
+                label="Recurrence"
+                labelPlacement="floating"
+                value={event.recurrent}
+                onIonChange={(e) => setEvent({ ...event, recurrent: e.detail.value! })}
+              >
+                <IonSelectOption key="1" value="0">
+                  Unique
+                </IonSelectOption>
+                <IonSelectOption key="2" value="1">
+                  Recurrent
+                </IonSelectOption>
               </IonSelect>
             </IonItem>
             <IonItem>
-              <IonSelect label="Event type" labelPlacement="floating" value={type} onIonChange={(e) => setType(e.detail.value)}>
+              <IonSelect label="Event type" labelPlacement="floating" value={event.type} onIonChange={(e) => setEvent({ ...event, type: e.detail.value! })}>
                 {typeOptions.map((typeOption: any) => (
-                  <IonSelectOption value={typeOption.id}>{typeOption.name}</IonSelectOption>
+                  <IonSelectOption key={typeOption.id} value={typeOption.id}>
+                    {typeOption.name}
+                  </IonSelectOption>
                 ))}
               </IonSelect>
             </IonItem>
             <IonItem>
-              <IonInput placeholder="image" value={image} onIonChange={(e) => setImage(e.detail.value!)}></IonInput>
+              <label htmlFor="file">Media</label>
+              <input type="file" id="file" name="file" onChange={(e) => 
+                // setEvent({ ...event, media: e.target.files![0] })} 
+                setMedia(e.target.files![0])}
+                />
             </IonItem>
             <IonButton
               onClick={() => {
