@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 interface AuthContextType {
@@ -10,13 +11,16 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-
-  const [profile, setProfile, removeProfile] = useLocalStorage('profile');
+  const [token, setToken, removeToken] = useLocalStorage('token');
 
   const hasAccess = (accesses: string[] = []) => {
     if (accesses.length === 0)
       return true;
-    return accesses.some((access) => profile === access);
+    let decodedToken = {} as { role: string };
+    if(token)
+      decodedToken = jwtDecode(token as string) as { role: string };
+    console.log(decodedToken);
+    return accesses.some((access) => decodedToken.role === access);
   }
 
   return (
