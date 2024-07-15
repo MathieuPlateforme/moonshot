@@ -27,7 +27,7 @@ const NewEvent: React.FC = () => {
     recurrent: "",
     media: "",
   });
-  const [media, setMedia] = React.useState<Blob | null>(null);
+  // const [media, setMedia] = React.useState<Blob | null>(new Blob());
   const [eventDate, setEventDate] = React.useState({
     event_id: "",
     start_date: "",
@@ -43,28 +43,19 @@ const NewEvent: React.FC = () => {
     }
   }, [typeOptions]);
 
-  const handleNewEvent = async () => {
-    console.log(media);
-    // return;
-    
-    let tempFile = new Blob([media], { type: media.type });
+  const handleMediaSelect = async (file: Blob) => {
     const reader = new FileReader();
-      reader.readAsDataURL(tempFile);
-      reader.onloadend = () => {
-        event.media = reader.result;
-        // console.log(reader.result);
-        console.log(typeof(reader.result));
-        
-      };
-      // console.log(event.media);
-      return;
-      
-      // event.mediaName = `${(await getSession()).user.name} - ${form.start_date} - ${form.end_date}`
-    
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setEvent({ ...event, media: reader.result as string });
+    };
+  };
+
+  const handleNewEvent = async () => {
     const newEventRequest = await post({ url: "https://localhost:8001/event/new", data: { event }, options: {} });
     if (newEventRequest.status === 201) {
-      setEventId(newEventRequest.data.id);
-      setEventDate({ ...eventDate, event_id: newEventRequest.data.id});
+      // setEventId(newEventRequest.data.id);
+      setEventDate({ ...eventDate, event_id: newEventRequest.data.id });
     }
   };
 
@@ -125,10 +116,16 @@ const NewEvent: React.FC = () => {
             </IonItem>
             <IonItem>
               <label htmlFor="file">Media</label>
-              <input type="file" id="file" name="file" onChange={(e) => 
-                // setEvent({ ...event, media: e.target.files![0] })} 
-                setMedia(e.target.files![0])}
-                />
+              <input
+                type="file"
+                id="file"
+                name="file"
+                onChange={(e) =>
+                  // setEvent({ ...event, media: e.target.files![0] })}
+                  // setMedia(e.target.files![0])
+                  handleMediaSelect(e.target.files![0])
+                }
+              />
             </IonItem>
             <IonButton
               onClick={() => {

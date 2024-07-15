@@ -10,11 +10,13 @@ use App\Entity\Event;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Token\TokenDecoder;
 use App\Entity\EventType;
+use App\Service\Requests\RequestService;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class EventController extends AbstractController
 {
     #[Route('/event/new', name: 'app_new_event')]
-    public function postEvent(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    public function postEvent(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client): JsonResponse
     {
         $token_decoder = new TokenDecoder('secret');
         $token = $request->headers->get('token');
@@ -32,22 +34,26 @@ class EventController extends AbstractController
                 ], 401);
             } else {
                 $request_params = json_decode($request->getContent(), true)['event'];
-                var_dump($request_params['media']);
-                die;
-                $new_event = new Event();
-                $event_type = $entityManager->getRepository(EventType::class)->find($request_params['type']);
-                $new_event->setType($event_type);
-                $new_event->setUserId($token['id']);
-                $new_event->setTitle($request_params['title']);
-                $new_event->setContent($request_params['description']);
-                $new_event->setCreatedAt(new \DateTime());
-                $new_event->setRecurrent($request_params['recurrent']);
-                $entityManager->persist($new_event);
-                $entityManager->flush();
+                // var_dump($request_params);
+                // $new_event = new Event();
+                // $event_type = $entityManager->getRepository(EventType::class)->find($request_params['type']);
+                // $new_event->setType($event_type);
+                // $new_event->setUserId($token['id']);
+                // $new_event->setTitle($request_params['title']);
+                // $new_event->setContent($request_params['description']);
+                // $new_event->setCreatedAt(new \DateTime());
+                // $new_event->setRecurrent($request_params['recurrent']);
+                // $entityManager->persist($new_event);
+                // $entityManager->flush();
+
+                $file_request = new RequestService($client);
+                $file_response = $file_request->sendMedia($request_params['media']);
+                // var_dump($file_response);
 
                 return $this->json([
                     'message' => 'Event created',
-                    'id' => $new_event->getId(),
+                    // 'id' => $new_event->getId(),
+                    'media' => $file_response
                 ], 201);
             }
         }
