@@ -18,6 +18,7 @@ class RequestService
             [
                 'json' => [
                     'media' => $file,
+                    'table' => 'publication',
                 ],
             ]
         );

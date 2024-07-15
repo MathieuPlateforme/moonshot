@@ -21,6 +21,7 @@ const NewEvent: React.FC = () => {
   const [typeOptions, setTypeOptions] = React.useState([]);
   const [eventId, setEventId] = React.useState("");
   const [event, setEvent] = React.useState({
+    table: "publication",
     title: "",
     description: "",
     type: "",
