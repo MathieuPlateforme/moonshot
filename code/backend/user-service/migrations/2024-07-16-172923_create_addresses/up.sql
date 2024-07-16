@@ -1,0 +1,12 @@
+CREATE TABLE addresses (
+address_id SERIAL PRIMARY KEY,
+user_id INTEGER NOT NULL,
+street VARCHAR NOT NULL,
+city VARCHAR NOT NULL,
+state VARCHAR NOT NULL,
+postal_code VARCHAR NOT NULL,
+country VARCHAR NOT NULL,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP NOT NULL,
+FOREIGN KEY (user_id) REFERENCES users (user_id)
+);
