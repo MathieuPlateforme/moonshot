@@ -16,3 +16,5 @@ Pour lancer l'émulateur
 - Lancer Android Studio
 - ionic cap open android (pour tout installer)
 - ionic cap run android -l --external
+
+https://medium.com/@meeky.ae/integrating-tailwindcss-and-ionic-react-application-c038b95af704
