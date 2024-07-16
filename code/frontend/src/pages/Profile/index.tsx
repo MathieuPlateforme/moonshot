@@ -1,8 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useQuery } from '../../providers/QueryProvider';
 import { getCatsFact } from '../../libs/api';
-import ExploreContainer from '../../components/ExploreContainer';
-import './index.css';
 
 const Profile: React.FC = () => {
 
@@ -10,9 +8,6 @@ const Profile: React.FC = () => {
     key: 'cat',
     variables: { country: 'fr' },
   })
-
-  console.log(cat)
-
 
   return (
     <IonPage>
@@ -27,7 +22,6 @@ const Profile: React.FC = () => {
             <IonTitle size="large">Salut</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer />
       </IonContent>
     </IonPage>
   );
