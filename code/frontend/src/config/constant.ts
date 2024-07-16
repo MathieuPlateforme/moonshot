@@ -3,6 +3,7 @@ export const ROUTES_PATH = {
   PROFILE: '/profile/:id',
   REGISTER: '/register',
   LOGIN: '/login',
+  EVENT: '/event',
   NEW_EVENT: '/event/new',
 };
 
