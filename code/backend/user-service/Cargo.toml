@@ -4,3 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+actix-web = "4.8.0" # Actix Web Framework
+diesel = { version = "2.2.1", features = ["postgres", "r2d2", "chrono"] } # ORM
+dotenv = "0.15.0" # Load environment variables from .env file
+postgres = "0.19.7" # Postgres driver for Rust
+serde = "1.0.204" # Serialize and Deserialize
+serde_json = "1.0.120" # JSON serialization
+serde_derive = "1.0.204" # Derive Serialize and Deserialize
