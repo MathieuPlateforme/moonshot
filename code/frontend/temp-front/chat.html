@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <style>
+        #chat {
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+        }
+        #messages li {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+        #form {
+            display: flex;
+            justify-content: space-between;
+        }
+        #form input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        #form button {
+            padding: 10px;
+            border: none;
+            background: #5cb85c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <ul id="messages"></ul>
+        <form id="form">
+            <input id="message" autocomplete="off" /><button>Send</button>
+        </form>
+    </div>
+
+    <!-- Inclure le script Socket.io depuis le CDN -->
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        const socket = io('http://localhost:5000'); // Assurez-vous d'utiliser l'URL correcte
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('message');
+        const messages = document.getElementById('messages');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                console.log('Sending message:', input.value);
+                socket.emit('message', {
+                    roomId: '1', // Par exemple, identifiant de la salle de chat
+                    userId: '1', // Identifiant de l'utilisateur
+                    content: input.value
+                });
+                input.value = '';
+            }
+        });
+
+        socket.on('message', function(msg) {
+            console.log('Received message:', msg);
+            const item = document.createElement('li');
+            item.textContent = msg.content;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
