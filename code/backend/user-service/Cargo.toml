@@ -11,3 +11,5 @@ postgres = "0.19.7" # Postgres driver for Rust
 serde = "1.0.204" # Serialize and Deserialize
 serde_json = "1.0.120" # JSON serialization
 serde_derive = "1.0.204" # Derive Serialize and Deserialize
+log = "0.4.22" # Logging
+env_logger = "0.11.3"
