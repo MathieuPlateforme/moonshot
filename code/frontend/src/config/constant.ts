@@ -15,6 +15,7 @@ export const ROUTES_PATH = {
   LOGIN: '/login',
   FEED: '/feed',
   EVENTS: '/events',
+  EVENT_DETAIL: '/event/:id',
   NEW_EVENT: '/event/new',
 };
 
@@ -75,9 +76,9 @@ export const USER_MENU = [
     title: 'Profile',
     link: ROUTES_PATH.PROFILE,
   },
-  // {
-  //   title: 'Logout',
-  //   icon: LogoutIcon,
-  //   action: 'logout',
-  // },
+  {
+    title: 'Logout',
+    icon: LogoutIcon,
+    action: 'logout',
+  },
 ]
