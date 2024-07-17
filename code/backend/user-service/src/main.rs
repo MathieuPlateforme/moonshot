@@ -1,6 +1,7 @@
 use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 use std::io::Result;
+use actix_web::middleware::Logger;
 
 mod config;
 mod routes;
@@ -14,6 +15,7 @@ async fn main() -> Result<()> {
 
     HttpServer::new(|| {
         App::new()
+            .wrap(Logger::default())
             .configure(routes::configure)
     })
     .bind(server_address)?
