@@ -16,8 +16,8 @@ pub struct Users {
     pub username: String,
     pub phone: Option<String>,
     pub role: String,
-    pub created_at: chrono::NaiveDateTime,
-    pub updated_at: chrono::NaiveDateTime,
+    pub created_at: Option<chrono::NaiveDateTime>,
+    pub updated_at: Option<chrono::NaiveDateTime>,
 }
 
 #[derive(Queryable, Serialize, Deserialize)]
@@ -29,6 +29,6 @@ pub struct Address {
     pub state: String,
     pub postal_code: String,
     pub country: String,
-    pub created_at: chrono::NaiveDateTime,
-    pub updated_at: chrono::NaiveDateTime,
+    pub created_at: Option<chrono::NaiveDateTime>,
+    pub updated_at: Option<chrono::NaiveDateTime>,
 }

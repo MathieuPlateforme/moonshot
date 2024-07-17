@@ -9,8 +9,8 @@ diesel::table! {
         state -> Varchar,
         postal_code -> Varchar,
         country -> Varchar,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
+        created_at -> Nullable<Timestamptz>,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -24,8 +24,8 @@ diesel::table! {
         username -> Varchar,
         phone -> Nullable<Varchar>,
         role -> Varchar,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
+        created_at -> Nullable<Timestamptz>,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 
