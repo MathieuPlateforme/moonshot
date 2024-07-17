@@ -15,7 +15,7 @@ import {
   IonDatetimeButton,
   IonModal,
 } from "@ionic/react";
-import { post, get } from "../../libs/utils";
+import { getEventTypes, postEvent, postEventDate } from "../../libs/api/event";
 
 const NewEvent: React.FC = () => {
   const [typeOptions, setTypeOptions] = React.useState([]);
@@ -27,7 +27,7 @@ const NewEvent: React.FC = () => {
     recurrent: "",
     media: "",
   });
-  const [media, setMedia] = React.useState<Blob | null>(null);
+  // const [media, setMedia] = React.useState<Blob | null>(new Blob());
   const [eventDate, setEventDate] = React.useState({
     event_id: "",
     start_date: "",
@@ -37,39 +37,30 @@ const NewEvent: React.FC = () => {
 
   useEffect(() => {
     if (typeOptions.length === 0) {
-      get({ url: "https://localhost:8001/event/types", options: {} }).then((response) => {
-        setTypeOptions(response.data);
-      });
+      const eventTypesRequest = getEventTypes();
+      eventTypesRequest.then((response) => {
+        setTypeOptions(response.data)});
     }
   }, [typeOptions]);
 
-  const handleNewEvent = async () => {
-    console.log(media);
-    // return;
-    
-    let tempFile = new Blob([media], { type: media.type });
+  const handleMediaSelect = async (file: Blob) => {
     const reader = new FileReader();
-      reader.readAsDataURL(tempFile);
-      reader.onloadend = () => {
-        event.media = reader.result;
-        // console.log(reader.result);
-        console.log(typeof(reader.result));
-        
-      };
-      // console.log(event.media);
-      return;
-      
-      // event.mediaName = `${(await getSession()).user.name} - ${form.start_date} - ${form.end_date}`
-    
-    const newEventRequest = await post({ url: "https://localhost:8001/event/new", data: { event }, options: {} });
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setEvent({ ...event, media: reader.result as string });
+    };
+  };
+
+  const handleNewEvent = async () => {
+    const newEventRequest = await postEvent(event);
     if (newEventRequest.status === 201) {
       setEventId(newEventRequest.data.id);
-      setEventDate({ ...eventDate, event_id: newEventRequest.data.id});
+      setEventDate({ ...eventDate, event_id: newEventRequest.data.id });
     }
   };
 
   const handleNewEventDate = async () => {
-    const newEventDateRequest = await post({ url: "https://localhost:8001/eventDate/new", data: { eventDate }, options: {} });
+    const newEventDateRequest = await postEventDate(eventDate);
     if (newEventDateRequest.status === 201) {
       setEventDate({
         event_id: eventId,
@@ -125,10 +116,16 @@ const NewEvent: React.FC = () => {
             </IonItem>
             <IonItem>
               <label htmlFor="file">Media</label>
-              <input type="file" id="file" name="file" onChange={(e) => 
-                // setEvent({ ...event, media: e.target.files![0] })} 
-                setMedia(e.target.files![0])}
-                />
+              <input
+                type="file"
+                id="file"
+                name="file"
+                onChange={(e) =>
+                  // setEvent({ ...event, media: e.target.files![0] })}
+                  // setMedia(e.target.files![0])
+                  handleMediaSelect(e.target.files![0])
+                }
+              />
             </IonItem>
             <IonButton
               onClick={() => {

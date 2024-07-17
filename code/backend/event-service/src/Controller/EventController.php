@@ -10,11 +10,15 @@ use App\Entity\Event;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Token\TokenDecoder;
 use App\Entity\EventType;
+use App\Service\Requests\RequestService;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
+//https://symfony.com/doc/current/service_container/request.html
 class EventController extends AbstractController
 {
     #[Route('/event/new', name: 'app_new_event')]
-    public function postEvent(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    public function postEvent(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client): JsonResponse
     {
         $token_decoder = new TokenDecoder('secret');
         $token = $request->headers->get('token');
@@ -32,8 +36,6 @@ class EventController extends AbstractController
                 ], 401);
             } else {
                 $request_params = json_decode($request->getContent(), true)['event'];
-                var_dump($request_params['media']);
-                die;
                 $new_event = new Event();
                 $event_type = $entityManager->getRepository(EventType::class)->find($request_params['type']);
                 $new_event->setType($event_type);
@@ -45,21 +47,64 @@ class EventController extends AbstractController
                 $entityManager->persist($new_event);
                 $entityManager->flush();
 
-                return $this->json([
-                    'message' => 'Event created',
-                    'id' => $new_event->getId(),
-                ], 201);
+                $file_request = new RequestService($client);
+                $file_response = $file_request->postMedia($request_params['media'], $new_event->getId());
+                if ($file_response['status'] !== 'ok') {
+                    return $this->json([
+                        'message' => 'Error uploading media',
+                        'path' => 'src/Controller/EventController.php',
+                    ], 500);
+                } else {
+                    return $this->json([
+                        'message' => 'Event created',
+                        'id' => $new_event->getId(),
+                    ], 201);
+                }
             }
         }
     }
 
     #[Route('/events', name: 'app_all_events')]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    public function index(EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
     {
-        $events = $entityManager->getRepository(Event::class)->findAll();
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/EventController.php',
-        ]);
+        $events = $entityManager->getRepository(event::class)->findAll();
+
+        $eventData = [];
+        foreach ($events as $event) {
+            $file_request = new RequestService($client);
+            $file_response = $file_request->getMedia(['table' => 'event', 'id' => $event->getId()]);
+            // if (!$file_response) {
+            //     return $this->json([
+            //         'message' => 'Error getting media',
+            //         'path' => 'src/Controller/EventController.php',
+            //     ], 500);
+            // } else {
+            //     $event->setMedia($file_response);
+            // }
+            $event_dates = $event->getEventDates();
+            $subEvents = [];
+            foreach ($event_dates as $event_date) {
+                $subEvents[] = [
+                    'id' => $event_date->getId(),
+                    'start_date' => $event_date->getStartDate()->format('Y-m-d H:i'),
+                    'end_date' => $event_date->getEndDate()->format('Y-m-d H:i'),
+                    'address' => $event_date->getAddress(),
+                    'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
+                ];
+            }
+            $eventData[] = [
+                'id' => $event->getId(),
+                'type' => $event->getType()->getName(),
+                'user_id' => $event->getUserId(),
+                'title' => $event->getTitle(),
+                'description' => $event->getContent(),
+                'createdAt' => $event->getCreatedAt()->format('Y-m-d H:i'),
+                'recurrent' => $event->isRecurrent(),
+                'subEvents' => $subEvents,
+                'media' => $file_response
+            ];
+        }
+
+        return $this->json($eventData, 200);
     }
 }

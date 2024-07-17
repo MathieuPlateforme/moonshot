@@ -29,6 +29,8 @@ class Event
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    private array $media = [];
+
     /**
      * @var Collection<int, EventDate>
      */
@@ -150,6 +152,18 @@ class Event
     public function setRecurrent(bool $recurrent): static
     {
         $this->recurrent = $recurrent;
+
+        return $this;
+    }
+
+    public function getMedia(): array
+    {
+        return $this->media;
+    }
+
+    public function setMedia(array $media): static
+    {
+        $this->media = $media;
 
         return $this;
     }

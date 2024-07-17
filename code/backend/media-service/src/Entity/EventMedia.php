@@ -19,6 +19,9 @@ class EventMedia
     #[ORM\Column(length: 25)]
     private ?string $type = null;
 
+    #[ORM\Column]
+    private ?int $event_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class EventMedia
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getEventId(): ?int
+    {
+        return $this->event_id;
+    }
+
+    public function setEventId(int $event_id): static
+    {
+        $this->event_id = $event_id;
 
         return $this;
     }
