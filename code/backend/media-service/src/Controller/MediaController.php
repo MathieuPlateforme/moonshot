@@ -14,6 +14,8 @@ use App\Form\PublicationMediaType;
 use App\Entity\EventMedia;
 use App\Entity\UserMedia;
 use App\Entity\ChatMedia;
+use App\Entity\Event;
+use PHPUnit\Util\Json;
 
 class MediaController extends AbstractController
 {
@@ -28,32 +30,36 @@ class MediaController extends AbstractController
         $file = str_replace(' ', '+', $file);
         $data = base64_decode($file);
         $filename = uniqid() . '.png';
-        $path = $this->getParameter('kernel.project_dir') . '/assets/' . $media_table . '_medias/' . $filename;
+        $path = '../assets/' . $media_table . '_medias/' . $filename;
+        // $path = $this->getParameter('kernel.project_dir/assets/' . $media_table . '_medias/' . $filename);
         file_put_contents($path, $data);
 
         switch ($media_table) {
             case 'publication':
                 $media = new PublicationMedia();
+                $media->setPublicationId($request_params['id']);
                 break;
             case 'event':
                 $media = new EventMedia();
+                $media->setEventId($request_params['id']);
                 break;
             case 'user':
                 $media = new UserMedia();
+                $media->setUserId($request_params['id']);
                 break;
             case 'chat':
                 $media = new ChatMedia();
+                break;
         }
 
+        $media->setUrl($filename);
+        $media->setType('image');
         try {
-            $media->setUrl($filename);
-            $media->setType('image');
             $entityManager->persist($media);
             $entityManager->flush();
             return new JsonResponse([
                 'status' => 'ok',
-                // 'params' => $request
-                'params' => $media
+                'id' => $media->getId(),
             ], 201);
         } catch (FileException $e) {
             return new Response($e);
@@ -78,5 +84,38 @@ class MediaController extends AbstractController
         //             return new Response($e);
         //         }
         //     }
+    }
+
+    #[Route('/media', methods: ['GET'])]
+    public function getMedia(Request $request, EntityManagerInterface $entityManager)
+    {
+        $params = $request->query->all();
+        // return $this->json($params);
+        $media_table = $params['table'];
+        $media_id = $params['id'];
+        // return $this->json([
+        //     'table' => $media_table,
+        //     'id' => $media_id,
+        // ]);
+
+        switch ($media_table) {
+            case 'publication':
+                $media = $entityManager->getRepository(PublicationMedia::class)->findOneBy(['publication_id' => $media_id]);
+                break;
+            case 'event':
+                $media = $entityManager->getRepository(EventMedia::class)->findOneBy(['event_id' => $media_id]);
+                break;
+            case 'user':
+                $media = $entityManager->getRepository(UserMedia::class)->findOneBy(['user_id' => $media_id]);
+                break;
+            case 'chat':
+                $media = $entityManager->getRepository(ChatMedia::class)->find($media_id);
+                break;
+        }
+
+        return new JsonResponse([
+            'id' => $media->getId(),
+            'url' => $media->getUrl(),
+        ], 200);
     }
 }

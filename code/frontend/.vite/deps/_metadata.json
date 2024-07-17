@@ -1,8 +1,160 @@
 {
-  "hash": "38d273e5",
+  "hash": "55d62589",
   "configHash": "69a031c3",
-  "lockfileHash": "e3b0c442",
-  "browserHash": "afcde613",
-  "optimized": {},
-  "chunks": {}
+  "lockfileHash": "d514328e",
+  "browserHash": "e0e2eeee",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "49d3b5c3",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "1d35ba5a",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "9d27293c",
+      "needsInterop": true
+    },
+    "react-query": {
+      "src": "../../node_modules/react-query/es/index.js",
+      "file": "react-query.js",
+      "fileHash": "59fb3de9",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/esm/react-router-dom.js",
+      "file": "react-router-dom.js",
+      "fileHash": "01034f24",
+      "needsInterop": false
+    },
+    "@ionic/react": {
+      "src": "../../node_modules/@ionic/react/dist/index.js",
+      "file": "@ionic_react.js",
+      "fileHash": "43b9ef88",
+      "needsInterop": false
+    },
+    "@ionic/react-router": {
+      "src": "../../node_modules/@ionic/react-router/dist/index.js",
+      "file": "@ionic_react-router.js",
+      "fileHash": "edcd61dc",
+      "needsInterop": false
+    },
+    "jwt-decode": {
+      "src": "../../../../node_modules/jwt-decode/build/esm/index.js",
+      "file": "jwt-decode.js",
+      "fileHash": "d0ba23f7",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "b9f7d9bf",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "keyboard2-H6D7CB3N": {
+      "file": "keyboard2-H6D7CB3N.js"
+    },
+    "index9-3AFMMYZ2": {
+      "file": "index9-3AFMMYZ2.js"
+    },
+    "status-tap-QS35XDCJ": {
+      "file": "status-tap-QS35XDCJ.js"
+    },
+    "input-shims-MYHL7DJ7": {
+      "file": "input-shims-MYHL7DJ7.js"
+    },
+    "shadow-css-FIJT7NWK": {
+      "file": "shadow-css-FIJT7NWK.js"
+    },
+    "ios.transition-6API6V4P": {
+      "file": "ios__transition-6API6V4P.js"
+    },
+    "md.transition-LLJBTZK4": {
+      "file": "md__transition-LLJBTZK4.js"
+    },
+    "index3-RSKRTQUG": {
+      "file": "index3-RSKRTQUG.js"
+    },
+    "hardware-back-button-M4LCHEDM": {
+      "file": "hardware-back-button-M4LCHEDM.js"
+    },
+    "focus-visible-DZGLERJY": {
+      "file": "focus-visible-DZGLERJY.js"
+    },
+    "swipe-back-XSJF637W": {
+      "file": "swipe-back-XSJF637W.js"
+    },
+    "chunk-6MURPPUH": {
+      "file": "chunk-6MURPPUH.js"
+    },
+    "chunk-3DW4N5Y6": {
+      "file": "chunk-3DW4N5Y6.js"
+    },
+    "chunk-VRLQKYAG": {
+      "file": "chunk-VRLQKYAG.js"
+    },
+    "chunk-7YD6DIQX": {
+      "file": "chunk-7YD6DIQX.js"
+    },
+    "chunk-LYDS5F64": {
+      "file": "chunk-LYDS5F64.js"
+    },
+    "chunk-OAHRFN6U": {
+      "file": "chunk-OAHRFN6U.js"
+    },
+    "chunk-LB5K5FE3": {
+      "file": "chunk-LB5K5FE3.js"
+    },
+    "chunk-OVKBABIO": {
+      "file": "chunk-OVKBABIO.js"
+    },
+    "chunk-3XQATP75": {
+      "file": "chunk-3XQATP75.js"
+    },
+    "chunk-UBMGMN77": {
+      "file": "chunk-UBMGMN77.js"
+    },
+    "chunk-MXQQFKEU": {
+      "file": "chunk-MXQQFKEU.js"
+    },
+    "chunk-AA54Y3GF": {
+      "file": "chunk-AA54Y3GF.js"
+    },
+    "chunk-H5GCNIO6": {
+      "file": "chunk-H5GCNIO6.js"
+    },
+    "chunk-PNM76LIE": {
+      "file": "chunk-PNM76LIE.js"
+    },
+    "chunk-F7JUQZHQ": {
+      "file": "chunk-F7JUQZHQ.js"
+    },
+    "chunk-2A5WUACF": {
+      "file": "chunk-2A5WUACF.js"
+    },
+    "chunk-43EAWSPA": {
+      "file": "chunk-43EAWSPA.js"
+    },
+    "chunk-7X7UJEGS": {
+      "file": "chunk-7X7UJEGS.js"
+    },
+    "chunk-NIU4ADUP": {
+      "file": "chunk-NIU4ADUP.js"
+    },
+    "chunk-AETY2TTL": {
+      "file": "chunk-AETY2TTL.js"
+    },
+    "chunk-F3OQE4AZ": {
+      "file": "chunk-F3OQE4AZ.js"
+    }
+  }
 }
