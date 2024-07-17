@@ -2,14 +2,13 @@ import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from 
 import FeedCard from '../../components/FeedCard';
 import EventCard from '../../components/EventCard';
 import ProfileCard from '../../components/ProfilCard';
+import Header from '../../components/Header';
 
 const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Spotty</IonTitle>
-        </IonToolbar>
+        <Header />
       </IonHeader>
       <IonContent fullscreen className="relative">
         <div className="sm">

@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   const [token, setToken, removeToken] = useLocalStorage('token');
   
   const handleLogin = async () => {
-    const loginRequest = await post({url: "https://localhost:8000/tempLogin", data: {email, password}, options: {}});
+    const loginRequest = await post({url: "http://localhost:8000/tempLogin", data: {email, password}, options: {}});
     if(loginRequest.status === 200){
       (setToken as (value: any) => void)(loginRequest.data);
     }
