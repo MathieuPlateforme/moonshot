@@ -9,11 +9,11 @@ services:
     networks:
       - spotty-network
 
-  hello-world-api:
-    build: ./code/backend/hello_world_api
-    container_name: hello-world-api
+  auth-service:
+    build: ./code/backend/auth-service
+    container_name: auth-service
     ports:
-      - "8000:8000"
+      - "8081:8081"
     networks:
       - spotty-network
 

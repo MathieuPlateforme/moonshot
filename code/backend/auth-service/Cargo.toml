@@ -20,3 +20,7 @@ proc-macro2 = "1.0.86"
 bcrypt = "0.15.1"
 mongodb = "3.0.1"
 log = "0.4.22"
+
+[[bin]]
+name = "auth-service"
+path = "src/main.rs"
