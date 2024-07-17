@@ -4,10 +4,14 @@ import useLocalStorage from '../hooks/useLocalStorage';
 
 interface AuthContextType {
   hasAccess: (accesses: string[]) => boolean;
+  getRole: () => string;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   hasAccess: () => false,
+  getRole: () => '',
+  logout: () => null,
 });
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -19,14 +23,26 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let decodedToken = {} as { role: string };
     if(token)
       decodedToken = jwtDecode(token as string) as { role: string };
-    console.log(decodedToken);
     return accesses.some((access) => decodedToken.role === access);
+  }
+
+  const getRole = () => {
+    let decodedToken = {} as { role: string };
+    if(token)
+      decodedToken = jwtDecode(token as string) as { role: string };
+    return decodedToken.role;
+  }
+
+  const logout = () => {
+    removeToken();
   }
 
   return (
     <AuthContext.Provider
       value={{
         hasAccess,
+        getRole,
+        logout,
       }}
     >
       {children}
@@ -37,9 +53,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 export const useAuth = () => {
   const {
     hasAccess,
+    getRole,
+    logout,
   } = useContext(AuthContext);
   return {
     hasAccess,
+    getRole,
+    logout,
   };
 };
 

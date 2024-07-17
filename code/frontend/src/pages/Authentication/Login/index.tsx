@@ -3,14 +3,23 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInp
 // import { dbPost } from "../../api/network.js";
 import { post } from "../../../libs/utils"
 import useLocalStorage from "../../../hooks/useLocalStorage";
+import { useAuth } from "../../../providers/AuthProvider";
+import { useHistory } from "react-router";
+import { ROUTES_PATH } from "../../../config/constant";
 
 const Login: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [token, setToken, removeToken] = useLocalStorage('token');
+  const { getRole } = useAuth();
+  const { push } = useHistory();
+  
+  if (getRole() === 'USER') {
+    push(ROUTES_PATH.HOME);
+  }
   
   const handleLogin = async () => {
-    const loginRequest = await post({url: "https://localhost:8000/tempLogin", data: {email, password}, options: {}});
+    const loginRequest = await post({url: "http://localhost:8000/tempLogin", data: {email, password}, options: {}});
     if(loginRequest.status === 200){
       (setToken as (value: any) => void)(loginRequest.data);
     }
