@@ -15,13 +15,12 @@ import {
   IonDatetimeButton,
   IonModal,
 } from "@ionic/react";
-import { post, get } from "../../libs/utils";
+import { getEventTypes, postEvent, postEventDate } from "../../libs/api/event";
 
 const NewEvent: React.FC = () => {
   const [typeOptions, setTypeOptions] = React.useState([]);
   const [eventId, setEventId] = React.useState("");
   const [event, setEvent] = React.useState({
-    table: "publication",
     title: "",
     description: "",
     type: "",
@@ -38,9 +37,9 @@ const NewEvent: React.FC = () => {
 
   useEffect(() => {
     if (typeOptions.length === 0) {
-      get({ url: "https://localhost:8001/event/types", options: {} }).then((response) => {
-        setTypeOptions(response.data);
-      });
+      const eventTypesRequest = getEventTypes();
+      eventTypesRequest.then((response) => {
+        setTypeOptions(response.data)});
     }
   }, [typeOptions]);
 
@@ -53,15 +52,15 @@ const NewEvent: React.FC = () => {
   };
 
   const handleNewEvent = async () => {
-    const newEventRequest = await post({ url: "https://localhost:8001/event/new", data: { event }, options: {} });
+    const newEventRequest = await postEvent(event);
     if (newEventRequest.status === 201) {
-      // setEventId(newEventRequest.data.id);
+      setEventId(newEventRequest.data.id);
       setEventDate({ ...eventDate, event_id: newEventRequest.data.id });
     }
   };
 
   const handleNewEventDate = async () => {
-    const newEventDateRequest = await post({ url: "https://localhost:8001/eventDate/new", data: { eventDate }, options: {} });
+    const newEventDateRequest = await postEventDate(eventDate);
     if (newEventDateRequest.status === 201) {
       setEventDate({
         event_id: eventId,

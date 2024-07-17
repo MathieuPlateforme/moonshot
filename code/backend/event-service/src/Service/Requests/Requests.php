@@ -9,8 +9,7 @@ class RequestService
     ) {
     }
 
-    public function sendMedia($file)
-    // : array
+    public function postMedia(string $file, int $id): array
     {
         $response = $this->client->request(
             'POST',
@@ -18,8 +17,30 @@ class RequestService
             [
                 'json' => [
                     'media' => $file,
-                    'table' => 'publication',
+                    'table' => 'event',
+                    'id' => $id,
                 ],
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+        // $statusCode = 200
+        $contentType = $response->getHeaders()['content-type'][0];
+        // $contentType = 'application/json'
+        $content = $response->getContent();
+        // $content = '{"id":521583, "name":"symfony-docs", ...}'
+        $content = $response->toArray();
+        // $content = ['id' => 521583, 'name' => 'symfony-docs', ...]
+
+        return $content;
+    }
+
+    public function getMedia(array $params) {
+        $response = $this->client->request(
+            'GET',
+            'https://localhost:8002/media',
+            [
+            'query' => $params,
             ]
         );
 
