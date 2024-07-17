@@ -8,7 +8,7 @@ CREATE TABLE addresses (
     state VARCHAR NOT NULL,
     postal_code VARCHAR NOT NULL,
     country VARCHAR NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW (),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW (),
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );

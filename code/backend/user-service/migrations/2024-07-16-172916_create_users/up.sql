@@ -8,7 +8,7 @@ CREATE TABLE users (
     birthdate DATE NOT NULL,
     username VARCHAR NOT NULL UNIQUE,
     phone VARCHAR,
-    role VARCHAR NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    role VARCHAR NOT NULL DEFAULT 'user',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW (),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW ()
 );
