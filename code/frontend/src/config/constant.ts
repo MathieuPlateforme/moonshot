@@ -1,6 +1,10 @@
 import { HomeIcon } from "../icons/HomeIcon";
 import { FeedIcon } from "../icons/FeedIcon";
 import { EventIcon } from "../icons/EventIcon";
+import { ChatIcon } from "../icons/ChatIcon";
+import { LoopIcon } from "../icons/LoopIcon";
+import { NotifIcon } from "../icons/NotifIcon";
+import { CalendarIcon } from "../icons/CalendarIcon";
 import { LoginIcon } from "../icons/LoginIcon";
 import { LogoutIcon } from "../icons/LogoutIcon";
 
@@ -47,13 +51,33 @@ export const USER_MENU = [
     icon: EventIcon,
     link: ROUTES_PATH.EVENTS,
   },
+  // {
+  //   title: 'Calendar',
+  //   icon: CalendarIcon,
+  //   // link: ROUTES_PATH.EVENTS,
+  // },
+  {
+    title: 'Search',
+    icon: LoopIcon,
+    // link: ROUTES_PATH.EVENTS,
+  },
+  {
+    title: 'Notifications',
+    icon: NotifIcon,
+    // link: ROUTES_PATH.EVENTS,
+  },
+  {
+    title: 'Chat',
+    icon: ChatIcon,
+    // link: ROUTES_PATH.EVENTS,
+  },
   {
     title: 'Profile',
     link: ROUTES_PATH.PROFILE,
   },
-  {
-    title: 'Logout',
-    icon: LogoutIcon,
-    action: 'logout',
-  },
+  // {
+  //   title: 'Logout',
+  //   icon: LogoutIcon,
+  //   action: 'logout',
+  // },
 ]
