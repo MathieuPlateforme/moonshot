@@ -45,6 +45,6 @@ export const USER_MENU = [
   {
     title: 'Déconnexion',
     icon: LogoutIcon,
-    link: ROUTES_PATH.LOGIN,
+    action: 'logout',
   },
 ]

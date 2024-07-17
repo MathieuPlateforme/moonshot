@@ -8,8 +8,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = () => {
 
-  const { getRole } = useAuth();
-  const [menu, setMenu] = useState<{ title: string; icon?: React.FC, link: string; }[]>([]);
+  const { getRole, logout } = useAuth();
+  const [menu, setMenu] = useState<{ title: string; icon?: React.FC, link?: string, action?: string; }[]>([]);
 
   useEffect(() => {
     if(getRole() === 'USER'){
@@ -19,13 +19,28 @@ const Header: React.FC<HeaderProps> = () => {
     }
   }, [getRole]);
 
+  const handleAction = (action: string) => {
+    switch(action){
+      case 'logout':
+        logout();
+        window.location.reload();
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <header className="bg-gray-800">
       <nav className="container mx-auto px-4 py-2">
         <ul className="flex items-center">
           {menu.map((item: any, index: number) => (
             <li key={index} className="mr-4">
-              <a href={item.link} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />} {item.title}</a>
+              {item?.link ? (
+                <a href={item.link} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />} {item.title}</a>
+              ) : (
+                <button onClick={() => handleAction(item.action)} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />} {item.title}</button>
+              )}
             </li>
           ))}
         </ul>
