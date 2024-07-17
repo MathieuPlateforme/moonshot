@@ -2,14 +2,10 @@ import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from 
 import FeedCard from '../../components/FeedCard';
 import EventCard from '../../components/EventCard';
 import ProfileCard from '../../components/ProfilCard';
-import Header from '../../components/Header';
 
 const Home: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <Header />
-      </IonHeader>
       <IonContent fullscreen className="relative">
         <div className="sm">
           <FeedCard
@@ -20,14 +16,14 @@ const Home: React.FC = () => {
           />
         </div>
         <IonButton color="primary">Primary</IonButton>
-          <EventCard
+          {/* <EventCard
             imageUrl="https://via.placeholder.com/800x400"
             title="Event Title"
             date="2021-08-12 12:00"
             location="Event Location"
             buttonText="Register"
             onButtonClick={() => alert('Button clicked')}
-          />
+          /> */}
           <ProfileCard
             avatarUrl="https://via.placeholder.com/50"
             name="John Doe"

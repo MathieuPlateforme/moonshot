@@ -1,4 +1,6 @@
 import { HomeIcon } from "../icons/HomeIcon";
+import { FeedIcon } from "../icons/FeedIcon";
+import { EventIcon } from "../icons/EventIcon";
 import { LoginIcon } from "../icons/LoginIcon";
 import { LogoutIcon } from "../icons/LogoutIcon";
 
@@ -7,7 +9,8 @@ export const ROUTES_PATH = {
   PROFILE: '/profile/:id',
   REGISTER: '/register',
   LOGIN: '/login',
-  EVENT: '/event',
+  FEED: '/feed',
+  EVENTS: '/events',
   NEW_EVENT: '/event/new',
 };
 
@@ -18,33 +21,38 @@ export const ACCESSES = {
 
 export const GUEST_MENU = [
   {
-    title: 'Accueil',
+    title: 'Home',
     icon: HomeIcon,
     link: ROUTES_PATH.HOME,
   },
   {
-    title: 'Connexion',
+    title: 'Login',
     icon: LoginIcon,
     link: ROUTES_PATH.LOGIN,
   },
   {
-    title: 'Inscription',
+    title: 'Register',
     link: ROUTES_PATH.REGISTER,
   },
 ]
 
 export const USER_MENU = [
   {
-    title: 'Accueil',
-    icon: HomeIcon,
+    title: 'Feed',
+    icon: FeedIcon,
     link: ROUTES_PATH.HOME,
   },
   {
-    title: 'Profil',
+    title: 'Events',
+    icon: EventIcon,
+    link: ROUTES_PATH.EVENTS,
+  },
+  {
+    title: 'Profile',
     link: ROUTES_PATH.PROFILE,
   },
   {
-    title: 'Déconnexion',
+    title: 'Logout',
     icon: LogoutIcon,
     action: 'logout',
   },

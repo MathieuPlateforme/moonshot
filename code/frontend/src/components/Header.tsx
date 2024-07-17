@@ -31,15 +31,15 @@ const Header: React.FC<HeaderProps> = () => {
   }
 
   return (
-    <header className="bg-gray-800">
+    <header className="bg-[#77DB48] fixed bottom-0 w-full z-10">
       <nav className="container mx-auto px-4 py-2">
         <ul className="flex items-center">
           {menu.map((item: any, index: number) => (
             <li key={index} className="mr-4">
               {item?.link ? (
-                <a href={item.link} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />} {item.title}</a>
+                <a href={item.link} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />}</a>
               ) : (
-                <button onClick={() => handleAction(item.action)} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />} {item.title}</button>
+                <a onClick={() => handleAction(item.action)} className="text-white hover:text-gray-300">{item.icon && <item.icon className="w-6 h-6" />}</a>
               )}
             </li>
           ))}
