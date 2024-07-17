@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonList } from "@ionic/react";
 // import { dbPost } from "../../api/network.js";
-import { post } from "../../../libs/utils"
-import useLocalStorage from "../../../hooks/useLocalStorage";
 import { useAuth } from "../../../providers/AuthProvider";
 import { useHistory } from "react-router";
 import { ROUTES_PATH } from "../../../config/constant";
@@ -10,21 +8,15 @@ import { ROUTES_PATH } from "../../../config/constant";
 const Login: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [token, setToken, removeToken] = useLocalStorage('token');
-  const { getRole } = useAuth();
+  const { getRole, login, token } = useAuth();
   const { push } = useHistory();
-  
-  if (getRole() === 'USER') {
-    push(ROUTES_PATH.HOME);
-  }
-  
-  const handleLogin = async () => {
-    const loginRequest = await post({url: "https://localhost:8000/tempLogin", data: {email, password}, options: {}});
-    if(loginRequest.status === 200){
-      (setToken as (value: any) => void)(loginRequest.data);
-      push(ROUTES_PATH.FEED);
+
+  useEffect(() => {
+    if(getRole()){
+      push(ROUTES_PATH.HOME);
     }
-  };
+  }, [token]);
+  
   return (
     <IonPage>
       <IonHeader>
@@ -40,7 +32,7 @@ const Login: React.FC = () => {
           <IonItem>
             <IonInput placeholder="Password" value={password} onIonChange={(e) => setPassword(e.detail.value!)}></IonInput>
           </IonItem>
-          <IonButton onClick={() => {handleLogin()}}> Login</IonButton>
+          <IonButton onClick={() => {login(email, password)}}> Login</IonButton>
         </IonList>
       </IonContent>
     </IonPage>
