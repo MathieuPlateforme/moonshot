@@ -189,3 +189,23 @@ pub async fn get_all_users() -> impl Responder {
         Err(_) => HttpResponse::NotFound().json(json!({"message": "Users not found"})),
     }
 }
+
+pub async fn create_address() -> impl Responder {
+    HttpResponse::Ok().finish()
+}
+
+pub async fn get_address() -> impl Responder {
+    HttpResponse::Ok().finish()
+}
+
+pub async fn update_address() -> impl Responder {
+    HttpResponse::Ok().finish()
+}
+
+pub async fn delete_address() -> impl Responder {
+    HttpResponse::Ok().finish()
+}
+
+pub async fn get_all_addresses() -> impl Responder {
+    HttpResponse::Ok().finish()
+}
