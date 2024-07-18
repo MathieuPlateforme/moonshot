@@ -5,40 +5,28 @@ import { getEvents } from "../../libs/api/event";
 import { useHistory } from "react-router";
 import { ROUTES_PATH } from "../../config/constant";
 
-const EventFeed: React.FC = () => {
+const UserEvents: React.FC = () => {
 
-  const [allEvents, setAllEvents] = React.useState([]);
+  const [userEvents, setUserEvents] = React.useState([]);
   const { push } = useHistory();
 
   useEffect(() => {
-    if (allEvents.length === 0) {
-      const eventsRequest = getEvents();
+    if (userEvents.length === 0) {
+      const eventsRequest = getEvents({ user_id: 10 });
       eventsRequest.then((response) => {
-        setAllEvents(response.data)});
+        setUserEvents(response.data)});
     }
-  }, [allEvents]);
+  }, [userEvents]);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Hervé</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen>
-        {allEvents?.map((event, index) => (
+        {userEvents?.map((event, index) => (
           <EventCard key={index} event={event} onButtonClick={() => {
             push(ROUTES_PATH.EVENT_DETAIL.replace(':id', event.id))
           }}/>
         ))}
-        {/* <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Salut</IonTitle>
-          </IonToolbar>
-        </IonHeader> */}
       </IonContent>
-    </IonPage>
   );
 };
 
-export default EventFeed;
+export default UserEvents;

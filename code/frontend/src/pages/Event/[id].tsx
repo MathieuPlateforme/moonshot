@@ -12,12 +12,8 @@ const EventDetail: React.FC = () => {
     if (event === null) {
       const url = window.location.href;
       const id = url.split("/").pop();
-      console.log("id", id);
-
       const eventRequest = getEvents({ id: id });
       eventRequest.then((response) => {
-        console.log("response", response);
-        
         setEvent(response.data[0]);
       });
     }
@@ -25,7 +21,6 @@ const EventDetail: React.FC = () => {
 
   useEffect(() => {
     console.log("event", event);
-    
   }, [event]);
 
   return (
@@ -37,15 +32,14 @@ const EventDetail: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         {event && (
-
-        <EventCard
-          // key={index}
-          event={event}
-          onButtonClick={() =>
-            // push(ROUTES_PATH.EVENT_DETAIL.replace(':id', event.id))
-            {}
-          }
-        />
+          <EventCard
+            // key={index}
+            event={event}
+            onButtonClick={() =>
+              // push(ROUTES_PATH.EVENT_DETAIL.replace(':id', event.id))
+              {}
+            }
+          />
         )}
       </IonContent>
     </IonPage>

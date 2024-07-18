@@ -8,6 +8,7 @@ interface EventCardProps {
     media: {
       id: number;
       url: string;
+      file: string;
     }
     // media: Array<{
     //   id: number;
@@ -23,7 +24,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, onButtonClick }) => {
   const imagePath = "/var/www/html/spotty/code/backend/media-service/assets/event_medias/";
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
-      <img className="w-full" src={imagePath + event.media.url} alt="Event" />
+      {/* <img className="w-full" src={imagePath + event.media.url} alt="Event" /> */}
+      <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
       <div className="p-4">
         <h2 className="text-xl font-bold mb-2 mt-0 text-black">{event.title}</h2>
         <p className="text-purple-600 mb-1">{event.location}</p>
