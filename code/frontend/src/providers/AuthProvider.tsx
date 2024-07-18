@@ -41,6 +41,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const loginRequest = await post({url: `${VITE_REST_API}:8000/tempLogin`, data: {email, password}, options: {}});
+    // const loginRequest = await post({url: `https://localhost:8000/tempLogin`, data: {email, password}, options: {}});
     if(loginRequest.status === 200){
       (setToken as (value: any) => void)(loginRequest.data);;
     }
