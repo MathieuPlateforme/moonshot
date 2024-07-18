@@ -12,7 +12,6 @@ use App\Service\Token\TokenDecoder;
 use App\Entity\EventType;
 use App\Service\Requests\RequestService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 
 //https://symfony.com/doc/current/service_container/request.html
 class EventController extends AbstractController
@@ -65,9 +64,14 @@ class EventController extends AbstractController
     }
 
     #[Route('/events', name: 'app_all_events')]
-    public function index(EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    public function getEvents(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client): JsonResponse
     {
-        $events = $entityManager->getRepository(event::class)->findAll();
+        $request_params = $request->query->all();
+        if(count($request_params) > 0) {
+            $events = $entityManager->getRepository(Event::class)->findBy($request_params);
+        } else {
+            $events = $entityManager->getRepository(Event::class)->findAll();
+        }
 
         $eventData = [];
         foreach ($events as $event) {
@@ -104,6 +108,57 @@ class EventController extends AbstractController
                 'media' => $file_response
             ];
         }
+
+        return $this->json($eventData, 200);
+    }
+
+    #[Route('/events/{id}', name: 'app_one_event')]
+    public function getOneEvent(EntityManagerInterface $entityManager, int $id, HttpClientInterface $client): JsonResponse
+    {
+        return $this->json([
+            'message' => 'Event not found',
+            'path' => 'src/Controller/EventController.php',
+        ], 404);
+        $event = $entityManager->getRepository(Event::class)->find($id);
+        if (!$event) {
+            return $this->json([
+                'message' => 'Event not found',
+                'path' => 'src/Controller/EventController.php',
+            ], 404);
+        }
+
+        $file_request = new RequestService($client);
+        $file_response = $file_request->getMedia(['table' => 'event', 'id' => $event->getId()]);
+        // if (!$file_response) {
+        //     return $this->json([
+        //         'message' => 'Error getting media',
+        //         'path' => 'src/Controller/EventController.php',
+        //     ], 500);
+        // } else {
+        //     $event->setMedia($file_response);
+        // }
+        $event_dates = $event->getEventDates();
+        $subEvents = [];
+        foreach ($event_dates as $event_date) {
+            $subEvents[] = [
+                'id' => $event_date->getId(),
+                'start_date' => $event_date->getStartDate()->format('Y-m-d H:i'),
+                'end_date' => $event_date->getEndDate()->format('Y-m-d H:i'),
+                'address' => $event_date->getAddress(),
+                'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
+            ];
+        }
+        $eventData = [
+            'id' => $event->getId(),
+            'type' => $event->getType()->getName(),
+            'user_id' => $event->getUserId(),
+            'title' => $event->getTitle(),
+            'description' => $event->getContent(),
+            'createdAt' => $event->getCreatedAt()->format('Y-m-d H:i'),
+            'recurrent' => $event->isRecurrent(),
+            'subEvents' => $subEvents,
+            'media' => $file_response
+        ];
 
         return $this->json($eventData, 200);
     }
