@@ -10,25 +10,25 @@ tasks:
   build:
     desc: "Build Docker images"
     cmds:
-      - docker-compose build
+      - docker compose build
     silent: false
 
   rebuild:
     desc: "Rebuild Docker images"
     cmds:
-      - docker-compose build --no-cache
+      - docker compose build --no-cache
     silent: false
 
   up:
     desc: "Start Docker containers"
     cmds:
-      - docker-compose up -d
+      - docker compose up -d
     silent: false
 
   down:
     desc: "Stop Docker containers"
     cmds:
-      - docker-compose down
+      - docker compose down
     silent: false
 
   restart:
@@ -41,13 +41,13 @@ tasks:
   logs:
     desc: "Follow logs of Docker containers"
     cmds:
-      - docker-compose logs -f
+      - docker compose logs -f
     silent: false
 
   clean:
     desc: "Remove all resources and images related to the Docker Compose"
     cmds:
-      - docker-compose down --volumes --rmi all
+      - docker compose down --volumes --rmi all
     silent: false
 
   global_clean:
@@ -59,7 +59,7 @@ tasks:
   status:
     desc: "Show status of Docker containers"
     cmds:
-      - docker-compose ps
+      - docker compose ps
     silent: false
 
   service_logs:
@@ -67,5 +67,5 @@ tasks:
     vars:
       SERVICE_NAME: ""
     cmds:
-      - docker-compose logs -f {{.SERVICE_NAME}}
+      - docker compose logs -f {{.SERVICE_NAME}}
     silent: false
