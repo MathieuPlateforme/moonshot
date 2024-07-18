@@ -3,14 +3,14 @@
   "name": "Spotty API Gateway",
   "endpoints": [
     {
-      "endpoint": "/login",
-      "method": "POST",
+      "endpoint": "/user-service/health",
+      "method": "GET",
       "output_encoding": "no-op",
       "backend": [
         {
-          "url_pattern": "/login",
+          "url_pattern": "/health",
           "host": [
-            "http://auth-service:8081"
+            "http://user-service:8000"
           ]
         }
       ]
