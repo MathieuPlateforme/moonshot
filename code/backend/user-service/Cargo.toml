@@ -15,3 +15,4 @@ log = "0.4.22" # Logging
 env_logger = "0.11.3" # Logging
 uuid = { version = "1.10.0", features = ["serde", "v4"] } # UUID generation
 chrono = { version = "0.4.38", features = ["serde"] } # Date and Time
+lapin = "2.4.0" # AMQP client

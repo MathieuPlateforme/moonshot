@@ -21,6 +21,7 @@ pub struct UpdateUserDto {
     pub birthdate: Option<NaiveDate>,
     pub username: Option<String>,
     pub phone: Option<String>,
+    pub password: Option<String>,
     pub role: Option<String>,
     pub street: Option<String>,
     pub city: Option<String>,
@@ -78,4 +79,12 @@ pub struct AddressResponseDto {
     pub country: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct AuthInfoDto {
+    pub email: String,
+    pub username: String,
+    pub password: String,
+    pub user_id: uuid::Uuid,
 }

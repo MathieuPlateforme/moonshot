@@ -2,11 +2,14 @@ use actix_web::{HttpResponse, Responder, web};
 use diesel::ExpressionMethods;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
+use lapin::BasicProperties;
+use lapin::options::BasicPublishOptions;
 use serde_json::json;
 
-use user_service::dto::{CreateUserDto, UpdateUserDto, UserResponseDto};
+use user_service::dto::{AuthInfoDto, CreateUserDto, UpdateUserDto, UserResponseDto};
 use user_service::establish_connection;
 use user_service::models::Users;
+use user_service::mq::{EXCHANGE_NAME, ROUTING_KEY_USER_CREATED, ROUTING_KEY_USER_DELETED, ROUTING_KEY_USER_UPDATED, setup_rabbitmq};
 use user_service::schema::users;
 
 pub async fn health_check() -> impl Responder {
@@ -36,6 +39,28 @@ pub async fn create_user(user_dto: web::Json<CreateUserDto>) -> impl Responder {
         .values(&user)
         .execute(&mut connection)
         .expect("Error inserting user");
+
+    let auth_info = AuthInfoDto {
+        email: user_dto.email.clone(),
+        username: user_dto.username.clone(),
+        password: user_dto.password.clone(),
+        user_id: user.user_id,
+    };
+
+    let channel = setup_rabbitmq().await.expect("Failed to connect to RabbitMQ");
+    let payload = serde_json::to_string(&auth_info).unwrap();
+
+    let _confirmation = channel.basic_publish(
+        EXCHANGE_NAME,
+        ROUTING_KEY_USER_CREATED,
+        BasicPublishOptions::default(),
+        payload.as_bytes(),
+        BasicProperties::default(),
+    ).await.expect("Failed to publish message");
+
+    log::info!("Channel: {:?}", channel);
+    log::info!("Payload: {:?}", payload);
+    log::info!("Confirmation: {:?}", _confirmation);
 
     HttpResponse::Created().json(json!({"message": "User created"}))
 }
@@ -88,6 +113,24 @@ pub async fn update_user(path: web::Path<(uuid::Uuid,)>, user_dto: web::Json<Upd
 
     let result = update_builder.execute(&mut connection);
 
+    let auth_info = AuthInfoDto {
+        email: user_dto.email.clone().unwrap_or("".to_string()),
+        username: user_dto.username.clone().unwrap_or("".to_string()),
+        password: user_dto.password.clone().unwrap_or("".to_string()),
+        user_id,
+    };
+
+    let channel = setup_rabbitmq().await.expect("Failed to connect to RabbitMQ");
+    let payload = serde_json::to_string(&auth_info).unwrap();
+
+    let _confirmation = channel.basic_publish(
+        EXCHANGE_NAME,
+        ROUTING_KEY_USER_UPDATED,
+        BasicPublishOptions::default(),
+        payload.as_bytes(),
+        BasicProperties::default(),
+    ).await.expect("Failed to publish message");
+
     match result {
         Ok(_) => HttpResponse::Ok().json(json!({"message": "User updated"})),
         Err(_) => HttpResponse::NotFound().json(json!({"message": "User not found"})),
@@ -98,6 +141,16 @@ pub async fn delete_user(path: web::Path<(uuid::Uuid,)>) -> impl Responder {
     let mut connection = establish_connection();
     let user_id = path.into_inner().0;
     let result = diesel::delete(users::table.find(user_id)).execute(&mut connection);
+
+    let payload = serde_json::to_string(&user_id).unwrap();
+    let channel = setup_rabbitmq().await.expect("Failed to connect to RabbitMQ");
+    let _confirmation = channel.basic_publish(
+        EXCHANGE_NAME,
+        ROUTING_KEY_USER_DELETED,
+        BasicPublishOptions::default(),
+        payload.as_bytes(),
+        BasicProperties::default(),
+    ).await.expect("Failed to publish message");
 
     match result {
         Ok(_) => HttpResponse::Ok().json(json!({"message": "User deleted"})),
