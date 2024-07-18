@@ -3,27 +3,14 @@
   "name": "Spotty API Gateway",
   "endpoints": [
     {
-      "endpoint": "/login",
-      "method": "POST",
+      "endpoint": "/user-service/health",
+      "method": "GET",
       "output_encoding": "no-op",
       "backend": [
         {
-          "url_pattern": "/login",
+          "url_pattern": "/health",
           "host": [
-            "http://hello-world-api:8000"
-          ]
-        }
-      ]
-    },
-    {
-      "endpoint": "/register",
-      "method": "POST",
-      "output_encoding": "no-op",
-      "backend": [
-        {
-          "url_pattern": "/register",
-          "host": [
-            "http://hello-world-api:8000"
+            "http://user-service:8000"
           ]
         }
       ]

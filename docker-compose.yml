@@ -9,11 +9,19 @@ services:
     networks:
       - spotty-network
 
-  hello-world-api:
-    build: ./code/backend/hello_world_api
-    container_name: hello-world-api
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq
     ports:
-      - "8000:8000"
+      - "5672:5672" # AMQP
+      - "15672:15672" # HTTP
+    env_file:
+      - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - spotty-network
 
@@ -21,3 +29,6 @@ networks:
   spotty-network:
     name: spotty
     driver: bridge
+
+volumes:
+  rabbitmq_data:
