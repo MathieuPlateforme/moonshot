@@ -14,6 +14,45 @@
           ]
         }
       ]
+    },
+    {
+      "endpoint": "/register",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/register",
+          "host": [
+            "http://auth-service:8081"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/refresh",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/refresh",
+          "host": [
+            "http://auth-service:8081"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/health",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/health",
+          "host": [
+            "http://auth-service:8081"
+          ]
+        }
+      ]
     }
   ]
 }
