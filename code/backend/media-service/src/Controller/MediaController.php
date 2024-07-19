@@ -113,9 +113,12 @@ class MediaController extends AbstractController
                 break;
         }
 
+        $fileHandler = fopen('../assets/' . $media_table . '_medias/' . $media->getUrl(), 'r');
+
         return new JsonResponse([
             'id' => $media->getId(),
             'url' => $media->getUrl(),
+            'file' => base64_encode(fread($fileHandler, filesize('../assets/' . $media_table . '_medias/' . $media->getUrl()))),
         ], 200);
     }
 }

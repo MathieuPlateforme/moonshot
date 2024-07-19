@@ -1,6 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useQuery } from '../../providers/QueryProvider';
 import { getCatsFact } from '../../libs/api';
+import { useParams } from 'react-router';
 
 const Profile: React.FC = () => {
 
@@ -8,6 +9,10 @@ const Profile: React.FC = () => {
     key: 'cat',
     variables: { country: 'fr' },
   })
+
+  const params = useParams<{ id: string }>();
+  
+  console.log(params?.id);
 
   return (
     <IonPage>

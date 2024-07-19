@@ -75,9 +75,9 @@ export const USER_MENU = [
     title: 'Profile',
     link: ROUTES_PATH.PROFILE,
   },
-  // {
-  //   title: 'Logout',
-  //   icon: LogoutIcon,
-  //   action: 'logout',
-  // },
+  {
+    title: 'Logout',
+    icon: LogoutIcon,
+    action: 'logout',
+  },
 ]
