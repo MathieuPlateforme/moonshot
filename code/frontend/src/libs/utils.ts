@@ -5,7 +5,8 @@ export const axiosInstance = axios.create({
     accept: '/',
     'Content-type': 'Application/json',
     'Access-Control-Allow-Origin': '*',
-    // 'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+    'token': localStorage.getItem('token'),
   },
 });
 
