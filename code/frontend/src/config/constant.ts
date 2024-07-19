@@ -15,7 +15,6 @@ export const ROUTES_PATH = {
   LOGIN: '/login',
   FEED: '/feed',
   EVENTS: '/events',
-  EVENT_DETAIL: '/event/:id',
   NEW_EVENT: '/event/new',
 };
 

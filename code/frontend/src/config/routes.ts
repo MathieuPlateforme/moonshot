@@ -4,7 +4,6 @@ import Register from "../pages/Authentication/Register";
 import Login from "../pages/Authentication/Login";
 import EventFeed from "../pages/Event";
 import NewEvent from "../pages/Event/newEvent";
-import EventDetail from "../pages/Event/[id]";
 
 import { ROUTES_PATH, ACCESSES } from "./constant";
 
@@ -29,10 +28,6 @@ export const routes = [
   {
     path: ROUTES_PATH.EVENTS,
     component: EventFeed,
-  },
-  {
-    path: ROUTES_PATH.EVENT_DETAIL,
-    component: EventDetail,
   },
   {
     path: ROUTES_PATH.NEW_EVENT,

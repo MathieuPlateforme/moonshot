@@ -92,23 +92,19 @@ class EventController extends AbstractController
                 foreach ($events as $event) {
                     $file_request = new RequestService($client);
                     $file_response = $file_request->getMedia(['table' => 'event', 'id' => $event->getId()]);
-                    // if (!$file_response) {
-                    //     return $this->json([
-                    //         'message' => 'Error getting media',
-                    //         'path' => 'src/Controller/EventController.php',
-                    //     ], 500);
-                    // } else {
-                    //     $event->setMedia($file_response);
-                    // }
                     $event_dates = $event->getEventDates();
                     $subEvents = [];
+                    $total_participants = 0;
                     foreach ($event_dates as $event_date) {
+                        $participants = $event_date->getEventDateParticipants();
+                        $total_participants += count($participants);
                         $subEvents[] = [
                             'id' => $event_date->getId(),
                             'start_date' => $event_date->getStartDate()->format('Y-m-d H:i'),
                             'end_date' => $event_date->getEndDate()->format('Y-m-d H:i'),
                             'address' => $event_date->getAddress(),
                             'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
+                            'participants' => count($participants),
                         ];
                     }
                     $eventData[] = [
@@ -120,7 +116,8 @@ class EventController extends AbstractController
                         'createdAt' => $event->getCreatedAt()->format('Y-m-d H:i'),
                         'recurrent' => $event->isRecurrent(),
                         'subEvents' => $subEvents,
-                        'media' => $file_response
+                        'media' => $file_response,
+                        'total_participants' => $total_participants,
                     ];
                 }
             }
