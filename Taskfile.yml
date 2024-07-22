@@ -12,6 +12,7 @@ tasks:
     cmds:
       - docker compose build
       - task -d code/backend/user-service build
+      - task -d code/backend/event-service build
     silent: false
 
   rebuild:
