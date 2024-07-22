@@ -2,7 +2,7 @@ import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Register from "../pages/Authentication/Register";
 import Login from "../pages/Authentication/Login";
-import EventFeed from "../pages/Event/EventFeed";
+import EventFeed from "../pages/Event";
 import NewEvent from "../pages/Event/newEvent";
 
 import { ROUTES_PATH, ACCESSES } from "./constant";

@@ -1,11 +1,11 @@
-export const EventIcon = () => (
-  <svg width="30" height="30" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const EventIcon = ({ className }: {className?: string}) => (
+  <svg width="30" height="30" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
       d="M9.99995 10H10.0099M13.9999 5H14.0099M17.9999 5H18.0099M6.49995 12.1H6.50995M17.3999 8.9C16.5999 9.7 15.3999 9.7 14.5999 8.9M10.0999 6.1C8.99995 6.2 7.69995 6.7 5.99995 7.6C2.49995 9.6 1.29995 11.5 2.29995 13.2C6.79995 21 11.7999 21.6 13.4999 20.6C14.3999 20.1 15.3999 18.5 15.3999 15.9M9.09995 15.5C9.39995 14.4 10.4999 13.8 11.4999 14.1M21.9999 4C21.9999 13 17.9999 16 15.9999 16C13.9999 16 9.99995 13 9.99995 4C9.99995 2 11.9999 1 15.9999 1C19.9999 1 21.9999 2 21.9999 4Z"
       stroke="black"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
