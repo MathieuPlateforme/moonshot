@@ -1,6 +1,9 @@
 # Ignore IDE's files
-/.idea/
-/.vscode/
+.idea/
+.vscode/
 
 # Ignore MacOS files
 .DS_Store
+
+# Ignore build files
+target/
