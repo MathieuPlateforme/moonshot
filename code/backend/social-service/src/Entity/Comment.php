@@ -34,6 +34,9 @@ class Comment
     #[ORM\OneToMany(targetEntity: InteractionComment::class, mappedBy: 'comment')]
     private Collection $interactions;
 
+    #[ORM\Column]
+    private ?\DateTime $createdAt = null;
+
     public function __construct()
     {
         $this->interactions = new ArrayCollection();
@@ -118,6 +121,18 @@ class Comment
                 $interaction->setComment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

@@ -24,6 +24,9 @@ class InteractionPublication
     #[ORM\Column]
     private ?int $userId = null;
 
+    #[ORM\Column]
+    private ?\DateTime $createdAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class InteractionPublication
     public function setUserId(int $userId): static
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
