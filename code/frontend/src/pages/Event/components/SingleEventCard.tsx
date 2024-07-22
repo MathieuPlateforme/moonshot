@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IonButton } from "@ionic/react";
 import { FlowerIcon } from "../../../icons/FlowerIcon";
 import { CheckMarkIcon } from "../../../icons/CheckMarkIcon";
@@ -8,6 +8,7 @@ interface SingleEventCardProps {
     title: string;
     description: string;
     created_at: string;
+    participants: string[];
     date: string;
     media: {
       id: number;
@@ -20,10 +21,14 @@ interface SingleEventCardProps {
     subEvents: any[];
     total_participants: number;
   };
+  eventParticipants: any;
+  subscribed: boolean;
   handleSubscribe: () => void;
+  userId: string;
 }
 
-const SingleEventCard: React.FC<SingleEventCardProps> = ({ event, handleSubscribe }) => {
+const SingleEventCard: React.FC<SingleEventCardProps> = ({ event, eventParticipants, subscribed, handleSubscribe, userId }) => {
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
       <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
@@ -32,13 +37,16 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({ event, handleSubscrib
         <h2 className="text-xl font-bold mb-2 mt-0 text-black">{event.title}</h2>
       </div>
       <div className="p-4">
-        <IonButton expand="full" color="primary"
-        onClick={() => {
+        <IonButton
+          expand="full"
+          color="primary"
+          onClick={() => {
             handleSubscribe();
-        }}
-        >  
-            <FlowerIcon />
-          <p>Join</p>
+          }}
+        >
+          {!subscribed && <FlowerIcon />}
+          {subscribed && <CheckMarkIcon />}
+          <p>{subscribed ? "Subscribed" : "Join"}</p>
         </IonButton>
       </div>
       <div className="p-4">

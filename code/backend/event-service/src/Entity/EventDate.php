@@ -18,7 +18,7 @@ class EventDate
 
     #[ORM\ManyToOne(inversedBy: 'eventDates')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?event $event = null;
+    private ?Event $event = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $start_date = null;

@@ -7,12 +7,10 @@ import CommunityEvents from "./CommunityEvents";
 
 const EventFeed: React.FC = () => {
   const [view, setView] = React.useState("list");
-  const [showMenu, setShowMenu] = React.useState(true);
 
   return (
     <IonPage>
       <IonHeader>
-        {showMenu && (
           <IonToolbar>
             <IonButton fill={view === "list" ? "outline" : "clear"} onClick={() => setView("list")}>
               For me
@@ -24,10 +22,9 @@ const EventFeed: React.FC = () => {
               My community
             </IonButton>
           </IonToolbar>
-        )}
       </IonHeader>
       <IonContent fullscreen>
-        {view === "list" && <EventList showMenu={setShowMenu} />}
+        {view === "list" && <EventList />}
         {view === "user_events" && <UserEvents />}
         {view === "group_events" && <CommunityEvents />}
       </IonContent>

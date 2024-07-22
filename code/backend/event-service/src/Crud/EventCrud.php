@@ -43,7 +43,13 @@ class EventCrud
 
     public function getEvent(array $request_params, int $user_id, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
     {
+        $load_participants = false;
         if (count($request_params) > 0) {
+            if (array_key_exists('participants', $request_params)) {
+                $load_participants = true;
+                $participants_list = [];
+                unset($request_params['participants']);
+            }
             $events = $entityManager->getRepository(Event::class)->findBy($request_params);
         } else {
             $events = $entityManager->getRepository(Event::class)->findAll();
@@ -67,6 +73,16 @@ class EventCrud
                     'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
                     'participants' => count($participants),
                 ];
+                if($load_participants){               
+                    foreach ($participants as $participant) {
+                        $participants_list[] = [
+                            'id' => $participant->getId(),
+                            'user_id' => $participant->getUserId(),
+                            'event_date_id' => $participant->getEventDate()->getId(),
+                            'created_at' => $participant->getCreatedAt()->format('Y-m-d H:i'),
+                        ];
+                    }
+                }
             }
             $eventData[] = [
                 'id' => $event->getId(),
@@ -78,8 +94,11 @@ class EventCrud
                 'recurrent' => $event->isRecurrent(),
                 'subEvents' => $subEvents,
                 'media' => $file_response,
-                'total_participants' => $total_participants,
+                'total_participants' => $total_participants,        
             ];
+            if($load_participants){
+                $eventData['participants'] = $participants_list;
+            }
         }
         return new JsonResponse($eventData, 200);
     }
