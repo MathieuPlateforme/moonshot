@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonList, IonInputPasswordToggle } from "@ionic/react";
 // import { dbPost } from "../../api/network.js";
 import { post } from "../../../libs/utils"
 import { ArobaseIcon } from '../../../icons/ArobaseIcon';
 import GoogleButton from "react-google-button";
+import { useAuth } from "../../../providers/AuthProvider";
+import { useHistory } from "react-router";
+import { ROUTES_PATH } from "../../../config/constant";        
 
 
 const Login: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const { getRole, login, token } = useAuth();
+  const { push } = useHistory();
 
   const handleLogin = async () => {
     // const request = await post("login", {email, password});
@@ -19,6 +24,12 @@ const Login: React.FC = () => {
     console.log('Google Login button clicked');
     // Ajoutez votre logique de gestion de la connexion avec Google ici
   };
+
+  useEffect(() => {
+    if(getRole()){
+      push(ROUTES_PATH.HOME);
+    }
+  }, [token]);
 
   return (
     <IonPage>

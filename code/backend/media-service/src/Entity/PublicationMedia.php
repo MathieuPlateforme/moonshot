@@ -19,6 +19,9 @@ class PublicationMedia
     #[ORM\Column(length: 25)]
     private ?string $type = null;
 
+    #[ORM\Column]
+    private ?int $publication_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class PublicationMedia
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getPublicationId(): ?int
+    {
+        return $this->publication_id;
+    }
+
+    public function setPublicationId(int $publication_id): static
+    {
+        $this->publication_id = $publication_id;
 
         return $this;
     }

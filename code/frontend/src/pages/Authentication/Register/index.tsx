@@ -7,7 +7,10 @@ import { CalendarIcon } from '../../../icons/CalendarIcon';
 import { UserIcon } from '../../../icons/UserIcon';
 import GoogleButton from 'react-google-button';
 import { post } from "../../../libs/utils"
-import { h } from "ionicons/dist/types/stencil-public-runtime";
+import { useAuth } from "../../../providers/AuthProvider";
+import { useHistory } from "react-router";
+import { ROUTES_PATH } from "../../../config/constant";
+
 
 const Register: React.FC = () => {
   const [firstName, setFirstName] = React.useState("");
@@ -16,6 +19,12 @@ const Register: React.FC = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const { getRole } = useAuth();
+  const { push } = useHistory();
+
+  if (getRole() === 'USER') {
+    push(ROUTES_PATH.HOME);
+  }
 
   const handleRegister = async () => {
     const registerRequest = await post({ url: "https://localhost:8000/register", data: { firstName, lastName, email, username, password }, options: {} });
