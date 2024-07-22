@@ -50,6 +50,9 @@ class Publication
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'publications')]
     private Collection $tags;
 
+    #[ORM\Column]
+    private ?\DateTime $createdAt = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -202,6 +205,18 @@ class Publication
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

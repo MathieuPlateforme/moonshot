@@ -6,5 +6,5 @@ enum Type: string
 {
     case Friend = 'friend';
     case Follower = 'follower';
-    case BlackList = 'blacklist';
+    case Blacklist = 'blacklist';
 }

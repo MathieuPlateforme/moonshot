@@ -21,6 +21,12 @@ class InteractionComment
     #[ORM\JoinColumn(nullable: false)]
     private ?Comment $comment = null;
 
+    #[ORM\Column]
+    private ?\DateTime $createdAt = null;
+
+    #[ORM\Column]
+    private ?int $userId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +52,30 @@ class InteractionComment
     public function setComment(?Comment $comment): static
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): static
+    {
+        $this->userId = $userId;
 
         return $this;
     }
