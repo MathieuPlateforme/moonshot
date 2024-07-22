@@ -40,7 +40,7 @@ class EventController extends AbstractController
             return new JsonResponse(['error' => 'Unauthorized'], 401);
         } else {
             $request_params = $request->query->all();
-            return $event_crud->getEvent($request_params, $token['id'], $entityManager, $client);
+            return $event_crud->getEvent($request_params, $entityManager, $client);
         }
     }
 }

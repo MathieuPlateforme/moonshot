@@ -8,6 +8,7 @@ import { useAuth } from "../../providers/AuthProvider";
 
 const EventFocus: React.FC<{ event_id: string; previousView: any }> = ({ event_id, previousView }) => {
   const [event, setEvent] = React.useState<any>(null);
+  const [selectedEventDate, setSelectedEventDate] = React.useState<any>(null);
   const [eventParticipants, setEventParticipants] = React.useState<any>(null);
   const { getId } = useAuth();
   const userId = getId();
@@ -19,6 +20,7 @@ const EventFocus: React.FC<{ event_id: string; previousView: any }> = ({ event_i
     eventRequest.then((response) => {
       setEvent(response.data[0]);
       setEventParticipants(response.data["participants"]);
+      setSelectedEventDate(response.data[0].subEvents[0]);      
     });
   };
 
@@ -43,7 +45,7 @@ const EventFocus: React.FC<{ event_id: string; previousView: any }> = ({ event_i
   };
 
   useEffect(() => {
-    if(event_id == null) return;
+    if (event_id == null) return;
     loadEvent();
   }, [event_id]);
 
@@ -69,7 +71,15 @@ const EventFocus: React.FC<{ event_id: string; previousView: any }> = ({ event_i
         <BackArrowIcon />
       </a>
       {event && (
-        <SingleEventCard event={event} eventParticipants={eventParticipants} subscribed={subscribed} handleSubscribe={handleSubscribe} userId={userId} />
+        <SingleEventCard
+          event={event}
+          selectedEventDate={selectedEventDate}
+          setSelectedEventDate={setSelectedEventDate}
+          eventParticipants={eventParticipants}
+          subscribed={subscribed}
+          handleSubscribe={handleSubscribe}
+          userId={userId}
+        />
       )}
     </IonContent>
   );

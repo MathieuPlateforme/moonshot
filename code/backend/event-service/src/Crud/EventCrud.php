@@ -41,18 +41,32 @@ class EventCrud
         }
     }
 
-    public function getEvent(array $request_params, int $user_id, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    public function getEvent(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
     {
         $load_participants = false;
-        if (count($request_params) > 0) {
-            if (array_key_exists('participants', $request_params)) {
-                $load_participants = true;
-                $participants_list = [];
-                unset($request_params['participants']);
-            }
+        $limit = 10;
+        $offset = 0;
+
+        if (array_key_exists('limit', $request_params)) {
+            $limit = $request_params['limit'];
+            unset($request_params['limit']);
+        }
+
+        if (array_key_exists('offset', $request_params)) {
+            $offset = $request_params['offset'];
+            unset($request_params['offset']);
+        }
+
+        if (array_key_exists('participants', $request_params)) {
+            $load_participants = true;
+            $participants_list = [];
+            unset($request_params['participants']);
+        }
+
+        if (count($request_params) > 0) {       
             $events = $entityManager->getRepository(Event::class)->findBy($request_params);
         } else {
-            $events = $entityManager->getRepository(Event::class)->findAll();
+            $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
         }
 
         $eventData = [];
@@ -94,7 +108,8 @@ class EventCrud
                 'recurrent' => $event->isRecurrent(),
                 'subEvents' => $subEvents,
                 'media' => $file_response,
-                'total_participants' => $total_participants,        
+                'total_participants' => $total_participants,
+                'offset' => $offset,
             ];
             if($load_participants){
                 $eventData['participants'] = $participants_list;
