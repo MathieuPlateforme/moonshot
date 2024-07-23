@@ -19,12 +19,7 @@ class TagController extends AbstractController
     {
         $tag = new Tag();
         $tag
-            ->setContent($request->get('content'))
-            ->setAuthorId($request->get('userId'))
-            ->setEventId($request->get('eventId'))
-            ->setStatus(\App\Config\Tag\Status::Draft)
-            ->setCreatedAt(new \DateTime())
-            ->setViews(0);
+            ->setLabel($request->get('label'));
 
         $entityManager->persist($tag);
         $entityManager->flush();
@@ -49,10 +44,6 @@ class TagController extends AbstractController
         return new JsonResponse([
             'id' => $tag->getId(),
             'label' => $tag->getLabel(),
-            'status' => $tag->getStatus(),
-            'views' => $tag->getViews(),
-            'authorId' => $tag->getAuthorId(),
-            'eventId' => $tag->getEventId(),
         ]);
     }
 

@@ -20,7 +20,7 @@ class CommentController extends AbstractController
         $comment = new Comment();
         $comment
             ->setContent($request->get('content'))
-            ->setAuthorId($request->get('userId'))
+            ->setAuthorId($request->get('authorId'))
             ->setPublication($request->get('publication'))
             ->setCreatedAt(new \DateTime())
             ->setParentComment($request->get('parentComment'));
@@ -91,40 +91,4 @@ class CommentController extends AbstractController
             'message' => 'Comment updated',
         ]);
     }
-
-    // #[Route('/search/{keywords}', name: 'search', methods: ['GET'])]
-    // public function search(EntityManagerInterface $entityManager, array $keywords)
-    // {
-    //     $comments = $entityManager->getRepository(Comment::class)->findByKeywords($keywords, ["content" => "ASC"], 10);
-
-    //     return new JsonResponse([
-    //         'comments' => $comments,
-    //     ]);
-    // }
-
-    // #[Route('/search/{content}', name: 'search', methods: ['GET'])]
-    // public function search(string $content)
-    // {
-    //     $comments = $this->entityManager->getRepository(Comment::class)->findBy(['content' => $content]);
-
-    //     if (!$comments) {
-    //         return new JsonResponse([
-    //             'message' => 'Comments not found',
-    //         ], 404);
-    //     }
-
-    //     $response = [];
-    //     foreach ($comments as $comment) {
-    //         $response[] = [
-    //             'id' => $comment->getId(),
-    //             'content' => $comment->getContent(),
-    //             'authorId' => $comment->getAuthorId(),
-    //             'publicationId' => $comment->getPublicationId(),
-    //         ];
-    //     }
-
-    //     return new JsonResponse($response);
-    // }
-
- 
 }

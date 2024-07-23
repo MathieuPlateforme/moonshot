@@ -19,12 +19,9 @@ class RelationController extends AbstractController
     {
         $relation = new Relation();
         $relation
-            ->setContent($request->get('content'))
-            ->setAuthorId($request->get('userId'))
-            ->setEventId($request->get('eventId'))
-            ->setStatus(\App\Config\Relation\Status::Draft)
-            ->setCreatedAt(new \DateTime())
-            ->setViews(0);
+            ->setUser1Id($request->get('user1Id'))
+            ->setUser2Id($request->get('user2Id'))
+            ->setType($request->get('type')); // see \App\Config\Relation\Type
 
         $entityManager->persist($relation);
         $entityManager->flush();
@@ -48,11 +45,9 @@ class RelationController extends AbstractController
 
         return new JsonResponse([
             'id' => $relation->getId(),
-            'label' => $relation->getLabel(),
-            'status' => $relation->getStatus(),
-            'views' => $relation->getViews(),
-            'authorId' => $relation->getAuthorId(),
-            'eventId' => $relation->getEventId(),
+            'user1Id' => $relation->getUser1Id(),
+            'user2Id' => $relation->getUser2Id(),
+            'type' => $relation->getType(),
         ]);
     }
 
@@ -94,42 +89,4 @@ class RelationController extends AbstractController
             'message' => 'Relation updated',
         ]);
     }
-
-    // #[Route('/search/{keywords}', name: 'search', methods: ['GET'])]
-    // public function search(EntityManagerInterface $entityManager, array $keywords)
-    // {
-    //     $relations = $entityManager->getRepository(Relation::class)->findByKeywords($keywords, ["content" => "ASC"], 10);
-
-    //     return new JsonResponse([
-    //         'relations' => $relations,
-    //     ]);
-    // }
-
-    // #[Route('/search/{content}', name: 'search', methods: ['GET'])]
-    // public function search(string $content)
-    // {
-    //     $relations = $this->entityManager->getRepository(Relation::class)->findBy(['content' => $content]);
-
-    //     if (!$relations) {
-    //         return new JsonResponse([
-    //             'message' => 'Relations not found',
-    //         ], 404);
-    //     }
-
-    //     $response = [];
-    //     foreach ($relations as $relation) {
-    //         $response[] = [
-    //             'id' => $relation->getId(),
-    //             'content' => $relation->getContent(),
-    //             'status' => $relation->getStatus(),
-    //             'views' => $relation->getViews(),
-    //             'authorId' => $relation->getAuthorId(),
-    //             'eventId' => $relation->getEventId(),
-    //         ];
-    //     }
-
-    //     return new JsonResponse($response);
-    // }
-
- 
 }

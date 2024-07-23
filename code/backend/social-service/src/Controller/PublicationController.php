@@ -20,7 +20,7 @@ class PublicationController extends AbstractController
         $publication = new Publication();
         $publication
             ->setContent($request->get('content'))
-            ->setAuthorId($request->get('userId'))
+            ->setAuthorId($request->get('authorId'))
             ->setEventId($request->get('eventId'))
             ->setStatus(\App\Config\Publication\Status::Draft)
             ->setCreatedAt(new \DateTime())
