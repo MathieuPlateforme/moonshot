@@ -19,10 +19,15 @@ class TokenDecoder
         return $credentials;
     }
 
-    public function token_verify(string $token): bool|array
+    public function token_verify(string $token = null): bool|array
     {
-        $token = $this->decode($token);
-        if (!$token) return false;
-        else return $token;
+        if ($token == null) {
+            return false;
+        } else {
+            $token = $this->decode($token);
+            if (!$token) {
+                return false;
+            } else return $token;
+        }
     }
 }

@@ -1,41 +1,66 @@
-import React, { useEffect } from "react";
-import { IonContent } from "@ionic/react";
+import React, { useEffect, useState } from "react";
+import { IonContent, IonModal } from "@ionic/react";
 import EventCard from "./components/EventCard";
 import { getEvents } from "../../libs/api/event";
 import EventFocus from "./EventFocus";
+import Header from "../../components/Header";
 
-const EventList: React.FC<{ showMenu: (value: boolean) => void }> = ({ showMenu }) => {
-  const [allEvents, setAllEvents] = React.useState([]);
+const EventList: React.FC = () => {
+  const [allEvents, setAllEvents] = React.useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
-  const [view, setView] = React.useState("list");
+  const [offset, setOffset] = React.useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrollDown, setScrollDown] = useState(0);
+  const [headerIsVisible, setHeaderIsVisible] = useState(true);
+
+  const loadEvents = async () => {
+    await getEvents({
+      limit: 10,
+      offset: offset,
+    }).then((response) => {
+      setAllEvents(allEvents.concat(response.data));
+      setOffset(offset + 10);
+      setScrollDown(scrollDown + 4000);
+    });
+  };
+
+  const handleScroll = (e: any) => {
+    if (e.scrollTop > scrollDown) {
+      loadEvents();
+    }
+    if (e.currentY > e.startY) {
+      setHeaderIsVisible(false);
+    }
+    if (e.currentY < e.startY) {
+      setHeaderIsVisible(true);
+    }
+  };
 
   useEffect(() => {
-    if (allEvents.length === 0) {
-      const eventsRequest = getEvents();
-      eventsRequest.then((response) => {
-        setAllEvents(response.data);
-      });
-    }
+    if (allEvents.length === 0) loadEvents();
   }, [allEvents]);
 
-  useEffect(() => {
-    if(view === "list") showMenu(true);
-  }, [view]);
-
   return (
-    <IonContent fullscreen>
-      {view === "list" && allEvents?.map((event, index) => (
+    <IonContent
+      scrollEvents={true}
+      onIonScroll={(e) => {
+        handleScroll(e.detail);
+      }}
+    >
+      {allEvents?.map((event, index) => (
         <EventCard
           key={index}
           event={event}
           onButtonClick={() => {
-            setView("focus");
             setSelectedEvent(event.id);
-            showMenu(false);
+            setIsOpen(true);
           }}
         />
       ))}
-      {view === "focus" && selectedEvent !== null && <EventFocus event_id={selectedEvent} previousView={setView}/>}
+      <IonModal isOpen={isOpen}>
+        <EventFocus event_id={selectedEvent} previousView={setIsOpen} />
+      </IonModal>
+      <Header isVisible={headerIsVisible} />
     </IonContent>
   );
 };

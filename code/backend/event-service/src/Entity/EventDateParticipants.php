@@ -16,7 +16,7 @@ class EventDateParticipants
 
     #[ORM\ManyToOne(inversedBy: 'eventDateParticipants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?eventDate $event_date = null;
+    private ?EventDate $event_date = null;
 
     #[ORM\Column]
     private ?int $user_id = null;
