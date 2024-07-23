@@ -24,7 +24,7 @@ class EventDateController extends AbstractController
             return new JsonResponse(['error' => 'Unauthorized'], 401);
         } else {
             $request_params = json_decode($request->getContent(), true)['eventDate'];
-            return $event_date->postEventDate($request_params, $entityManager);
+            return $event_date->postEventDate($request_params, $entityManager, $token['id']);
         }
     }
 }

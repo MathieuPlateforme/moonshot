@@ -48,6 +48,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
   };
 
   const handleDelete = async () => {
+    alert("Are you sure you want to delete this event?");
     delEvent(event.id).then((response) => {
       if (response.status === 200) {
         previousView(false);

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { IonContent, IonInput, IonCard, IonButton, IonCardHeader, IonCardSubtitle, IonCardTitle } from "@ionic/react";
+import { IonContent, IonInput, IonCard, IonButton, IonCardHeader, IonCardSubtitle, IonCardTitle, IonModal } from "@ionic/react";
 import { BackArrowIcon } from "../../icons/BackArrowIcon";
 import { getEventsAutoComplete } from "../../libs/api/event";
-import EventCard from "./components/EventCard";
+import EventFocus from "./EventFocus";
 
 const EventSearch: React.FC<{ previousView: any }> = ({ previousView }) => {
   const [typeOptions, setTypeOptions] = React.useState([]);
@@ -10,6 +10,8 @@ const EventSearch: React.FC<{ previousView: any }> = ({ previousView }) => {
   const [allEvents, setAllEvents] = React.useState<any[]>([]);
   const [offset, setOffset] = React.useState(0);
   const [scrollDown, setScrollDown] = React.useState(0);
+  const [selectedEvent, setSelectedEvent] = React.useState(null);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const loadEvents = async () => {
     await getEventsAutoComplete({
@@ -91,6 +93,10 @@ const EventSearch: React.FC<{ previousView: any }> = ({ previousView }) => {
             height: "auto",
             paddingLeft: "10px",
           }}
+          onClick={() => {
+            setSelectedEvent(event.id);
+            setIsOpen(true);
+          }}
         >
           <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" style={{ width: "60px", height: "60px" }} />
           <IonCardHeader>
@@ -100,6 +106,9 @@ const EventSearch: React.FC<{ previousView: any }> = ({ previousView }) => {
           </IonCardHeader>
         </IonCard>
       ))}
+      <IonModal isOpen={isOpen}>
+        <EventFocus event_id={selectedEvent} previousView={setIsOpen} />
+      </IonModal>
     </IonContent>
   );
 };

@@ -35,7 +35,7 @@ const EventList: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => {
   };
 
   useEffect(() => {
-    if (allEvents.length === 0) loadEvents();
+    if (allEvents.length === 0 ) loadEvents();
   }, [allEvents]);
 
   return (

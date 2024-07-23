@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { IonContent, IonModal } from "@ionic/react";
 import EventCard from "./components/EventCard";
 import { getEvents } from "../../libs/api/event";
-import { useHistory } from "react-router";
 import { useAuth } from "../../providers/AuthProvider";
 import EventFocus from "./EventFocus";
 
@@ -60,8 +59,9 @@ const UserEvents: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => 
           }}
         />
       ))}
+      {userEvents.length === 0 && <p>You have not created any event yet</p>}
       <IonModal isOpen={isOpen}>
-        <EventFocus event_id={selectedEvent} previousView={setIsOpen} />
+        <EventFocus event_id={selectedEvent} previousView={setIsOpen}/>
       </IonModal>
     </IonContent>
   );

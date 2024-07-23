@@ -24,7 +24,7 @@ class EventCrud
         $new_event->setRecurrent($request_params['recurrent']);
         $entityManager->persist($new_event);
         $entityManager->flush();
-
+        
         $file_request = new RequestService($client);
         $file_response = $file_request->postMedia($request_params['media'], $new_event->getId());
         if ($file_response['status'] !== 'ok') {
