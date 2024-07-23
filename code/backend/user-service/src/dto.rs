@@ -87,4 +87,5 @@ pub struct AuthInfoDto {
     pub username: String,
     pub password: String,
     pub user_id: uuid::Uuid,
+    pub role: String,
 }
