@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { IonContent } from "@ionic/react";
 import SingleEventCard from "./components/SingleEventCard";
-import { getEvents } from "../../libs/api/event";
+import { getEvents, delEvent } from "../../libs/api/event";
 import { BackArrowIcon } from "../../icons/BackArrowIcon";
 import { postEventParticipant, delEventParticipant } from "../../libs/api/event";
 import { useAuth } from "../../providers/AuthProvider";
@@ -11,20 +11,23 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
   const [selectedEventDate, setSelectedEventDate] = React.useState<any>(null);
   const [eventParticipants, setEventParticipants] = React.useState<any>(null);
   const { getId } = useAuth();
-  const userId = getId();
   const [subscribed, setSubscribed] = React.useState(false);
   const [subscribedId, setSubscribedId] = React.useState("");
+  const [eventIsMine, setEventIsMine] = React.useState(false);
 
   const loadEvent = async () => {
     const eventRequest = getEvents({ id: event_id, participants: "" });
     eventRequest.then((response) => {
       setEvent(response.data[0]);
       setEventParticipants(response.data["participants"]);
-      setSelectedEventDate(response.data[0].subEvents[0]);      
+      setSelectedEventDate(response.data[0].subEvents[0]);
+      if (response.data[0].user_id == getId()) {
+        setEventIsMine(true);
+      }
     });
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (!subscribed) {
       const eventParticipant = {
         event_date_id: event.subEvents[0].id,
@@ -44,6 +47,14 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
     }
   };
 
+  const handleDelete = async () => {
+    delEvent(event.id).then((response) => {
+      if (response.status === 200) {
+        previousView(false);
+      }
+    });
+  };
+
   useEffect(() => {
     if (event_id == null) return;
     loadEvent();
@@ -52,7 +63,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
   useEffect(() => {
     if (eventParticipants === null) return;
     for (const participation of eventParticipants) {
-      if (participation.user_id == userId) {
+      if (participation.user_id == getId()) {
         setSubscribed(true);
         setSubscribedId(participation.id);
         return;
@@ -78,7 +89,8 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
           eventParticipants={eventParticipants}
           subscribed={subscribed}
           handleSubscribe={handleSubscribe}
-          userId={userId}
+          handleDelete={handleDelete}
+          eventIsMine={eventIsMine}
         />
       )}
     </IonContent>

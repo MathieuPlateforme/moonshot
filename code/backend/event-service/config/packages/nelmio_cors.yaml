@@ -17,12 +17,17 @@ nelmio_cors:
     "^/event/new":
       allow_origin: ["*"]
       allow_headers: ["*"]
-      allow_methods: ["POST", "PUT", "GET", "DELETE"]
+      allow_methods: ["POST"]
+      max_age: 3600
+    "^/event/delete":
+      allow_origin: ["*"]
+      allow_headers: ["*"]
+      allow_methods: ["DELETE"]
       max_age: 3600
     "^/eventDate/new":
       allow_origin: ["*"]
       allow_headers: ["*"]
-      allow_methods: ["POST", "PUT", "GET", "DELETE"]
+      allow_methods: ["POST"]
       max_age: 3600
     "^/events":
       allow_origin: ["*"]
@@ -32,20 +37,15 @@ nelmio_cors:
     "^/events/autocomplete":
       allow_origin: ["*"]
       allow_headers: ["*"]
-      allow_methods: ["POST", "PUT", "GET", "DELETE"]
-      max_age: 3600
-    "^/events/{id}":
-      allow_origin: ["*"]
-      allow_headers: ["*"]
-      allow_methods: ["POST", "PUT", "GET", "DELETE"]
+      allow_methods: ["GET"]
       max_age: 3600
     "^/event/participant/new":
       allow_origin: ["*"]
       allow_headers: ["*"]
-      allow_methods: ["POST", "PUT", "GET", "DELETE"]
+      allow_methods: ["POST"]
       max_age: 3600
     "^/event/participant/delete":
       allow_origin: ["*"]
       allow_headers: ["*"]
-      allow_methods: ["POST", "PUT", "GET", "DELETE"]
+      allow_methods: ["DELETE"]
       max_age: 3600

@@ -3,15 +3,13 @@ import { IonContent, IonModal } from "@ionic/react";
 import EventCard from "./components/EventCard";
 import { getEvents } from "../../libs/api/event";
 import EventFocus from "./EventFocus";
-import Header from "../../components/Header";
 
-const EventList: React.FC = () => {
+const EventList: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => {
   const [allEvents, setAllEvents] = React.useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
   const [offset, setOffset] = React.useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [scrollDown, setScrollDown] = useState(0);
-  const [headerIsVisible, setHeaderIsVisible] = useState(true);
 
   const loadEvents = async () => {
     await getEvents({
@@ -29,10 +27,10 @@ const EventList: React.FC = () => {
       loadEvents();
     }
     if (e.currentY > e.startY) {
-      setHeaderIsVisible(false);
+      headerIsVisible(false);
     }
     if (e.currentY < e.startY) {
-      setHeaderIsVisible(true);
+      headerIsVisible(true);
     }
   };
 
@@ -41,7 +39,7 @@ const EventList: React.FC = () => {
   }, [allEvents]);
 
   return (
-    <IonContent
+    <IonContent fullscreen
       scrollEvents={true}
       onIonScroll={(e) => {
         handleScroll(e.detail);
@@ -60,7 +58,6 @@ const EventList: React.FC = () => {
       <IonModal isOpen={isOpen}>
         <EventFocus event_id={selectedEvent} previousView={setIsOpen} />
       </IonModal>
-      <Header isVisible={headerIsVisible} />
     </IonContent>
   );
 };

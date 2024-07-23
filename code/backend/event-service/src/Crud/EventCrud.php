@@ -62,7 +62,7 @@ class EventCrud
             unset($request_params['participants']);
         }
 
-        if (count($request_params) > 0) {       
+        if (count($request_params) > 0) {
             $events = $entityManager->getRepository(Event::class)->findBy($request_params);
         } else {
             $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
@@ -86,7 +86,7 @@ class EventCrud
                     'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
                     'participants' => count($participants),
                 ];
-                if($load_participants){               
+                if ($load_participants) {
                     foreach ($participants as $participant) {
                         $participants_list[] = [
                             'id' => $participant->getId(),
@@ -110,7 +110,7 @@ class EventCrud
                 'total_participants' => $total_participants,
                 'offset' => $offset,
             ];
-            if($load_participants){
+            if ($load_participants) {
                 $eventData['participants'] = $participants_list;
             }
         }
@@ -140,7 +140,7 @@ class EventCrud
         }
 
         // if (count($request_params) > 0) {       
-            $events = $entityManager->getRepository(Event::class)->FindAllWithAutoComplete($request_params, $limit, $offset);
+        $events = $entityManager->getRepository(Event::class)->FindAllWithAutoComplete($request_params, $limit, $offset);
         // } else {
         //     $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
         // }
@@ -163,7 +163,7 @@ class EventCrud
                     'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
                     'participants' => count($participants),
                 ];
-                if($load_participants){               
+                if ($load_participants) {
                     foreach ($participants as $participant) {
                         $participants_list[] = [
                             'id' => $participant->getId(),
@@ -187,10 +187,35 @@ class EventCrud
                 'total_participants' => $total_participants,
                 'offset' => $offset,
             ];
-            if($load_participants){
+            if ($load_participants) {
                 $eventData['participants'] = $participants_list;
             }
         }
         return new JsonResponse($eventData, 200);
+    }
+
+    public function deleteEvent(int $event_id, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    {
+        $event = $entityManager->getRepository(Event::class)->find($event_id);
+        if ($event) {
+            $file_request = new RequestService($client);
+            $file_response = $file_request->deleteMedia($event_id);
+            if ($file_response['status'] !== 'ok') {
+                return new JsonResponse([
+                    'message' => 'Error deleting media',
+                    'path' => 'src/Controller/EventController.php',
+                ], 500);
+            } else {
+                $entityManager->remove($event);
+                $entityManager->flush();
+                return new JsonResponse([
+                    'message' => 'Event deleted',
+                ], 200);
+            }
+        } else {
+            return new JsonResponse([
+                'message' => 'Event not found',
+            ], 404);
+        }
     }
 }

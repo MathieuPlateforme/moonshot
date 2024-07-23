@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonModal } from "@ionic/react";
-import { useHistory } from "react-router";
+import Header from "../../components/Header";
 import EventList from "./EventList";
 import UserEvents from "./UserEvents";
 import CommunityEvents from "./CommunityEvents";
@@ -15,6 +15,7 @@ const EventFeed: React.FC = () => {
   const [calendarIsOpen, setCalendarIsOpen] = useState(false);
   const [searchIsOpen, setSearchIsOpen] = useState(false);
   const [newEventIsOpen, setNewEventIsOpen] = useState(false);
+  const [headerIsVisible, setHeaderIsVisible] = useState(true);
 
   return (
     <IonPage>
@@ -63,8 +64,8 @@ const EventFeed: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {view === "list" && <EventList />}
-        {view === "user_events" && <UserEvents />}
+        {view === "list" && <EventList headerIsVisible={setHeaderIsVisible} />}
+        {view === "user_events" && <UserEvents headerIsVisible={setHeaderIsVisible}/>}
         {view === "group_events" && <CommunityEvents />}
       </IonContent>
       <IonModal isOpen={calendarIsOpen}></IonModal>
@@ -74,6 +75,7 @@ const EventFeed: React.FC = () => {
       <IonModal isOpen={newEventIsOpen}>
         <NewEvent previousView={setNewEventIsOpen}/>
       </IonModal>
+      <Header isVisible={headerIsVisible} />
     </IonPage>
   );
 };

@@ -41,6 +41,19 @@ class EventController extends AbstractController
         }
     }
 
+    #[Route('/event/delete', name: 'app_delete_event')]
+    public function deleteEvent(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, EventCrud $event_crud): JsonResponse
+    {
+        $token_decoder = new TokenDecoder('secret');
+        $token = $token_decoder->token_verify($request->headers->get('token'));
+        if ($token == false) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        } else {
+            $request_params = json_decode($request->getContent(), true);
+            return $event_crud->deleteEvent($request_params['id'], $entityManager, $client);
+        }
+    }
+
     #[Route('/events/autocomplete', name: 'app_get_events_autocomplete')]
     public function getEventsAutoComplete(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, EventCrud $event_crud): JsonResponse
     {
