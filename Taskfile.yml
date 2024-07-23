@@ -11,29 +11,24 @@ tasks:
     desc: "Build all Docker images"
     cmds:
       - docker compose build
-      - task -d code/backend/user-service build
-      - task -d code/backend/event-service build
     silent: false
 
   rebuild:
     desc: "Rebuild all Docker images"
     cmds:
       - docker compose build --no-cache
-      - task -d code/backend/user-service rebuild
     silent: false
 
   up:
     desc: "Start all Docker containers"
     cmds:
       - docker compose up -d
-      - task -d code/backend/user-service up
     silent: false
 
   down:
     desc: "Stop all Docker containers"
     cmds:
       - docker compose down
-      - task -d code/backend/user-service down
     silent: false
 
   restart:

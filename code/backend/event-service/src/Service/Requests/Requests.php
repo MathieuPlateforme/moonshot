@@ -1,19 +1,23 @@
 <?php
 namespace App\Service\Requests;
+
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RequestService
 {
+    private string $mediaServiceUrl;
+
     public function __construct(
         private HttpClientInterface $client,
     ) {
+        $this->mediaServiceUrl = getenv('MEDIA_SERVICE_URL') ?: 'http://localhost:8002';
     }
 
     public function postMedia(string $file, int $id): array
     {
         $response = $this->client->request(
             'POST',
-            'http://localhost:8002/media/new',
+            $this->mediaServiceUrl . '/media/new',
             [
                 'json' => [
                     'media' => $file,
@@ -35,12 +39,13 @@ class RequestService
         return $content;
     }
 
-    public function getMedia(array $params) {
+    public function getMedia(array $params): array
+    {
         $response = $this->client->request(
             'GET',
-            'http://localhost:8002/media',
+            $this->mediaServiceUrl . '/media',
             [
-            'query' => $params,
+                'query' => $params,
             ]
         );
 

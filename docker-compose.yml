@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   krakend:
     image: devopsfaith/krakend:2.6.3
@@ -16,7 +18,7 @@ services:
       - "8081:8081"
     networks:
       - spotty-network
-      
+
   rabbitmq:
     image: "rabbitmq:3-management"
     container_name: rabbitmq
@@ -33,10 +35,122 @@ services:
     networks:
       - spotty-network
 
+  media-service:
+    build:
+      context: ./code/backend/media-service
+      dockerfile: docker/Dockerfile
+    container_name: media-service
+    working_dir: /var/www/symfony
+    volumes:
+      - ./code/backend/media-service:/var/www/symfony
+    ports:
+      - "8084:80"
+    environment:
+      APP_ENV: dev
+      DB_HOST: media-database
+      DB_PORT: 3306
+      DATABASE_URL: mysql://symfony:symfony@media-database:3306/media-service
+    entrypoint: ["/var/www/symfony/docker/entrypoint.sh"]
+    depends_on:
+      - media-database
+    networks:
+      - spotty-network
+
+  media-database:
+    image: mysql:5.7
+    container_name: media-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: media-service
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - "3308:3306"
+    volumes:
+      - media_db_data:/var/lib/mysql
+    networks:
+      - spotty-network
+
+  event-service:
+    build:
+      context: ./code/backend/event-service
+      dockerfile: docker/Dockerfile
+    container_name: event-service
+    working_dir: /var/www/symfony
+    volumes:
+      - ./code/backend/event-service:/var/www/symfony
+    ports:
+      - "8083:80"
+    environment:
+      APP_ENV: dev
+      DB_HOST: event-database
+      DB_PORT: 3306
+      DATABASE_URL: mysql://symfony:symfony@event-database:3306/event-service
+      MEDIA_SERVICE_URL: http://media-service:80
+    entrypoint: ["/var/www/symfony/docker/entrypoint.sh"]
+    depends_on:
+      - event-database
+    networks:
+      - spotty-network
+
+  event-database:
+    image: mysql:5.7
+    container_name: event-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: event-service
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - "3307:3306"
+    volumes:
+      - event_db_data:/var/lib/mysql
+    networks:
+      - spotty-network
+
+  temp-auth-service: 
+    build:
+      context: ./code/backend/temp-auth-service
+      dockerfile: docker/Dockerfile
+    container_name: temp-auth-service
+    working_dir: /var/www/symfony
+    volumes:
+      - ./code/backend/temp-auth-service:/var/www/symfony
+    ports:
+      - "8082:80"
+    environment:
+      APP_ENV: dev
+      DB_HOST: event-database
+      DB_PORT: 3306
+      DATABASE_URL: mysql://symfony:symfony@temp-auth-database:3306/temp-auth-service
+    entrypoint: ["/var/www/symfony/docker/entrypoint.sh"]
+    depends_on:
+      - temp-auth-database
+    networks:
+      - spotty-network
+    
+  temp-auth-database:
+    image: mysql:5.7
+    container_name: temp-auth-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: temp-auth-service
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - "3309:3306"
+    volumes:
+      - temp_auth_db_data:/var/lib/mysql
+    networks:
+      - spotty-network
+
+
 networks:
   spotty-network:
-    name: spotty
     driver: bridge
 
 volumes:
   rabbitmq_data:
+  media_db_data:
+  event_db_data:
+  temp_auth_db_data:
