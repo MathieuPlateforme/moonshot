@@ -13,7 +13,7 @@ class RequestService
     {
         $response = $this->client->request(
             'POST',
-            'https://localhost:8002/media/new',
+            'http://localhost:8002/media/new',
             [
                 'json' => [
                     'media' => $file,
@@ -38,7 +38,7 @@ class RequestService
     public function getMedia(array $params) {
         $response = $this->client->request(
             'GET',
-            'https://localhost:8002/media',
+            'http://localhost:8002/media',
             [
             'query' => $params,
             ]
