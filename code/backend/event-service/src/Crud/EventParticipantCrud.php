@@ -28,6 +28,29 @@ class EventParticipantCrud
         ], 201);
     }
 
+    public function getEventDateParticipants(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    {
+        $participants = $entityManager->getRepository(EventDateParticipants::class)->FindAllWithParams($request_params);
+        $response = [];
+        foreach ($participants as $participant) {
+            $event_date = $entityManager->getRepository(EventDate::class)->find($participant->getEventDate()->getId());
+            $event = $entityManager->getRepository(Event::class)->find($event_date->getEvent()->getId());
+            $event_data = [
+                'event_title' => $event->getTitle(),
+                'event_start_date' => $event_date->getStartDate(),
+                'event_end_date' => $event_date->getEndDate(),
+            ];
+            $response[] = [
+                'id' => $participant->getId(),
+                'user_id' => $participant->getUserId(),
+                'created_at' => $participant->getCreatedAt(),
+                'event_data' => $event_data,
+            ];
+        }
+
+        return new JsonResponse($response, 200);
+    }
+
     public function deleteEventParticipant(int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $participant = $entityManager->getRepository(EventDateParticipants::class)->find($id);

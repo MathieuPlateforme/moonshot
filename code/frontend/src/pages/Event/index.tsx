@@ -9,6 +9,7 @@ import { LoopIcon } from "../../icons/LoopIcon";
 import { PlusIcon } from "../../icons/PlusIcon";
 import NewEvent from "./newEvent";
 import EventSearch from "./EventSearch";
+import EventCalendar from "./EventCalendar";
 
 const EventFeed: React.FC = () => {
   const [view, setView] = useState("list");
@@ -68,7 +69,9 @@ const EventFeed: React.FC = () => {
         {view === "user_events" && <UserEvents headerIsVisible={setHeaderIsVisible}/>}
         {view === "group_events" && <CommunityEvents />}
       </IonContent>
-      <IonModal isOpen={calendarIsOpen}></IonModal>
+      <IonModal isOpen={calendarIsOpen}>
+        <EventCalendar previousView={setCalendarIsOpen}/>
+      </IonModal>
       <IonModal isOpen={searchIsOpen}>
         <EventSearch previousView={setSearchIsOpen}/>
       </IonModal>

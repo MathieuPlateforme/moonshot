@@ -62,11 +62,11 @@ class EventCrud
             unset($request_params['participants']);
         }
 
-        if (count($request_params) > 0) {
-            $events = $entityManager->getRepository(Event::class)->findBy($request_params);
-        } else {
-            $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
-        }
+        // if (count($request_params) > 0) {
+            $events = $entityManager->getRepository(Event::class)->FindAllWithParams($request_params, $limit, $offset);
+        // } else {
+        //     $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
+        // }
 
         $eventData = [];
         foreach ($events as $event) {

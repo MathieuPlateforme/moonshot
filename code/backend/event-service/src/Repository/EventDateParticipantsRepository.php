@@ -16,28 +16,25 @@ class EventDateParticipantsRepository extends ServiceEntityRepository
         parent::__construct($registry, EventDateParticipants::class);
     }
 
-    //    /**
-    //     * @return EventDateParticipants[] Returns an array of EventDateParticipants objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function FindAllWithParams(array $params, int $limit = null, int $offset = null): array
+    {
+        $query = $this->createQueryBuilder('e');
 
-    //    public function findOneBySomeField($value): ?EventDateParticipants
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        foreach ($params as $key => $value) {
+            $query->andWhere("e.$key LIKE :$key")
+            ->setParameter($key, '%' . $value . '%');
+        }
+
+        if ($limit && $limit > 0) {
+            $query->setMaxResults($limit);
+        }
+        
+        if($offset && $offset > 0){
+            $query->setFirstResult($offset);
+        }
+
+        $request = $query->getQuery();
+
+        return $request->execute();
+    }
 }

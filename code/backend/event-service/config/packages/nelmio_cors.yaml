@@ -44,6 +44,11 @@ nelmio_cors:
       allow_headers: ["*"]
       allow_methods: ["POST"]
       max_age: 3600
+    "^/event/participations":
+      allow_origin: ["*"]
+      allow_headers: ["*"]
+      allow_methods: ["GET"]
+      max_age: 3600
     "^/event/participant/delete":
       allow_origin: ["*"]
       allow_headers: ["*"]
