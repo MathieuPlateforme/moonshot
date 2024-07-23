@@ -22,7 +22,8 @@ class CommentController extends AbstractController
             ->setContent($request->get('content'))
             ->setAuthorId($request->get('userId'))
             ->setPublication($request->get('publication'))
-            ->setCreatedAt(new \DateTime());
+            ->setCreatedAt(new \DateTime())
+            ->setParentComment($request->get('parentComment'));
 
         $entityManager->persist($comment);
         $entityManager->flush();
