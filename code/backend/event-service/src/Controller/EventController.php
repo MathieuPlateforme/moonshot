@@ -24,7 +24,7 @@ class EventController extends AbstractController
             return new JsonResponse(['error' => 'Unauthorized'], 401);
         } else {
             $request_params = json_decode($request->getContent(), true)['event'];
-            return $event_crud->postEvent($request_params, $token['user_id'], $entityManager, $client);
+            return $event_crud->postEvent($request_params, $token['id'], $entityManager, $client);
         }
     }
 
@@ -38,6 +38,19 @@ class EventController extends AbstractController
         } else {
             $request_params = $request->query->all();
             return $event_crud->getEvent($request_params, $entityManager, $client);
+        }
+    }
+
+    #[Route('/events/autocomplete', name: 'app_get_events_autocomplete')]
+    public function getEventsAutoComplete(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, EventCrud $event_crud): JsonResponse
+    {
+        $token_decoder = new TokenDecoder('secret');
+        $token = $token_decoder->token_verify($request->headers->get('token'));
+        if ($token == false) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        } else {
+            $request_params = $request->query->all();
+            return $event_crud->getEventAutocomplete($request_params, $entityManager, $client);
         }
     }
 }

@@ -9,6 +9,10 @@ export const getEvents = async (params: Object | null = null) => {
   return await get({ url: `${VITE_REST_API}:8001/events`, options: { params } });
 };
 
+export const getEventsAutoComplete = async (params: Object | null = null) => {
+  return await get({ url: `${VITE_REST_API}:8001/events/autocomplete`, options: { params } });
+};
+
 export const postEvent = async (event: Object) => {
   return await post({ url: `${VITE_REST_API}:8001/event/new`, data: { event }, options: {} });
 };

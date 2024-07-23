@@ -6,7 +6,7 @@ import { BackArrowIcon } from "../../icons/BackArrowIcon";
 import { postEventParticipant, delEventParticipant } from "../../libs/api/event";
 import { useAuth } from "../../providers/AuthProvider";
 
-const EventFocus: React.FC<{ event_id: string; previousView: any }> = ({ event_id, previousView }) => {
+const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ event_id, previousView }) => {
   const [event, setEvent] = React.useState<any>(null);
   const [selectedEventDate, setSelectedEventDate] = React.useState<any>(null);
   const [eventParticipants, setEventParticipants] = React.useState<any>(null);
@@ -68,7 +68,7 @@ const EventFocus: React.FC<{ event_id: string; previousView: any }> = ({ event_i
         }}
         style={{ position: "absolute", top: "10px", left: "10px" }}
       >
-        <BackArrowIcon />
+        <BackArrowIcon color="white" />
       </a>
       {event && (
         <SingleEventCard
