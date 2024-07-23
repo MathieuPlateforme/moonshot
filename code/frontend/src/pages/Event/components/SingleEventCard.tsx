@@ -38,9 +38,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
   handleSubscribe,
   userId,
 }) => {
-  useEffect(() => {
-    console.log("tteteetet", selectedEventDate.start_date);
-  }, [selectedEventDate]);
+  
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
       <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
@@ -55,7 +53,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
                 labelPlacement="floating"
                 value={selectedEventDate.start_date}
                 onIonChange={(e) => {
-                  setSelectedEventDate(event.subEvents[e.detail.value - 1]);              
+                  setSelectedEventDate(event.subEvents[e.detail.value - 1]);
                 }}
               >
                 {event.subEvents.map((eventDate: any) => (

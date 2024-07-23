@@ -26,4 +26,40 @@ class EventRepository extends ServiceEntityRepository
 
         return $request->execute();
     }
+
+    // public function FindAllWithAutoComplete(string $title): array
+    // {
+    //     $query = $this->createQueryBuilder('e')
+    //         ->where('e.title LIKE :title')
+    //         ->setParameter('title', '%' . $title . '%');
+
+    //     $request = $query->getQuery();
+
+    //     return $request->execute();
+    // }
+
+
+    public function FindAllWithAutoComplete(array $params, int $limit = null, int $offset = null): array
+    {
+        $query = $this->createQueryBuilder('e');
+        // var_dump($params);
+
+        foreach ($params as $key => $value) {
+            // if()
+            $query->andWhere("e.$key LIKE :$key")
+            ->setParameter($key, '%' . $value . '%');
+        }
+
+        if ($limit) {
+            $query->setMaxResults($limit);
+        }
+        
+        if($offset){
+            $query->setFirstResult($offset);
+        }
+
+        $request = $query->getQuery();
+
+        return $request->execute();
+    }
 }

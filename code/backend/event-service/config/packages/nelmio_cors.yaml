@@ -29,6 +29,11 @@ nelmio_cors:
       allow_headers: ["*"]
       allow_methods: ["POST", "PUT", "GET", "DELETE"]
       max_age: 3600
+    "^/events/autocomplete":
+      allow_origin: ["*"]
+      allow_headers: ["*"]
+      allow_methods: ["POST", "PUT", "GET", "DELETE"]
+      max_age: 3600
     "^/events/{id}":
       allow_origin: ["*"]
       allow_headers: ["*"]

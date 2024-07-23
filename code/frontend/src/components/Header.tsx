@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import { GUEST_MENU, USER_MENU } from "../config/constant";
 import { useAuth } from "../providers/AuthProvider";
 
-interface HeaderProps {}
+interface HeaderProps {
+  isVisible: boolean;
+}
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({isVisible}) => {
   const { getRole, logout } = useAuth();
   const [menu, setMenu] = useState<{ title: string; icon?: React.FC; link?: string; action?: string }[]>([]);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  
+  const headerClassName = isVisible
+    ? "bg-[#77DB48] fixed bottom-0 w-full z-10 transition-opacity duration-100"
+    : "hidden transition-opacity duration-500";
 
   const handleAction = (action: string) => {
     switch (action) {
@@ -20,19 +25,6 @@ const Header: React.FC<HeaderProps> = () => {
     }
   };
 
-  const handleScroll = () => {
-    const scrollPosition = window.scrollY;
-    console.log(scrollPosition);
-    setIsHeaderVisible(scrollPosition < 100);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   useEffect(() => {
     if (getRole() === "USER") {
       setMenu(USER_MENU);
@@ -40,10 +32,6 @@ const Header: React.FC<HeaderProps> = () => {
       setMenu(GUEST_MENU);
     }
   }, [getRole]);
-
-  const headerClassName = isHeaderVisible
-    ? "bg-[#77DB48] fixed bottom-0 w-full z-10 transition-opacity duration-500"
-    : "bg-[#77DB48] fixed bottom-0 w-full z-10 opacity-0 transition-opacity duration-500";
 
   return (
     <header className={headerClassName}>

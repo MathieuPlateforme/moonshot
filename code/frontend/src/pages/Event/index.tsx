@@ -1,15 +1,20 @@
-import React, { useEffect } from "react";
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from "@ionic/react";
+import React, { useEffect, useState } from "react";
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonModal } from "@ionic/react";
 import { useHistory } from "react-router";
 import EventList from "./EventList";
 import UserEvents from "./UserEvents";
 import CommunityEvents from "./CommunityEvents";
 import { CalendarIcon2 } from "../../icons/CalendarIcon2";
 import { LoopIcon } from "../../icons/LoopIcon";
-import { MoreIcon } from "../../icons/MoreIcon";
+import { PlusIcon } from "../../icons/PlusIcon";
+import NewEvent from "./newEvent";
+import EventSearch from "./EventSearch";
 
 const EventFeed: React.FC = () => {
-  const [view, setView] = React.useState("list");
+  const [view, setView] = useState("list");
+  const [calendarIsOpen, setCalendarIsOpen] = useState(false);
+  const [searchIsOpen, setSearchIsOpen] = useState(false);
+  const [newEventIsOpen, setNewEventIsOpen] = useState(false);
 
   return (
     <IonPage>
@@ -34,9 +39,15 @@ const EventFeed: React.FC = () => {
               gap: "20px",
             }}
           >
-            <CalendarIcon2 />
-            <LoopIcon />
-            <MoreIcon />
+            <button onClick={()=>setCalendarIsOpen(true)}>
+              <CalendarIcon2 />
+            </button>
+            <button onClick={()=>setSearchIsOpen(true)}>
+              <LoopIcon />
+            </button>
+            <button onClick={()=>setNewEventIsOpen(true)}>
+              <PlusIcon />
+            </button>
           </div>
         </div>
         <IonToolbar>
@@ -56,6 +67,13 @@ const EventFeed: React.FC = () => {
         {view === "user_events" && <UserEvents />}
         {view === "group_events" && <CommunityEvents />}
       </IonContent>
+      <IonModal isOpen={calendarIsOpen}></IonModal>
+      <IonModal isOpen={searchIsOpen}>
+        <EventSearch previousView={setSearchIsOpen}/>
+      </IonModal>
+      <IonModal isOpen={newEventIsOpen}>
+        <NewEvent previousView={setNewEventIsOpen}/>
+      </IonModal>
     </IonPage>
   );
 };
