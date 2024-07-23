@@ -28,6 +28,7 @@ class PublicationController extends AbstractController
                 'views' => $publication->getViews(),
                 'authorId' => $publication->getAuthorId(),
                 'eventId' => $publication->getEventId(),
+                'nbComments' => $publication->getComments()->count(),
             ];
         }
 

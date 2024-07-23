@@ -5,11 +5,12 @@ interface PublicationCardProps {
     id: number;
     content: string;
     status: string;
-    created_at: string;
-    author_id: number;
-    author: string | null;
-    event_id: number | null;
+    createdAt: string;
+    authorId: number;
+    author: string | null; //! need user service
+    eventId: number | null;
     views: number;
+    nbComments: number;
     // media: {
     //   id: number;
     //   url: string;
@@ -22,15 +23,16 @@ interface PublicationCardProps {
 const PublicationCard: React.FC<PublicationCardProps> = ({ publication, onButtonClick }) => {
 
   if (publication.status === "published") {
-    if (publication.event_id === null) {
+    if (publication.eventId === null) {
       return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md mt-5" onClick={onButtonClick}>
           {/* <img className="w-full" src={`data:image/jpeg;base64,${publication.media.file}`} alt="Publication" /> */}
           <div className="p-4">
-            <p className="text-purple-600 mb-1">{publication.created_at}</p>
+            <p className="text-purple-600 mb-1">{publication.createdAt}</p>
             <h2 className="text-xl font-bold mb-2 mt-0 text-black">{publication.content}</h2>
-            <p className="text-purple-600 self-end">published by {publication.author_id}</p>
+            <p className="text-purple-600 self-end">Écrit par {publication.authorId}</p>
             <p className="text-green-600">{publication.views} vues</p>
+            <p className="text-green-600">{publication.nbComments} commentaires</p>
           </div>
         </div>
       );
@@ -39,10 +41,11 @@ const PublicationCard: React.FC<PublicationCardProps> = ({ publication, onButton
         <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md mt-5" onClick={onButtonClick}>
           {/* <img className="w-full" src={`data:image/jpeg;base64,${publication.media.file}`} alt="Publication" /> */}
           <div className="p-4">
-            <p className="text-purple-600 mb-1">{publication.created_at}</p>
+            <p className="text-purple-600 mb-1">{publication.createdAt}</p>
             <h2 className="text-xl font-bold mb-2 mt-0 text-black">{publication.content}</h2>
-            <p className="text-purple-600 self-end">published by {publication.author_id}</p>
+            <p className="text-purple-600 self-end">published by {publication.authorId}</p>
             <p className="text-green-600">{publication.views} vues</p>
+            <p className="text-green-600">{publication.nbComments} commentaires</p>
           </div>
         </div>
       );
