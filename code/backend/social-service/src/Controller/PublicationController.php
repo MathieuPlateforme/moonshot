@@ -14,6 +14,26 @@ class PublicationController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
 
+    #[Route('/list', name: 'list', methods: ['GET'])]
+    public function list(EntityManagerInterface $entityManager)
+    {
+        $publications = $entityManager->getRepository(Publication::class)->findAll();
+
+        $response = [];
+        foreach ($publications as $publication) {
+            $response[] = [
+                'id' => $publication->getId(),
+                'content' => $publication->getContent(),
+                'status' => $publication->getStatus(),
+                'views' => $publication->getViews(),
+                'authorId' => $publication->getAuthorId(),
+                'eventId' => $publication->getEventId(),
+            ];
+        }
+
+        return new JsonResponse($response);
+    }
+
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(EntityManagerInterface $entityManager, Request $request)
     {
@@ -130,6 +150,4 @@ class PublicationController extends AbstractController
 
     //     return new JsonResponse($response);
     // }
-
- 
 }
