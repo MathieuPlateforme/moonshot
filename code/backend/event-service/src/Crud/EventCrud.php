@@ -5,7 +5,6 @@ namespace App\Crud;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Event;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\EventType;
 use App\Service\Requests\RequestService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { IonContent, IonModal, IonButton } from "@ionic/react";
+import React, { useEffect, useState } from "react";
+import { IonContent, IonModal } from "@ionic/react";
 import EventCard from "./components/EventCard";
 import { getEvents } from "../../libs/api/event";
 import EventFocus from "./EventFocus";
@@ -27,31 +27,12 @@ const EventList: React.FC = () => {
   }, [allEvents]);
 
   return (
-    <IonContent style={{
-      height: "90%",
-    }}
+    <IonContent
     scrollEvents={true}
     onIonScroll={(e) => {     
-      // console.log(e);
-      console.log(e.detail.currentY);
-      console.log(e.detail.scrollTop);
-      // // console.log("typeofscroll", typeof(e.detail.scrollTop));     
       if(e.detail.scrollTop > scrollDown) {
-        console.log("scrolling down");       
         loadEvents();
       }
-      // if(e.detail.currentY > scrollDown) {
-      //   console.log("scrolling down");       
-      //   loadEvents();
-      // }
-
-
-      // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
-      //   console.log("doc", document.body.offsetHeight);
-      //   console.log("total", window.innerHeight + window.scrollY);
-      //   console.log("scrll", window.scrollY);
-      //   console.log("scrolling down");       
-      // }
     }}
     >
       {allEvents?.map((event, index) => (
@@ -67,7 +48,6 @@ const EventList: React.FC = () => {
       <IonModal isOpen={isOpen}>
         <EventFocus event_id={selectedEvent} previousView={setIsOpen} />
       </IonModal>
-      <IonButton onClick={loadEvents}>Load More</IonButton>
     </IonContent>
   );
 };

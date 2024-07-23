@@ -6,11 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Event;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Token\TokenDecoder;
-use App\Entity\EventType;
-use App\Service\Requests\RequestService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Crud\EventCrud;
 
