@@ -16,8 +16,7 @@ const Login: React.FC = () => {
   const { push } = useHistory();
 
   const handleLogin = async () => {
-    // const request = await post("login", {email, password});
-
+    login(email, password);
   };
 
   const handleGoogleLogin = () => {

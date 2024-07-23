@@ -26,8 +26,10 @@ const Register: React.FC = () => {
     push(ROUTES_PATH.HOME);
   }
 
+  const { VITE_REST_API } = import.meta.env;
+
   const handleRegister = async () => {
-    const registerRequest = await post({ url: "https://localhost:8000/register", data: { firstName, lastName, email, username, password }, options: {} });
+    const registerRequest = await post({ url: `${VITE_REST_API}:8000/register`, data: { firstName, lastName, email, username, password }, options: {} });
     console.log(registerRequest);
   };
 
