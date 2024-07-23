@@ -7,124 +7,124 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Publication;
+use App\Entity\Tag;
 
-#[Route('/publication', name: 'publication_')]
-class PublicationController extends AbstractController
+#[Route('/tag', name: 'tag_')]
+class TagController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
 
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(EntityManagerInterface $entityManager, Request $request)
     {
-        $publication = new Publication();
-        $publication
+        $tag = new Tag();
+        $tag
             ->setContent($request->get('content'))
             ->setAuthorId($request->get('userId'))
             ->setEventId($request->get('eventId'))
-            ->setStatus(\App\Config\Publication\Status::Draft)
+            ->setStatus(\App\Config\Tag\Status::Draft)
             ->setCreatedAt(new \DateTime())
             ->setViews(0);
 
-        $entityManager->persist($publication);
+        $entityManager->persist($tag);
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'Publication created',
-            'id' => $publication->getId(),
+            'message' => 'Tag created',
+            'id' => $tag->getId(),
         ], 201);
     }
 
     #[Route('/{id}', name: 'getone', methods: ['GET'])]
     public function get(EntityManagerInterface $entityManager, int $id)
     {
-        $publication = $entityManager->getRepository(Publication::class)->find($id);
+        $tag = $entityManager->getRepository(Tag::class)->find($id);
 
-        if (!$publication) {
+        if (!$tag) {
             return new JsonResponse([
-                'message' => 'Publication not found',
+                'message' => 'Tag not found',
             ], 404);
         }
 
         return new JsonResponse([
-            'id' => $publication->getId(),
-            'content' => $publication->getContent(),
-            'status' => $publication->getStatus(),
-            'views' => $publication->getViews(),
-            'authorId' => $publication->getAuthorId(),
-            'eventId' => $publication->getEventId(),
+            'id' => $tag->getId(),
+            'label' => $tag->getLabel(),
+            'status' => $tag->getStatus(),
+            'views' => $tag->getViews(),
+            'authorId' => $tag->getAuthorId(),
+            'eventId' => $tag->getEventId(),
         ]);
     }
 
     #[Route('/{id}', name: 'deleteone', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, int $id)
     {
-        $publication = $entityManager->getRepository(Publication::class)->find($id);
+        $tag = $entityManager->getRepository(Tag::class)->find($id);
 
-        if (!$publication) {
+        if (!$tag) {
             return new JsonResponse([
-                'message' => 'Publication not found',
+                'message' => 'Tag not found',
             ], 404);
         }
 
-        $entityManager->remove($publication);
+        $entityManager->remove($tag);
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'Publication deleted',
+            'message' => 'Tag deleted',
         ]);
     }
 
     #[Route('/{id}', name: 'updateone', methods: ['PUT'])]
     public function update(EntityManagerInterface $entityManager, int $id, string $content)
     {
-        $publication = $entityManager->getRepository(Publication::class)->find($id);
+        $tag = $entityManager->getRepository(Tag::class)->find($id);
 
-        if (!$publication) {
+        if (!$tag) {
             return new JsonResponse([
-                'message' => 'Publication not found',
+                'message' => 'Tag not found',
             ], 404);
         }
 
-        $publication->setContent($content);
+        $tag->setLabel($content);
 
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'Publication updated',
+            'message' => 'Tag updated',
         ]);
     }
 
     // #[Route('/search/{keywords}', name: 'search', methods: ['GET'])]
     // public function search(EntityManagerInterface $entityManager, array $keywords)
     // {
-    //     $publications = $entityManager->getRepository(Publication::class)->findByKeywords($keywords, ["content" => "ASC"], 10);
+    //     $tags = $entityManager->getRepository(Tag::class)->findByKeywords($keywords, ["content" => "ASC"], 10);
 
     //     return new JsonResponse([
-    //         'publications' => $publications,
+    //         'tags' => $tags,
     //     ]);
     // }
 
     // #[Route('/search/{content}', name: 'search', methods: ['GET'])]
     // public function search(string $content)
     // {
-    //     $publications = $this->entityManager->getRepository(Publication::class)->findBy(['content' => $content]);
+    //     $tags = $this->entityManager->getRepository(Tag::class)->findBy(['content' => $content]);
 
-    //     if (!$publications) {
+    //     if (!$tags) {
     //         return new JsonResponse([
-    //             'message' => 'Publications not found',
+    //             'message' => 'Tags not found',
     //         ], 404);
     //     }
 
     //     $response = [];
-    //     foreach ($publications as $publication) {
+    //     foreach ($tags as $tag) {
     //         $response[] = [
-    //             'id' => $publication->getId(),
-    //             'content' => $publication->getContent(),
-    //             'status' => $publication->getStatus(),
-    //             'views' => $publication->getViews(),
-    //             'authorId' => $publication->getAuthorId(),
-    //             'eventId' => $publication->getEventId(),
+    //             'id' => $tag->getId(),
+    //             'content' => $tag->getContent(),
+    //             'status' => $tag->getStatus(),
+    //             'views' => $tag->getViews(),
+    //             'authorId' => $tag->getAuthorId(),
+    //             'eventId' => $tag->getEventId(),
     //         ];
     //     }
 
