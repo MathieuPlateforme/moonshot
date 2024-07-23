@@ -5,7 +5,6 @@ namespace App\Crud;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Event;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\EventType;
 use App\Service\Requests\RequestService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -41,12 +40,32 @@ class EventCrud
         }
     }
 
-    public function getEvent(array $request_params, int $user_id, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    public function getEvent(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
     {
-        if (count($request_params) > 0) {
+        $load_participants = false;
+        $limit = 0;
+        $offset = 0;
+
+        if (array_key_exists('limit', $request_params)) {
+            $limit = $request_params['limit'];
+            unset($request_params['limit']);
+        }
+
+        if (array_key_exists('offset', $request_params)) {
+            $offset = $request_params['offset'];
+            unset($request_params['offset']);
+        }
+
+        if (array_key_exists('participants', $request_params)) {
+            $load_participants = true;
+            $participants_list = [];
+            unset($request_params['participants']);
+        }
+
+        if (count($request_params) > 0) {       
             $events = $entityManager->getRepository(Event::class)->findBy($request_params);
         } else {
-            $events = $entityManager->getRepository(Event::class)->findAll();
+            $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
         }
 
         $eventData = [];
@@ -67,6 +86,16 @@ class EventCrud
                     'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
                     'participants' => count($participants),
                 ];
+                if($load_participants){               
+                    foreach ($participants as $participant) {
+                        $participants_list[] = [
+                            'id' => $participant->getId(),
+                            'user_id' => $participant->getUserId(),
+                            'event_date_id' => $participant->getEventDate()->getId(),
+                            'created_at' => $participant->getCreatedAt()->format('Y-m-d H:i'),
+                        ];
+                    }
+                }
             }
             $eventData[] = [
                 'id' => $event->getId(),
@@ -79,7 +108,88 @@ class EventCrud
                 'subEvents' => $subEvents,
                 'media' => $file_response,
                 'total_participants' => $total_participants,
+                'offset' => $offset,
             ];
+            if($load_participants){
+                $eventData['participants'] = $participants_list;
+            }
+        }
+        return new JsonResponse($eventData, 200);
+    }
+
+    public function getEventAutocomplete(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    {
+        $load_participants = false;
+        $limit = 0;
+        $offset = 0;
+
+        if (array_key_exists('limit', $request_params)) {
+            $limit = $request_params['limit'];
+            unset($request_params['limit']);
+        }
+
+        if (array_key_exists('offset', $request_params)) {
+            $offset = $request_params['offset'];
+            unset($request_params['offset']);
+        }
+
+        if (array_key_exists('participants', $request_params)) {
+            $load_participants = true;
+            $participants_list = [];
+            unset($request_params['participants']);
+        }
+
+        // if (count($request_params) > 0) {       
+            $events = $entityManager->getRepository(Event::class)->FindAllWithAutoComplete($request_params, $limit, $offset);
+        // } else {
+        //     $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
+        // }
+
+        $eventData = [];
+        foreach ($events as $event) {
+            $file_request = new RequestService($client);
+            $file_response = $file_request->getMedia(['table' => 'event', 'id' => $event->getId()]);
+            $event_dates = $event->getEventDates();
+            $subEvents = [];
+            $total_participants = 0;
+            foreach ($event_dates as $event_date) {
+                $participants = $event_date->getEventDateParticipants();
+                $total_participants += count($participants);
+                $subEvents[] = [
+                    'id' => $event_date->getId(),
+                    'start_date' => $event_date->getStartDate()->format('Y-m-d H:i'),
+                    'end_date' => $event_date->getEndDate()->format('Y-m-d H:i'),
+                    'address' => $event_date->getAddress(),
+                    'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
+                    'participants' => count($participants),
+                ];
+                if($load_participants){               
+                    foreach ($participants as $participant) {
+                        $participants_list[] = [
+                            'id' => $participant->getId(),
+                            'user_id' => $participant->getUserId(),
+                            'event_date_id' => $participant->getEventDate()->getId(),
+                            'created_at' => $participant->getCreatedAt()->format('Y-m-d H:i'),
+                        ];
+                    }
+                }
+            }
+            $eventData[] = [
+                'id' => $event->getId(),
+                'type' => $event->getType()->getName(),
+                'user_id' => $event->getUserId(),
+                'title' => $event->getTitle(),
+                'description' => $event->getContent(),
+                'createdAt' => $event->getCreatedAt()->format('Y-m-d H:i'),
+                'recurrent' => $event->isRecurrent(),
+                'subEvents' => $subEvents,
+                'media' => $file_response,
+                'total_participants' => $total_participants,
+                'offset' => $offset,
+            ];
+            if($load_participants){
+                $eventData['participants'] = $participants_list;
+            }
         }
         return new JsonResponse($eventData, 200);
     }

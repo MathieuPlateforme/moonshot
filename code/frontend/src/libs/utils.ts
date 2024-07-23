@@ -34,4 +34,11 @@ export const put = ({ url, data = {}, options = {} }: { url: string, data: objec
       },
     });
 
-export const del = ({ url, data = {} }: { url: string, data: object }) => axios.delete(url, data);
+export const del = ({ url, data = {} }: { url: string, data: object }) => 
+  // axios.delete(url, data);
+axios.delete(url, {
+  headers: {
+    token: localStorage.getItem('token'),
+  },
+  data,
+});

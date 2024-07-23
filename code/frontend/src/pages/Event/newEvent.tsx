@@ -16,8 +16,9 @@ import {
   IonModal,
 } from "@ionic/react";
 import { getEventTypes, postEvent, postEventDate } from "../../libs/api/event";
+import { BackArrowIcon } from "../../icons/BackArrowIcon";
 
-const NewEvent: React.FC = () => {
+const NewEvent: React.FC<{ previousView: any }> = ({ previousView }) => {
   const [typeOptions, setTypeOptions] = React.useState([]);
   const [eventId, setEventId] = React.useState("");
   const [event, setEvent] = React.useState({
@@ -71,13 +72,21 @@ const NewEvent: React.FC = () => {
     }
   };
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle> {eventId === "" ? "New Event" : "Event created! Now let's add date(s) to it"}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    // <IonPage>
+    //   <IonHeader>
+    //     <IonToolbar>
+    //       <IonTitle> {eventId === "" ? "New Event" : "Event created! Now let's add date(s) to it"}</IonTitle>
+    //     </IonToolbar>
+    //   </IonHeader>
       <IonContent fullscreen>
+      <a
+        onClick={() => {
+          previousView(false);
+        }}
+        // style={{ position: "absolute", top: "10px", left: "10px" }}
+      >
+        <BackArrowIcon color="black" />
+      </a>
         {eventId === "" && (
           <IonList>
             <IonItem>
@@ -167,7 +176,7 @@ const NewEvent: React.FC = () => {
           </IonList>
         )}
       </IonContent>
-    </IonPage>
+    // </IonPage>
   );
 };
 

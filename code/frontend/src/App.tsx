@@ -52,9 +52,6 @@ const App: React.FC = () => {
             hasAccess(accesses) ? <Route key={path} path={path} component={Component} exact /> : <Redirect key={path} to={ROUTES_PATH.HOME} />
           )}
         </IonRouterOutlet>
-        <IonHeader>
-          <Header />
-        </IonHeader>
       </IonReactRouter>
     </IonApp>
   );
