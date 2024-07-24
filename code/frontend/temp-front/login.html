@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <style>
+    #login {
+      max-width: 300px;
+      margin: 100px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    #login input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    #login button {
+      padding: 10px;
+      width: 100%;
+      background: #5cb85c;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="login">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="text" id="name" placeholder="Name" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <script>
+    async function login() {
+      // Récupérer les valeurs des champs de saisie
+      const email = document.getElementById('email').value;
+      const name = document.getElementById('name').value;
+
+      if (!email || !name) {
+        alert('Please enter both name and email');
+        return;
+      }
+
+      // Générer un ID pour l'utilisateur, par exemple, en utilisant l'email
+      const id = email;
+
+      // Appeler la fonction pour se connecter
+      await loginUser(id, name, email);
+    }
+
+    async function loginUser(id, name, email) {
+      try {
+        const response = await fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id, name, email })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Stocker le token JWT
+          localStorage.setItem('token', data.token);
+          // Redirection après une connexion réussie
+          window.location.href = '/room.html'; // Remplacez '/room.html' par l'URL de la page vers laquelle vous voulez rediriger
+        } else {
+          console.error('Login failed:', data.message);
+          alert('Login failed: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        alert('An error occurred. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>

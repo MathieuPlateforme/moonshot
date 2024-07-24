@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #token {
+            word-break: break-all; /* Permet de gérer les longues chaînes de texte */
+        }
+    </style>
+</head>
+<body>
+    <h1>OK</h1>
+    <p>Connexion réussie !</p>
+    <p id="token">Votre token apparaîtra ici.</p>
+
+    <script>
+        // Récupérer le token depuis le localStorage
+        const token = localStorage.getItem('token');
+
+        // Afficher le token dans l'élément avec l'id 'token'
+        document.getElementById('token').textContent = token ? `Votre token est : ${token}` : 'Aucun token trouvé.';
+    </script>
+</body>
+</html>

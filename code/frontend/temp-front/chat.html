@@ -44,22 +44,31 @@
         </form>
     </div>
 
-    <!-- Inclure le script Socket.io depuis le CDN -->
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     <script>
-        const socket = io('http://localhost:5000'); // Assurez-vous d'utiliser l'URL correcte
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        const socket = io('http://localhost:5000', {
+            query: { token }
+        });
 
         const form = document.getElementById('form');
         const input = document.getElementById('message');
         const messages = document.getElementById('messages');
+
+        socket.on('connect', () => {
+            socket.emit('joinRoom', { roomId: '1' });
+        });
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if (input.value) {
                 console.log('Sending message:', input.value);
                 socket.emit('message', {
-                    roomId: '1', // Par exemple, identifiant de la salle de chat
-                    userId: '1', // Identifiant de l'utilisateur
+                    roomId: '1',
                     content: input.value
                 });
                 input.value = '';
@@ -69,13 +78,25 @@
         socket.on('message', function(msg) {
             console.log('Received message:', msg);
             const item = document.createElement('li');
-            item.textContent = msg.content;
+            item.textContent = `User ${msg.user.name}: ${msg.content}`;
             messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('messageHistory', function(history) {
+            console.log('Message history received:', history);
+            history.forEach(msg => {
+                const item = document.createElement('li');
+                item.textContent = `User ${msg.user_id}: ${msg.content}`;
+                messages.appendChild(item);
+            });
             window.scrollTo(0, document.body.scrollHeight);
         });
     </script>
 </body>
 </html>
+
+
 
 
 
