@@ -17,15 +17,15 @@ class PublicationController extends AbstractController
     private EntityManagerInterface $entityManager;
 
     #[Route('/list', name: 'list', methods: ['GET'])]
-    public function list(EntityManagerInterface $entityManager, HttpClientInterface $client,)
+    public function list(EntityManagerInterface $entityManager, HttpClientInterface $client, Request $request,)
     {
-        $publications = $entityManager->getRepository(Publication::class)->findAllWithLimitAndOffset(10, 0);
-
+        $request_params = $request->query->all();
+        $publications = $entityManager->getRepository(Publication::class)->findAllWithLimitAndOffset($request_params['limit'], $request_params['offset']);
         $response = [];
         foreach ($publications as $publication) {
             $file_request = new RequestService($client);
-            $file_response = $file_request->getMedia(['table' => 'event', 'id' => $publication->getId()]);
-            // return new JsonResponse($file_response, 200);
+            $file_response = $file_request->getMedia(['table' => 'publication', 'id' => $publication->getId()]);
+            $user = $file_request->getUser($publication->getAuthorId());
             $response[] = [
                 'id' => $publication->getId(),
                 'content' => $publication->getContent(),
@@ -34,7 +34,8 @@ class PublicationController extends AbstractController
                 'authorId' => $publication->getAuthorId(),
                 'eventId' => $publication->getEventId(),
                 'nbComments' => $publication->getComments()->count(),
-                "media" => $file_response
+                "media" => $file_response,
+                'author' => $user
             ];
         }
 
