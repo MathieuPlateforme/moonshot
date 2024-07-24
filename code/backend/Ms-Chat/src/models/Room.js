@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const roomSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        unique: true,
-        autoIncrement: true
-    },
     created_at: {
         type: Date,
         default: Date.now
@@ -24,6 +20,9 @@ const roomSchema = new mongoose.Schema({
     }
 });
 
+roomSchema.plugin(AutoIncrement, {inc_field: 'id'});
+
 const Room = mongoose.model('Room', roomSchema);
 
 module.exports = Room;
+

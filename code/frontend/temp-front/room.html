@@ -27,5 +27,65 @@
         // Afficher le token dans l'élément avec l'id 'token'
         document.getElementById('token').textContent = token ? `Votre token est : ${token}` : 'Aucun token trouvé.';
     </script>
+    <style>
+        #create-room {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        #create-room input, #create-room button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        #create-room button {
+            background: #5cb85c;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="create-room">
+        <h2>Create Room</h2>
+        <form id="room-form">
+            <input type="text" id="room-title" placeholder="Room Title" required />
+            <input type="text" id="room-description" placeholder="Room Description" />
+            <button type="submit">Create Room</button>
+        </form>
+        <p id="response-message"></p>
+    </div>
+
+    <script>
+        document.getElementById('room-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('room-title').value;
+            const description = document.getElementById('room-description').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/rooms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ title, description })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('response-message').textContent = `Room created successfully! ID: ${data.roomId}`;
+                } else {
+                    document.getElementById('response-message').textContent = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('response-message').textContent = 'An error occurred.';
+            }
+        });
+    </script>
 </body>
 </html>
