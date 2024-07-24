@@ -5,7 +5,7 @@ const { it } = require('vitest');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,jsx,ts,tsx,css}'],
-  darkMode: 'media',
+  darkMode: 'class',
   theme: {
     colors: {
       'green': '#0AD944',

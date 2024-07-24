@@ -40,11 +40,7 @@ const Login: React.FC = () => {
       <IonContent fullscreen className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-center">Login</h2>
-          <img
-            src="https://via.placeholder.com/400x150"
-            alt="Illustration"
-            className="w-full h-20 object-cover"
-          />
+
           <IonList className="space-y-4">
             <IonItem className="flex items-center border-b border-gray-300 py-2">
               <IonInput placeholder="Email" value={email} onIonChange={(e) => setEmail(e.detail.value!)} className="w-full px-2 py-2 text-gray-700 focus:outline-none"></IonInput>

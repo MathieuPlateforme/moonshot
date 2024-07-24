@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { IonContent } from "@ionic/react";
 import SingleEventCard from "./components/SingleEventCard";
-import { getEvents, delEvent } from "../../libs/api/event";
 import { BackArrowIcon } from "../../icons/BackArrowIcon";
-import { postEventParticipant, delEventParticipant } from "../../libs/api/event";
+import { postEventParticipant, delEventParticipant, getEvents, delEvent } from "../../libs/api/event";
 import { useAuth } from "../../providers/AuthProvider";
 
 const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ event_id, previousView }) => {
@@ -30,7 +29,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
     });
   };
 
-  const handleSubscribe = async (target: string) => {
+  const handleSubscribe = (target: string) => {
     if (target == "single") {
       if (selectedEventDate.is_subscribed) {
         delEventParticipant(selectedEventDate.participation_id).then((response) => {
@@ -61,6 +60,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
         setSubscribedToAll(false);
         loadEvent();
       } else {
+        console.log(event.subEvents);
         for (const eventDate of event.subEvents) {
           if (!eventDate.is_subscribed) {
             const eventParticipant = {

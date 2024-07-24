@@ -4,6 +4,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { ROUTES_PATH, ACCESSES } from "./config/constant";
 import { routes } from "./config/routes";
 import { useAuth } from "./providers/AuthProvider";
+import { useEffect } from "react";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import "./theme/tailwind.css";
@@ -42,6 +43,11 @@ setupIonicReact();
 
 const App: React.FC = () => {
   const { hasAccess } = useAuth();
+  useEffect(() => {
+    // Force light mode
+    document.documentElement.classList.remove('dark');
+    localStorage.theme = 'light';
+  }, []);
 
   return (
     <IonApp>
