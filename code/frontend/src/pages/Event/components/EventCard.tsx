@@ -22,14 +22,16 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event, onButtonClick }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md mt-5" onClick={onButtonClick}>
-      <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
-      <div className="p-4">
-        <p className="text-purple-600 mb-1">{event.subEvents[0].start_date}</p>
-        <h2 className="text-xl font-bold mb-2 mt-0 text-black">{event.title}</h2>
-        <p className="text-purple-600 self-end">{event.description}</p>
-        <p className="text-grey-600 self-end">{event.subEvents[0].address}</p>
-        <p className="text-green-600">{event.total_participants} participants</p>
+    <div className="p-4">
+      <div className="rounded-lg shadow-xl overflow-hidden max-w-md mt-5" onClick={onButtonClick}>
+        <img className="p-2 rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
+        <div className="p-4">
+          <p className="font-be-vietnam text-14 font-regular italic text-textBlueCard mb-1">{event.subEvents[0].start_date}</p>
+          <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">{event.title}</h2>
+          <p className="font-be-vietnam text-16 font-regular p-2 self-end">{event.description}</p>
+          <p className="font-be-vietnam text-16 font-regular text-textBlueCard self-end">{event.subEvents[0].address}</p>
+          <p className="font-be-vietnam text-14 font-regular text-green">{event.total_participants} participants</p>
+        </div>
       </div>
     </div>
   );

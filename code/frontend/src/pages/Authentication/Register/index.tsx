@@ -41,9 +41,7 @@ const Register: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Register</IonTitle>
-        </IonToolbar>
+        
       </IonHeader>
       <IonContent fullscreen className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
@@ -54,7 +52,7 @@ const Register: React.FC = () => {
             className="w-full h-20 object-cover"
           />
           <IonList className="space-y-4">
-            <IonItem className="flex items-center border-b border-gray-300 py-2">
+            <IonItem className="flex items-center rounded-lg border-b border-gray-300 py-2">
               <IonInput placeholder="First name" value={firstName} onIonChange={(e) => setFirstName(e.detail.value!)} className="w-full px-2 py-2 text-gray-700 focus:outline-none"></IonInput>
               <UserIcon className="w-5 h-5 text-gray-400 ml-2" />
             </IonItem>
