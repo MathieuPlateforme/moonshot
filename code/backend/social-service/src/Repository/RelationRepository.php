@@ -16,28 +16,31 @@ class RelationRepository extends ServiceEntityRepository
         parent::__construct($registry, Relation::class);
     }
 
-    //    /**
-    //     * @return Relation[] Returns an array of Relation objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findAllWith(array $params): array
+    {
+        $query = $this->createQueryBuilder('r');
 
-    //    public function findOneBySomeField($value): ?Relation
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        foreach ($params as $key => $value) {
+            if($key == 'user1Id' || $key == 'type'){
+                $query->andWhere("r.$key = :$key")->setParameter($key, $value);
+            }
+        }
+
+        if (array_key_exists('limit', $params)) {
+            $query->setMaxResults($limit);
+        } else {
+            $query->setMaxResults(10);
+        }
+        
+        if(array_key_exists('offset', $params)) {
+            $query->setFirstResult($offset);
+        } else {
+            $query->setFirstResult(0);
+        }
+
+        $request = $query->getQuery();
+
+        return $request->execute();
+    }
+    
 }
