@@ -43,11 +43,11 @@ export const GUEST_MENU = [
 ]
 
 export const USER_MENU = [
-  // {
-  //   title: 'Feed',
-  //   icon: FeedIcon,
-  //   link: ROUTES_PATH.HOME,
-  // },
+  {
+    title: 'Feed',
+    icon: FeedIcon,
+    link: ROUTES_PATH.FEED,
+  },
   {
     title: 'Events',
     icon: EventIcon,

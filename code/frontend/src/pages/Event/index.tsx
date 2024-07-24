@@ -53,17 +53,26 @@ const EventFeed: React.FC = () => {
             </button>
           </div>
         </div>
-        <IonToolbar>
-          <IonButton fill={view === "list" ? "outline" : "clear"} onClick={() => setView("list")}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+          }}
+        >
+          <IonButton color="success" fill={view === "list" ? "solid" : "outline"} onClick={() => setView("list")}>
             For me
           </IonButton>
-          <IonButton fill={view === "user_events" ? "outline" : "clear"} onClick={() => setView("user_events")}>
+          <IonButton color="success" fill={view === "user_events" ? "solid" : "outline"} onClick={() => setView("user_events")}>
             My Events
           </IonButton>
-          <IonButton fill={view === "group_events" ? "outline" : "clear"} onClick={() => setView("group_events")}>
+          <IonButton color="success" fill={view === "group_events" ? "solid" : "outline"} onClick={() => setView("group_events")}>
             My community
           </IonButton>
-        </IonToolbar>
+        </div>
       </IonHeader>
       <IonContent fullscreen>
         {view === "list" && <EventList footerIsVisible={setFooterIsVisible} headerIsVisible={setHeaderIsVisible}/>}

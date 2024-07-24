@@ -22,7 +22,7 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event, onButtonClick }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md mt-5" onClick={onButtonClick}>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-md mt-5" onClick={onButtonClick}>
       <img className="w-full" src={`data:image/jpeg;base64,${event?.media.file}`} alt="Event" />
       <div className="p-4">
         <p className="text-purple-600 mb-1">{event?.subEvents[0]?.start_date}</p>

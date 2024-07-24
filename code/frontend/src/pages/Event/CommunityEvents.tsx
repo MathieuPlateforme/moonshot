@@ -9,14 +9,14 @@ const CommunityEvents: React.FC = () => {
   const [allEvents, setAllEvents] = React.useState([]);
   const { push } = useHistory();
 
-  useEffect(() => {
-    if (allEvents.length === 0) {
-      const eventsRequest = getEvents();
-      eventsRequest.then((response) => {
-        setAllEvents(response.data);
-      });
-    }
-  }, [allEvents]);
+  // useEffect(() => {
+  //   if (allEvents.length === 0) {
+  //     const eventsRequest = getEvents();
+  //     eventsRequest.then((response) => {
+  //       setAllEvents(response.data);
+  //     });
+  //   }
+  // }, [allEvents]);
 
   return (
     <IonContent fullscreen>
@@ -25,7 +25,7 @@ const CommunityEvents: React.FC = () => {
           key={index}
           event={event}
           onButtonClick={() => {
-            push(ROUTES_PATH.EVENT_DETAIL.replace(":id", event.id));
+            // push(ROUTES_PATH.EVENT_DETAIL.replace(":id", event.id));
           }}
         />
       ))}

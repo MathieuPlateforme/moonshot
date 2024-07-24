@@ -59,16 +59,19 @@ class RelationController extends AbstractController
     #[Route('/filter', name: 'filter', methods: ['GET'])]
     public function get(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, RelationCrud $relation_crud): JsonResponse
     {
+        $relation = $entityManager->getRepository(Relation::class)->find($id);
 
-      $token_decoder = new TokenDecoder('secret');
-      $token = $token_decoder->token_verify($request->headers->get('token'));
+        if (!$relation) {
+            return new JsonResponse([
+                'message' => 'Relation not found',
+            ], 404);
+        }
 
-      if ($token == false) {
-        return new JsonResponse(['error' => 'Unauthorized'], 401);
-      } else {
-        $request_params = $request->query->all();
-        return $relation_crud->getRelations($request_params, $entityManager, $client);
-      }
+        return new JsonResponse([
+            'id' => $relation->getId(),
+            'user1Id' => $relation->getUser1Id(),
+            'user2Id' => $relation->getUser2Id(),
+            'type' => $relation->getType(),
+        ]);
     }
- 
 }

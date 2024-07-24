@@ -92,20 +92,20 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
     loadEvent();
   }, [event_id]);
 
-    useEffect(() => {
-    if(event === null) return;
+  useEffect(() => {
+    if (event === null) return;
     let count = 0;
-    for(const eventDate of event.subEvents){
-      for(const participation of eventParticipants){
-        if(participation.event_date_id == eventDate.id && participation.user_id == getId()){
+    for (const eventDate of event.subEvents) {
+      for (const participation of eventParticipants) {
+        if (participation.event_date_id == eventDate.id && participation.user_id == getId()) {
           eventDate.participation_id = participation.id;
-          if(eventDate.is_subscribed == true){
+          if (eventDate.is_subscribed == true) {
             count++;
           }
         }
       }
     }
-    if(count == event.subEvents.length) setSubscribedToAll(true);
+    if (count == event.subEvents.length) setSubscribedToAll(true);
   }, [event]);
 
   return (
@@ -116,7 +116,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
         }}
         style={{ position: "absolute", top: "10px", left: "10px" }}
       >
-        <BackArrowIcon color="green" />
+        <BackArrowIcon color="#75DA6D" />
       </a>
       {event && (
         <SingleEventCard

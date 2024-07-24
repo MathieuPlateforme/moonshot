@@ -43,4 +43,8 @@ export const postComment = async (req: Object) => {
   return await post({ url: `${VITE_REST_API}:8003/comment/new`, data: req , options: {} });
 }
 
+/***** SOCIAL *****/
+
+// export const get
+
 /***** TAG *****/
