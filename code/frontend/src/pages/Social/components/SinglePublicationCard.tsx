@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { IonButton, IonItem, IonList, IonSelect, IonSelectOption } from "@ionic/react";
+import React, { useState, useEffect, useRef } from "react";
+import { IonButton, IonInput, IonItem, IonLabel, IonList, IonSelect, IonSelectOption } from "@ionic/react";
 import { FlowerIcon } from "../../../icons/FlowerIcon";
 import { CheckMarkIcon } from "../../../icons/CheckMarkIcon";
 
@@ -17,17 +17,18 @@ interface SinglePublicationCardProps {
     comments: any[];
     authorId: number;
   };
-  // handleSubscribe: () => void;
+  sendComment: (comment: string) => void;
   authorId: string;
   comments: any[];
 }
 
 const SinglePublicationCard: React.FC<SinglePublicationCardProps> = ({
   publication,
-  // handleSubscribe,
+  sendComment,
   authorId,
   comments,
 }) => {
+  const inputRef = useRef<HTMLIonInputElement>(null);
 
   useEffect(() => {
   }, [publication]);
@@ -41,14 +42,30 @@ const SinglePublicationCard: React.FC<SinglePublicationCardProps> = ({
 
         {/* <h2 className="text-xl font-bold mb-2 mt-0 text-black">{publication?.title}</h2> */}
       </div>
-      <div className="p-4">
+      <div className="p-4"> 
         <h2>Comments</h2>
+
+        <IonInput ref={inputRef} placeholder="Comment" label="Add a comment" />
+
+        <IonButton
+          expand="full"
+          color="primary"
+          onClick={() => {
+            if (inputRef.current) {
+              const comment = inputRef.current.value as string;
+              sendComment(comment);
+            }
+          }}
+        >
+          Send
+        </IonButton>
+
         <IonList>
-            {comments?.map((comment, index) => (
-              <IonItem key={index}>
-                {comment.content}
-              </IonItem>
-            ))}
+          {comments?.map((comment, index) => (
+            <IonItem key={index}>
+              {comment.content}
+            </IonItem>
+          ))}
         </IonList>
         {/* <IonButton
           expand="full"

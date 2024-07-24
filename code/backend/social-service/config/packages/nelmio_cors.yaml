@@ -27,4 +27,9 @@ nelmio_cors:
             allow_headers: ['*']
             allow_methods: ['GET']
             max_age: 3600
+        '/comment/new':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST']
+            max_age: 3600  
 

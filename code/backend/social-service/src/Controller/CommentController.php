@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\Requests\RequestService;
+use App\Entity\Publication;
 use App\Entity\Comment;
 
 #[Route('/comment', name: 'comment_')]
@@ -17,13 +19,18 @@ class CommentController extends AbstractController
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(EntityManagerInterface $entityManager, Request $request)
     {
+        $request_params = json_decode($request->getContent(), true);
+        // return new JsonResponse([
+        //     'request' => $request_params,
+        //     'content' => $request_params['publication']
+        // ], 200);
         $comment = new Comment();
         $comment
-            ->setContent($request->get('content'))
-            ->setAuthorId($request->get('authorId'))
-            ->setPublication($request->get('publication'))
+            ->setContent($request_params['content'])
+            ->setAuthorId($request_params['authorId'])
+            ->setPublication($entityManager->getRepository(Publication::class)->find($request_params['publication_id']))
             ->setCreatedAt(new \DateTime())
-            ->setParentComment($request->get('parentComment'));
+            ->setParentComment($request_params['parentComment'] ?? null);
 
         $entityManager->persist($comment);
         $entityManager->flush();
