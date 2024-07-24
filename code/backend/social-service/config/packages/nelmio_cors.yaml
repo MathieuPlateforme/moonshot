@@ -12,7 +12,7 @@ nelmio_cors:
             allow_headers: ['*']
             allow_methods: ['GET']
             max_age: 3600
-        '/publication/{id}':
+        '/publication/(\d+)':
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['GET', 'PUT', 'DELETE']
@@ -22,9 +22,9 @@ nelmio_cors:
             allow_headers: ['*']
             allow_methods: ['POST']
             max_age: 3600
-        '/publication/{id}/comments':
+        '/publication/(\d+)/comments':
             allow_origin: ['*']
             allow_headers: ['*']
-            allow_methods: ['GET', 'POST']
+            allow_methods: ['GET']
             max_age: 3600
 

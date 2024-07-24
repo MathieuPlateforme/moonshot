@@ -116,6 +116,35 @@ class PublicationController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/comments', name: 'publication_comments', methods: ['GET'])]
+    public function getPublicationComments(EntityManagerInterface $entityManager, int $id)
+    {
+        $publication = $entityManager->getRepository(Publication::class)->find($id);
+
+        
+        if (!$publication) {
+            return new JsonResponse([
+                'message' => 'Publication not found',
+            ], 404);
+        }
+        
+
+        $response = [];
+        foreach ($publication->getComments() as $comment) {
+            $response[] = [
+                'id' => $comment->getId(),
+                'content' => $comment->getContent(),
+                'createdAt' => $comment->getCreatedAt(),
+                'authorId' => $comment->getAuthorId(),
+                'parentComment' => $comment->getParentComment(),
+            ];
+        }
+        // var_dump($response);
+
+
+        return new JsonResponse($response, 200);
+    }
+
     // #[Route('/search/{keywords}', name: 'search', methods: ['GET'])]
     // public function search(EntityManagerInterface $entityManager, array $keywords)
     // {

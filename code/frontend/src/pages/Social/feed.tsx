@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IonContent, IonModal } from "@ionic/react";
 import PublicationCard from "./components/PublicationCard";
 import { getPublications } from "../../libs/api/social";
-// import PublicationFocus from "./PublicationFocus";
+import PublicationFocus from "./PublicationFocus";
 import Header from "../../components/Header";
 
 const PublicationList: React.FC = () => {
@@ -58,7 +58,7 @@ const PublicationList: React.FC = () => {
         />
       ))}
       <IonModal isOpen={isOpen}>
-        {/* <PublicationFocus event_id={selectedPublication} previousView={setIsOpen} /> */}
+        <PublicationFocus publication_id={selectedPublication} previousView={setIsOpen} />
       </IonModal>
       <Header isVisible={headerIsVisible} />
     </IonContent>
