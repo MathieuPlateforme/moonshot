@@ -5,9 +5,10 @@ use bcrypt::verify;
 use chrono::{Utc, Duration};
 use jsonwebtoken::{encode, decode, Header, EncodingKey, DecodingKey, Validation, TokenData, errors::Error as JwtError};
 use crate::models::{User, Role};
-use crate::services::create_user_service;
 use mongodb::{Client, bson::doc};
 use std::env;
+use std::sync::Arc;
+use log::info;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateUser {
@@ -26,6 +27,7 @@ pub struct LoginUser {
 #[derive(Debug, Serialize, Deserialize)]
 struct AccessClaims {
     sub: String,
+    role: String,
     exp: usize,
 }
 
@@ -53,7 +55,7 @@ pub async fn health_check() -> impl Responder {
     HttpResponse::Ok().finish()
 }
 
-pub async fn refresh_token(client: web::Data<Client>, token_request: web::Json<TokenRequest>) -> impl Responder {
+pub async fn refresh_token(client: web::Data<Arc<Client>>, token_request: web::Json<TokenRequest>) -> impl Responder {
     let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
 
     let access_token_data: Result<TokenData<AccessClaims>, JwtError> = decode::<AccessClaims>(
@@ -72,6 +74,7 @@ pub async fn refresh_token(client: web::Data<Client>, token_request: web::Json<T
         if access_claims.claims.sub == refresh_claims.claims.sub && refresh_claims.claims.exp > Utc::now().timestamp() as usize {
             let new_access_token = create_access_jwt(
                 access_claims.claims.sub.clone(),
+                &access_claims.claims.role,
                 15, // 15 minutes for access token
             );
             let new_refresh_token = create_refresh_jwt(
@@ -91,50 +94,53 @@ pub async fn refresh_token(client: web::Data<Client>, token_request: web::Json<T
     HttpResponse::Unauthorized().finish()
 }
 
-pub async fn create_user(client: web::Data<Client>, new_user: web::Json<CreateUser>) -> impl Responder {
-    match create_user_service(&client, new_user.into_inner()).await {
-        Ok(id) => HttpResponse::Ok().json(id),
-        Err(_) => HttpResponse::InternalServerError().finish(),
-    }
-}
-
-pub async fn login_user(client: web::Data<Client>, login_user: web::Json<LoginUser>) -> impl Responder {
+pub async fn login_user(client: web::Data<Arc<Client>>, login_user: web::Json<LoginUser>) -> impl Responder {
     let start_time = Instant::now();
+    info!("Starting login_user handler");
 
     let db = client.database("auth-service");
     let collection = db.collection::<User>("credentials");
 
-    println!("Attempting to find user with username: {}", login_user.username);
+    info!("Attempting to find user with username: {}", login_user.username);
     let user = match collection.find_one(doc! { "username": &login_user.username }).await {
         Ok(user) => user,
-        Err(_) => return HttpResponse::InternalServerError().finish(),
+        Err(e) => {
+            info!("Error finding user: {:?}", e);
+            return HttpResponse::InternalServerError().finish();
+        },
     };
 
     if let Some(user) = user {
-        println!("User found: {:?}", user);
-        if verify(&login_user.password, &user.hashed_password).unwrap() {
-            println!("Password verification succeeded");
-            let access_token = create_access_jwt(user.id.unwrap().to_string(), 15); // 15 minutes for access token
-            let refresh_token = create_refresh_jwt(user.id.unwrap().to_string(), &user.username, &user.role.to_string(), 30 * 24 * 60); // 1 month for refresh token
-            let tokens = TokenResponse {
-                access_token,
-                refresh_token,
-            };
-            println!("Generated tokens: {:?}", tokens);
-            println!("Login process completed in {:?}", start_time.elapsed());
-            return HttpResponse::Ok().json(tokens);
-        } else {
-            println!("Password verification failed");
+        info!("User found: {:?}", user);
+        match verify(&login_user.password, &user.hashed_password) {
+            Ok(is_valid) => {
+                if is_valid {
+                    info!("Password verification succeeded");
+                    let access_token = create_access_jwt(user.id.unwrap().to_string(), &user.role, 15); // 15 minutes pour access token
+                    let refresh_token = create_refresh_jwt(user.id.unwrap().to_string(), &user.username, &user.role, 30 * 24 * 60); // 1 month for refresh token
+                    let tokens = TokenResponse {
+                        access_token,
+                        refresh_token,
+                    };
+                    info!("Generated tokens: {:?}", tokens);
+                    return HttpResponse::Ok().json(tokens);
+                } else {
+                    info!("Password verification failed");
+                }
+            }
+            Err(e) => {
+                info!("Error verifying password: {:?}", e);
+                return HttpResponse::InternalServerError().finish();
+            }
         }
     } else {
-        println!("User not found");
+        info!("User not found");
     }
 
-    println!("Login process completed in {:?}", start_time.elapsed());
     HttpResponse::Unauthorized().finish()
 }
 
-fn create_access_jwt(user_id: String, expiration_minutes: i64) -> String {
+fn create_access_jwt(user_id: String, role: &str,  expiration_minutes: i64) -> String {
     let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
 
     let expiration = Utc::now()
@@ -144,6 +150,7 @@ fn create_access_jwt(user_id: String, expiration_minutes: i64) -> String {
 
     let claims = AccessClaims {
         sub: user_id,
+        role: role.to_owned(),
         exp: expiration,
     };
 
