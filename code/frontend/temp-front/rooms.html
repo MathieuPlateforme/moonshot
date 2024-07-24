@@ -3,10 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OK</title>
+    <title>Rooms</title>
+    <style>
+        #rooms {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .room {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .room:last-child {
+            border-bottom: none;
+        }
+        .chat {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .chat input {
+            width: 80%;
+            padding: 10px;
+        }
+        .chat button {
+            width: 18%;
+            padding: 10px;
+            background: #5cb85c;
+            color: white;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>OK</h1>
-    <p>Connexion réussie !</p>
+    <div id="rooms">
+        <h2>Rooms</h2>
+        <div id="roomList"></div>
+    </div>
+
+    <div id="chat" style="display:none;">
+        <h2>Chat Room</h2>
+        <div id="chatMessages"></div>
+        <input type="text" id="messageContent" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        async function fetchRooms() {
+            const response = await fetch('http://localhost:5000/my-rooms', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const rooms = await response.json();
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = '';
+
+            rooms.forEach(room => {
+                const roomDiv = document.createElement('div');
+                roomDiv.className = 'room';
+                roomDiv.innerHTML = `<strong>${room.room_id.title}</strong><br>${room.room_id.description}<br><button onclick="enterRoom(${room.room_id._id})">Enter Room</button>`;
+                roomList.appendChild(roomDiv);
+            });
+        }
+
+        async function enterRoom(roomId) {
+            document.getElementById('rooms').style.display = 'none';
+            document.getElementById('chat').style.display = 'block';
+
+            const response = await fetch(`http://localhost:5000/rooms/${roomId}/chats`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const chats = await response.json();
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+
+            chats.forEach(chat => {
+                const chatDiv = document.createElement('div');
+                chatDiv.innerHTML = `<strong>User ${chat.user_id}:</strong> ${chat.content}`;
+                chatMessages.appendChild(chatDiv);
+            });
+        }
+
+        async function sendMessage() {
+            const messageContent = document.getElementById('messageContent').value;
+            const roomId = /* obtenir l'ID de la salle actuelle */;
+
+            const response = await fetch(`http://localhost:5000/rooms/${roomId}/chats`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content: messageContent })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                // Ajouter le message au DOM
+                const chatMessages = document.getElementById('chatMessages');
+                const chatDiv = document.createElement('div');
+                chatDiv.innerHTML = `<strong>You:</strong> ${data.content}`;
+                chatMessages.appendChild(chatDiv);
+                document.getElementById('messageContent').value = '';
+            } else {
+                console.error('Message send failed:', data.message);
+                alert('Message send failed: ' + data.message);
+            }
+        }
+
+        // Initialiser la page
+        fetchRooms();
+    </script>
 </body>
 </html>

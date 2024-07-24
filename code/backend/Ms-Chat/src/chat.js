@@ -6,6 +6,7 @@ const cors = require('cors');
 const Room = require('./models/Room.js');
 const RoomMember = require('./models/RoomMember.js');
 const UserTest = require('./models/UserTest.js');
+const Chat = require('./models/Chat.js'); // Utilisation du modèle Chat
 
 const app = express();
 app.use(express.json());
@@ -77,6 +78,43 @@ app.post('/rooms/:roomId/members', authenticateToken, async (req, res) => {
     res.json(roomMember);
   } catch (err) {
     console.error('Error adding room member:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Voir les salles auxquelles l'utilisateur a accès
+app.get('/my-rooms', authenticateToken, async (req, res) => {
+  try {
+    const rooms = await RoomMember.find({ user: req.user.id }).populate('room_id');
+    res.json(rooms);
+  } catch (err) {
+    console.error('Error retrieving user rooms:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Chatter dans une salle
+app.post('/rooms/:roomId/chats', authenticateToken, async (req, res) => {
+  const { roomId } = req.params;
+  const { content } = req.body;
+  const chat = new Chat({ ban_id: roomId, user_id: req.user.id, content });
+  try {
+    await chat.save();
+    res.json(chat);
+  } catch (err) {
+    console.error('Error sending chat:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Récupérer les messages d'une salle
+app.get('/rooms/:roomId/chats', authenticateToken, async (req, res) => {
+  const { roomId } = req.params;
+  try {
+    const chats = await Chat.find({ ban_id: roomId });
+    res.json(chats);
+  } catch (err) {
+    console.error('Error retrieving chats:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
