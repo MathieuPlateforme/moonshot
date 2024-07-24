@@ -25,8 +25,8 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
-    if(getRole()){
-      push(ROUTES_PATH.HOME);
+    if(getRole() === 'USER'){
+      push(ROUTES_PATH.EVENTS);
     }
   }, [token]);
 

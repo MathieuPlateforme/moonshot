@@ -28,9 +28,11 @@ export const routes = [
   {
     path: ROUTES_PATH.EVENTS,
     component: EventFeed,
+    accesses: [ACCESSES.USER]
   },
   {
     path: ROUTES_PATH.NEW_EVENT,
     component: NewEvent,
+    accesses: [ACCESSES.USER]
   },
 ]

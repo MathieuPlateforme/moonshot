@@ -29,7 +29,6 @@ class RelationController extends AbstractController
         }
 
         $request_params = json_decode($request->getContent(), true);
-        var_dump($request_params);
 
         $relation = new Relation();
         $relation->setUser1Id($request_params['user1Id']);

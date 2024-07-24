@@ -62,7 +62,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
                     {eventDate?.start_date}
                   </IonSelectOption>
                 ))}
-              </IonSelect>
+              </IonSelect> 
             </IonItem>
             <IonButton
               fill={selectedEventDate?.is_subscribed ? "outline" : "solid"}
