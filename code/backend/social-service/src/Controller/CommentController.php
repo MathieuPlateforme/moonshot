@@ -7,86 +7,88 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Relation;
+use App\Entity\Comment;
 
-#[Route('/relation', name: 'relation_')]
-class RelationController extends AbstractController
+#[Route('/comment', name: 'comment_')]
+class CommentController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
 
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(EntityManagerInterface $entityManager, Request $request)
     {
-        $relation = new Relation();
-        $relation
-            ->setUser1Id($request->get('user1Id'))
-            ->setUser2Id($request->get('user2Id'))
-            ->setType($request->get('type')); // see \App\Config\Relation\Type
+        $comment = new Comment();
+        $comment
+            ->setContent($request->get('content'))
+            ->setAuthorId($request->get('authorId'))
+            ->setPublication($request->get('publication'))
+            ->setCreatedAt(new \DateTime())
+            ->setParentComment($request->get('parentComment'));
 
-        $entityManager->persist($relation);
+        $entityManager->persist($comment);
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'Relation created',
-            'id' => $relation->getId(),
+            'message' => 'Comment created',
+            'id' => $comment->getId(),
         ], 201);
     }
 
     #[Route('/{id}', name: 'getone', methods: ['GET'])]
     public function get(EntityManagerInterface $entityManager, int $id)
     {
-        $relation = $entityManager->getRepository(Relation::class)->find($id);
+        $comment = $entityManager->getRepository(Comment::class)->find($id);
 
-        if (!$relation) {
+        if (!$comment) {
             return new JsonResponse([
-                'message' => 'Relation not found',
+                'message' => 'Comment not found',
             ], 404);
         }
 
         return new JsonResponse([
-            'id' => $relation->getId(),
-            'user1Id' => $relation->getUser1Id(),
-            'user2Id' => $relation->getUser2Id(),
-            'type' => $relation->getType(),
+            'id' => $comment->getId(),
+            'content' => $comment->getContent(),
+            'authorId' => $comment->getAuthorId(),
+            'publication' => $comment->getPublication()
         ]);
     }
 
     #[Route('/{id}', name: 'deleteone', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, int $id)
     {
-        $relation = $entityManager->getRepository(Relation::class)->find($id);
+        $comment = $entityManager->getRepository(Comment::class)->find($id);
 
-        if (!$relation) {
+        if (!$comment) {
             return new JsonResponse([
-                'message' => 'Relation not found',
+                'message' => 'Comment not found',
             ], 404);
         }
 
-        $entityManager->remove($relation);
+        $entityManager->remove($comment);
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'Relation deleted',
+            'message' => 'Comment deleted',
         ]);
     }
 
     #[Route('/{id}', name: 'updateone', methods: ['PUT'])]
     public function update(EntityManagerInterface $entityManager, int $id, string $content)
     {
-        $relation = $entityManager->getRepository(Relation::class)->find($id);
+        $comment = $entityManager->getRepository(Comment::class)->find($id);
 
-        if (!$relation) {
+        if (!$comment) {
             return new JsonResponse([
-                'message' => 'Relation not found',
+                'message' => 'Comment not found',
             ], 404);
         }
 
-        $relation->setLabel($content);
+        $comment->setContent($content);
 
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'Relation updated',
+            'message' => 'Comment updated',
         ]);
     }
 }
