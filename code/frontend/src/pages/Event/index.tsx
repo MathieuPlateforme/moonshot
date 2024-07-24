@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonModal } from "@ionic/react";
-import { useHistory } from "react-router";
+import Header from "../../components/Header";
 import EventList from "./EventList";
 import UserEvents from "./UserEvents";
 import CommunityEvents from "./CommunityEvents";
@@ -9,19 +9,22 @@ import { LoopIcon } from "../../icons/LoopIcon";
 import { PlusIcon } from "../../icons/PlusIcon";
 import NewEvent from "./newEvent";
 import EventSearch from "./EventSearch";
+import EventCalendar from "./EventCalendar";
 
 const EventFeed: React.FC = () => {
   const [view, setView] = useState("list");
   const [calendarIsOpen, setCalendarIsOpen] = useState(false);
   const [searchIsOpen, setSearchIsOpen] = useState(false);
   const [newEventIsOpen, setNewEventIsOpen] = useState(false);
+  const [footerIsVisible, setFooterIsVisible] = useState(true);
+  const [headerIsVisible, setHeaderIsVisible] = useState(true);
 
   return (
     <IonPage>
       <IonHeader>
         <div
           style={{
-            display: "flex",
+            display: headerIsVisible ? "flex" : "none",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
@@ -63,17 +66,20 @@ const EventFeed: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {view === "list" && <EventList />}
-        {view === "user_events" && <UserEvents />}
+        {view === "list" && <EventList footerIsVisible={setFooterIsVisible} headerIsVisible={setHeaderIsVisible}/>}
+        {view === "user_events" && <UserEvents footerIsVisible={setFooterIsVisible} headerIsVisible={setHeaderIsVisible}/>}
         {view === "group_events" && <CommunityEvents />}
       </IonContent>
-      <IonModal isOpen={calendarIsOpen}></IonModal>
+      <IonModal isOpen={calendarIsOpen}>
+        <EventCalendar previousView={setCalendarIsOpen}/>
+      </IonModal>
       <IonModal isOpen={searchIsOpen}>
         <EventSearch previousView={setSearchIsOpen}/>
       </IonModal>
       <IonModal isOpen={newEventIsOpen}>
         <NewEvent previousView={setNewEventIsOpen}/>
       </IonModal>
+      <Header isVisible={footerIsVisible} />
     </IonPage>
   );
 };

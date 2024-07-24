@@ -26,6 +26,20 @@ class EventParticipantController extends AbstractController
         }
     }
 
+    #[Route('/event/participations', name: 'app_event_get_user_participations')]
+    public function getUserParticipations(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, EventParticipantCrud $participant_crud): JsonResponse
+    {
+        $token_decoder = new TokenDecoder('secret');
+        $token = $token_decoder->token_verify($request->headers->get('token'));
+        if ($token == false) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        } else {
+            $request_params = json_decode($request->getContent(), true);
+            $request_params['user_id'] = $token['id'];
+            return $participant_crud->getEventDateParticipants($request_params, $entityManager, $client);
+        }
+    }
+
     #[Route('/event/participant/delete', name: 'app_event_delete_participant')]
     public function deleteParticipant(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, EventParticipantCrud $participant_crud): JsonResponse
     {
