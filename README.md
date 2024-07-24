@@ -4,7 +4,7 @@
   <p>Connecting eco-conscious individuals through a mobile platform to promote and organize ecological events.</p>
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-![GitHub contributors](https://img.shields.io/github/contributors/alexandre-aloesode/spotty)
+![GitHub contributors](https://img.shields.io/github/contributors/MathieuPlateforme/spotty)
 </div>
 
 ## Table of Contents
@@ -56,7 +56,7 @@ To set up the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```sh
-   git clone https://github.com/alexandre-aloesode/spotty.git
+   git clone https://github.com/MathieuPlateforme/spotty.git
    cd spotty
    ```
 
