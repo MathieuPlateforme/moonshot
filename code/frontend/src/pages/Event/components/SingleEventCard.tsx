@@ -40,10 +40,6 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
   handleDelete,
   eventIsMine,
 }) => {
-  useEffect(() => {
-    console.log("selectedEventDate", selectedEventDate);
-    
-  }, [selectedEventDate]);
   return (
     <div className="rounded-lg shadow-xl overflow-hidden max-w-md p-2 m-2 pt-8 mt-4">
       <img className="rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
@@ -58,7 +54,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
                 labelPlacement="floating"
                 value={selectedEventDate?.id}
                 onIonChange={(e) => {
-                  setSelectedEventDate(event.subEvents.find((eventDate: any) => eventDate.id === e.detail.value))
+                  setSelectedEventDate(event.subEvents.find((eventDate: any) => eventDate.id === e.detail.value));
                 }}
               >
                 {event.subEvents.map((eventDate: any) => (
@@ -66,10 +62,13 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
                     {eventDate?.start_date}
                   </IonSelectOption>
                 ))}
-              </IonSelect> 
+              </IonSelect>
             </IonItem>
             <IonButton
-              style={{ width: "30%" }}
+              fill={selectedEventDate?.is_subscribed ? "outline" : "solid"}
+              color="success"
+              style={{ width: "40%" }}
+              // size="default"
               onClick={() => {
                 handleSubscribe("single");
               }}
@@ -89,16 +88,15 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
       {!eventIsMine && (
         <div className="p-4">
           <IonButton
-            expand="full"
-            color="primary"
+            fill={subscribedToAll ? "outline" : "solid"}
+            color="success"
+            // expand="full"
             onClick={() => {
               handleSubscribe("all");
             }}
           >
             {!subscribedToAll && <FlowerIcon />}
             {subscribedToAll && <CheckMarkIcon />}
-            {/* {subscribedToAll ? "You subscribed to all dates" : "Join all dates"}
-             */}
             {subscribedToAll && event.subEvents.length === 1 && "Subscribed"}
             {!subscribedToAll && event.subEvents.length === 1 && "Join"}
             {!subscribedToAll && event.subEvents.length > 1 && "Join all dates"}
