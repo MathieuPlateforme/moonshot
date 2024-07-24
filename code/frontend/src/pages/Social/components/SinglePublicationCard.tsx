@@ -30,8 +30,6 @@ const SinglePublicationCard: React.FC<SinglePublicationCardProps> = ({
 }) => {
 
   useEffect(() => {
-    console.log('Publication:', publication);
-    console.log('Comments:', publication?.comments);
   }, [publication]);
   
   return (
@@ -40,28 +38,7 @@ const SinglePublicationCard: React.FC<SinglePublicationCardProps> = ({
       <p className="p-4 m-5">Écrit par {publication?.authorId} le {publication?.createdAt}</p>
       <div className="p-4">
         {publication?.content}
-        {/* {publication?.subPublications.length == 1 ? (
-          <p className="text-purple-600 mb-1">{publication?.subPublications[0].start_date}</p>
-        ) : (
-          <IonList>
-            <IonItem>
-              <IonSelect
-                label="Dates"
-                labelPlacement="floating"
-                value={"cool"}
-                onIonChange={(e) => {
-                  setSelectedPublicationDate(publication?.subPublications[e.detail.value - 1]);
-                }}
-              >
-                {publication?.subPublications.map((publicationDate: any) => (
-                  <IonSelectOption key={publicationDate.id} value={publicationDate.id}>
-                    {publicationDate.start_date}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
-          </IonList>
-        )} */}
+
         {/* <h2 className="text-xl font-bold mb-2 mt-0 text-black">{publication?.title}</h2> */}
       </div>
       <div className="p-4">

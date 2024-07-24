@@ -19,8 +19,7 @@ export const updatePublication = async (publication: Object) => {
   return await put({ url: `${VITE_REST_API}:8003/publication/update`, data: { publication }, options: {} });
 };
 
-export const getPublication = async (publication: string) => {
-  console.log("PUBLICATION ID", publication);
+export const getPublication = async (publication: Object) => {
     return await get({ url: `${VITE_REST_API}:8003/publication/${publication.id}`, options: { params: { id: publication.id } } });
 };
 
@@ -35,12 +34,7 @@ export const getComments = async (params: Object | null = null) => {
 }
 
 export const getPublicationComments = async (comment: Object) => {
-  // if (!publication_id) {
-  //   throw new Error("Publication ID is required");
-  // }
-  console.log("PUBLICATIOn ID", comment.publication_id);
   const url = `${VITE_REST_API}:8003/publication/${comment.publication_id}/comments`;
-  console.log("API ENDPOINT", url);
   return await get({ url });
 }
 
