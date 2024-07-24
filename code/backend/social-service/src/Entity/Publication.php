@@ -44,10 +44,20 @@ class Publication
     #[ORM\OneToMany(targetEntity: InteractionPublication::class, mappedBy: 'publication')]
     private Collection $interactions;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'publications')]
+    private Collection $tags;
+
+    #[ORM\Column]
+    private ?\DateTime $createdAt = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->interactions = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,6 +181,42 @@ class Publication
                 $interaction->setPublication(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

@@ -1,0 +1,1 @@
+// TODO: Ajouter des fonctions utilitaires si nécessaire

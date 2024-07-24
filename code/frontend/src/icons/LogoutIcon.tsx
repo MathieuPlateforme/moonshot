@@ -1,5 +1,5 @@
-export const LogoutIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg width="30" height="30" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const LogoutIcon = ({ className }: {className?: string}) => (
+  <svg width="30" height="30" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
       d="M19 27H15.6667C15.2246 27 14.8007 26.8244 14.4882 26.5118C14.1756 26.1993 14 25.7754 14 25.3333V13.6667C14 13.2246 14.1756 12.8007 14.4882 12.4882C14.8007 12.1756 15.2246 12 15.6667 12H19M24.8333 23.6667L29 19.5M29 19.5L24.8333 15.3333M29 19.5H19"
       stroke="black"

@@ -45,11 +45,11 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
     
   }, [selectedEventDate]);
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
-      <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
+    <div className="rounded-lg shadow-xl overflow-hidden max-w-md p-2 m-2 pt-8 mt-4">
+      <img className="rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
       <div className="p-4">
-        {event.subEvents.length === 1 ? (
-          <p className="text-purple-600 mb-1">{event.subEvents[0].start_date}</p>
+        {event.subEvents.length == 1 ? (
+          <p className="mb-1 font-be-vietnam text-14 font-regular italic text-textBlueCard">{event.subEvents[0].start_date}</p>
         ) : (
           <IonList style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
             <IonItem style={{ width: "50%" }}>
@@ -80,7 +80,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
             </IonButton>
           </IonList>
         )}
-        <h2 className="text-xl font-bold mb-2 mt-0 text-black">{event.title}</h2>
+        <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">{event.title}</h2>
       </div>
       <div className="p-4">
         <p className="text-grey-600 self-end">{selectedEventDate?.address}</p>

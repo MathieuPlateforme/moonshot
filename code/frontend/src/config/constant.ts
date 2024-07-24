@@ -5,6 +5,7 @@ import { ChatIcon } from "../icons/ChatIcon";
 import { LoopIcon } from "../icons/LoopIcon";
 import { NotifIcon } from "../icons/NotifIcon";
 import { CalendarIcon } from "../icons/CalendarIcon";
+import { ProfileIcon } from "../icons/ProfileIcon";
 import { LoginIcon } from "../icons/LoginIcon";
 import { LogoutIcon } from "../icons/LogoutIcon";
 
@@ -36,6 +37,7 @@ export const GUEST_MENU = [
   },
   {
     title: 'Register',
+    icon: ProfileIcon,
     link: ROUTES_PATH.REGISTER,
   },
 ]
@@ -73,6 +75,7 @@ export const USER_MENU = [
   },
   {
     title: 'Profile',
+    icon: ProfileIcon,
     link: ROUTES_PATH.PROFILE,
   },
   {
