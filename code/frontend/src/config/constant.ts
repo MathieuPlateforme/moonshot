@@ -73,11 +73,11 @@ export const USER_MENU = [
     icon: ChatIcon,
     // link: ROUTES_PATH.EVENTS,
   },
-  {
-    title: 'Profile',
-    icon: ProfileIcon,
-    link: ROUTES_PATH.PROFILE,
-  },
+  // {
+  //   title: 'Profile',
+  //   icon: ProfileIcon,
+  //   link: ROUTES_PATH.PROFILE,
+  // },
   {
     title: 'Logout',
     icon: LogoutIcon,
