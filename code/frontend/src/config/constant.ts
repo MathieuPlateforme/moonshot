@@ -46,7 +46,7 @@ export const USER_MENU = [
   {
     title: 'Feed',
     icon: FeedIcon,
-    link: ROUTES_PATH.HOME,
+    link: ROUTES_PATH.FEED,
   },
   {
     title: 'Events',

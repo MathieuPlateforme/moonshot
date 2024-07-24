@@ -16,7 +16,7 @@ const Login: React.FC = () => {
   const { push } = useHistory();
 
   const handleLogin = async () => {
-    login(email, password);
+    login(email, password)
   };
 
   const handleGoogleLogin = () => {
@@ -26,7 +26,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if(getRole()){
-      push(ROUTES_PATH.HOME);
+      push(ROUTES_PATH.FEED);
     }
   }, [token]);
 
