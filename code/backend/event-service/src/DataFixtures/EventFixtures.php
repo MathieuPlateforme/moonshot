@@ -82,6 +82,58 @@ class EventFixtures extends AppFixtures
 
     private function createEventDates(ObjectManager $manager, int $count )
     {
+
+            $addresses = [
+                "1 Rue de la Paix, 75001, Paris",
+                "2 Avenue des Champs-Elysees, 75008, Paris",
+                "3 Place de la Concorde, 75008, Paris",
+                "4 Rue du Faubourg Saint-Honore, 75008, Paris",
+                "5 Boulevard Saint-Germain, 75005, Paris",
+                "6 Rue de Rivoli, 75004, Paris",
+                "7 Rue de la Roquette, 75011, Paris",
+                "8 Rue de la Republique, 75003, Paris",
+                "9 Rue de la Pompe, 75116, Paris",
+                "10 Rue de la Paix, 75001, Paris",
+                "11 Avenue des Champs-Elysees, 75008, Paris",
+                "12 Place de la Concorde, 75008, Paris",
+                "13 Rue du Faubourg Saint-Honore, 75008, Paris",
+                "14 Boulevard Saint-Germain, 75005, Paris",
+                "15 Rue de Rivoli, 75004, Paris",
+                "16 Rue de la Roquette, 75011, Paris",
+                "17 Rue de la Republique, 75003, Paris",
+                "18 Rue de la Canebiere, 13001, Marseille",
+                "19 Boulevard de la Liberation, 13001, Marseille",
+                "20 Rue Saint-Ferreol, 13001, Marseille",
+                "21 Rue de Rome, 13001, Marseille",
+                "22 Rue Paradis, 13001, Marseille",
+                "23 Rue de la Republique, 13002, Marseille",
+                "24 Quai du Port, 13002, Marseille",
+                "25 Rue de la Major, 13002, Marseille",
+                "26 Rue de la Joliette, 13002, Marseille",
+                "27 Rue de la Corderie, 13007, Marseille",
+                "28 Rue Sainte, 13007, Marseille",
+                "29 Rue d'Endoume, 13007, Marseille",
+                "30 Rue de la Republique, 13007, Marseille",
+                "1 Rue de la Paix, 69001, Lyon",
+                "2 Avenue des Champs-Elysees, 69002, Lyon",
+                "3 Place de la Concorde, 69003, Lyon",
+                "4 Rue du Faubourg Saint-Honore, 69004, Lyon",
+                "5 Boulevard Saint-Germain, 69005, Lyon",
+                "6 Rue de Rivoli, 69006, Lyon",
+                "7 Rue de la Roquette, 69007, Lyon",
+                "8 Rue de la Republique, 69008, Lyon",
+                "9 Rue de la Pompe, 69009, Lyon",
+                "10 Rue de la Paix, 69001, Lyon",
+                "11 Avenue des Champs-Elysees, 69002, Lyon",
+                "12 Place de la Concorde, 69003, Lyon",
+                "13 Rue du Faubourg Saint-Honore, 69004, Lyon",
+                "14 Boulevard Saint-Germain, 69005, Lyon",
+                "15 Rue de Rivoli, 69006, Lyon",
+                "16 Rue de la Roquette, 69007, Lyon",
+                "17 Rue de la Republique, 69008, Lyon",
+            ];
+
+
         for ($i = 1; $i <= $count; $i++) {
             $event = $this->entityManager->getRepository(Event::class)->find($i);
             $recurrent = $event->isRecurrent();
@@ -91,7 +143,7 @@ class EventFixtures extends AppFixtures
                     $event_date->setEvent($event);
                     $event_date->setStartDate($this->faker->dateTimeBetween('now', '+2 months'));
                     $event_date->setEndDate($this->faker->dateTimeBetween($event_date->getStartDate(), '+2 months'));
-                    $event_date->setAddress($this->faker->address);
+                    $event_date->setAddress($addresses[$this->faker->numberBetween(0, count($addresses) - 1)]);
                     $event_date->setCreatedAt($this->faker->dateTimeBetween('now', '+2 months'));
                     $manager->persist($event_date);
                     $manager->flush();

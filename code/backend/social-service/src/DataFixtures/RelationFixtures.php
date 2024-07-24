@@ -14,7 +14,7 @@ class RelationFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        for ($userId = 1; $userId <= 100; $userId++) {
+        for ($userId = 1; $userId <= 301; $userId++) {
 
             $friendCount = $faker->numberBetween(0, 5);
             for ($i = 0; $i < $friendCount; $i++) {

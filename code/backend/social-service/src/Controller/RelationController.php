@@ -89,4 +89,23 @@ class RelationController extends AbstractController
             'message' => 'Relation updated',
         ]);
     }
+
+    #[Route('/user', name: 'get_user_friends', methods: ['GET'])]
+    public function getUserRelations(EntityManagerInterface $entityManager, int $id)
+    {
+        $relation = $entityManager->getRepository(Relation::class)->find($id);
+
+        if (!$relation) {
+            return new JsonResponse([
+                'message' => 'Relation not found',
+            ], 404);
+        }
+
+        return new JsonResponse([
+            'id' => $relation->getId(),
+            'user1Id' => $relation->getUser1Id(),
+            'user2Id' => $relation->getUser2Id(),
+            'type' => $relation->getType(),
+        ]);
+    }
 }

@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
-import { IonButton, IonItem, IonList, IonSelect, IonSelectOption } from "@ionic/react";
+import { IonButton, IonItem, IonList, IonSelect, IonSelectOption, IonModal } from "@ionic/react";
+import { APIProvider, Map, AdvancedMarker, MapCameraChangedEvent, Pin } from "@vis.gl/react-google-maps";
 import { FlowerIcon } from "../../../icons/FlowerIcon";
 import { CheckMarkIcon } from "../../../icons/CheckMarkIcon";
+import { BackArrowIcon } from "../../../icons/BackArrowIcon";
+
+const { GOOGLE_API_KEY } = import.meta.env;
 
 interface SingleEventCardProps {
   event: {
@@ -40,6 +44,22 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
   handleDelete,
   eventIsMine,
 }) => {
+  const [eventLocation, setEventLocation] = React.useState<any>(null);
+  const [eventMapMarker, setEventMapMarker] = React.useState<any>(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  useEffect(() => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${selectedEventDate?.address}&key=AIzaSyBrrm9uoLtDWOyPg0SC7bvo7KEtZLnC-ak`)
+      .then((response) => response.json())
+      .then((data) => {
+        setEventLocation(data.results[0].geometry.location);
+        setEventMapMarker({
+          key: "Event",
+          location: data.results[0].geometry.location,
+        });
+      });
+  }, [selectedEventDate]);
+
   return (
     <div className="rounded-lg shadow-xl overflow-hidden max-w-md p-2 m-2 pt-8 mt-4">
       <img className="rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
@@ -82,7 +102,14 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
         <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">{event.title}</h2>
       </div>
       <div className="p-4">
-        <p className="text-grey-600 self-end">{selectedEventDate?.address}</p>
+        <p
+          className="text-grey-600 self-end"
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          {selectedEventDate?.address}
+        </p>
         <p className="text-green-600">{selectedEventDate?.participants} participants</p>
       </div>
       {!eventIsMine && (
@@ -122,6 +149,27 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
           </IonButton>
         </div>
       )}
+      <IonModal isOpen={isOpen}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width:"100vw", height:"100vh" }}>
+          <button onClick={() => setIsOpen(false)} style={{}}>
+            <BackArrowIcon color="#75DA6D" />
+          </button>
+          <APIProvider apiKey="AIzaSyBrrm9uoLtDWOyPg0SC7bvo7KEtZLnC-ak">
+            <Map
+              style={{ width: "90vw", height: "95vh" }}
+              // defaultCenter={{lat: 22.54992, lng: 0}}
+              defaultCenter={eventLocation}
+              defaultZoom={15}
+              gestureHandling={"greedy"}
+              disableDefaultUI={true}
+            >
+              {/* <AdvancedMarker key={eventMapMarker?.key} position={eventMapMarker?.location}>
+              <Pin background={"#FBBC04"} glyphColor={"#000"} borderColor={"#000"} />
+            </AdvancedMarker> */}
+            </Map>
+          </APIProvider>
+        </div>
+      </IonModal>
     </div>
   );
 };
