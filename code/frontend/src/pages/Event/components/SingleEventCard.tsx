@@ -40,11 +40,11 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
 }) => {
   
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
-      <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
+    <div className="rounded-lg shadow-xl overflow-hidden max-w-md p-2 m-2 pt-8 mt-4">
+      <img className="rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
       <div className="p-4">
         {event.subEvents.length == 1 ? (
-          <p className="text-purple-600 mb-1">{event.subEvents[0].start_date}</p>
+          <p className="mb-1 font-be-vietnam text-14 font-regular italic text-textBlueCard">{event.subEvents[0].start_date}</p>
         ) : (
           <IonList>
             <IonItem>
@@ -65,12 +65,10 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
             </IonItem>
           </IonList>
         )}
-        <h2 className="text-xl font-bold mb-2 mt-0 text-black">{event.title}</h2>
+        <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">{event.title}</h2>
       </div>
-      <div className="p-4">
-        <IonButton
-          expand="full"
-          color="primary"
+      <div className="pb-2">
+        <IonButton className="w-full rounded-lg"
           onClick={() => {
             handleSubscribe();
           }}
@@ -81,12 +79,12 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
         </IonButton>
       </div>
       <div className="p-4">
-        <p className="text-grey-600 self-end">{selectedEventDate.address}</p>
-        <p className="text-green-600">{event.total_participants} participants</p>
+        <p className="font-be-vietnam text-16 font-regular text-textBlueCard self-end">{selectedEventDate.address}</p>
+        <p className="font-be-vietnam text-14 font-regular text-green">{event.total_participants} participants</p>
       </div>
       <div className="p-4 border-t-4">
-        <h2 className="text-xl font-bold mb-2 mt-0 text-black">Description</h2>
-        <p className="text-purple-600 self-end">{event.description}</p>
+        <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">Description</h2>
+        <p className="font-be-vietnam text-16 font-regular p-2 self-end">{event.description}</p>
       </div>
     </div>
   );

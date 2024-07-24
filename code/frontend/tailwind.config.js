@@ -1,4 +1,7 @@
 // tailwind.config.js
+
+const { it } = require('vitest');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,jsx,ts,tsx,css}'],
@@ -17,14 +20,32 @@ module.exports = {
       'blue': '#0000FF',
       'yellow': '#FFFF00',
       'gray': '#808080',
+      'bgCustomForm': '#CFDBE8',
+      'textBlueCard': '#5C59E7',
     },
     fontFamily: {
-      'sans': ['Poppins', 'sans-serif'],
-      'serif': ['Merriweather', 'serif'],
-      'mono': ['"Fira Code"', 'monospace'],
+      'be-vietnam': ['"Be Vietnam Pro"', 'sans-serif'],
+      'roboto': ['"Roboto"', 'sans-serif'],
     },
+    fontSize: {
+      '12': '12px',
+      '14': '14px',
+      '16': '16px',
+      '18': '18px',
+      '20': '20px',
+      '24': '24px',
+      '32': '32px',
+    },
+    fontWeight: {
+      'regular': 400,
+      'bold': 700,
+    },
+      
 
     extend: {
+      fontStyle: {
+        italic: 'italic',
+      },
       spacing: {
         '72': '18rem',
         '84': '21rem',
