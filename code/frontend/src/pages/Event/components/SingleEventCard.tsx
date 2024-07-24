@@ -40,10 +40,6 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
   handleDelete,
   eventIsMine,
 }) => {
-  useEffect(() => {
-    console.log("selectedEventDate", selectedEventDate);
-    
-  }, [selectedEventDate]);
   return (
     <div className="rounded-lg shadow-xl overflow-hidden max-w-md p-2 m-2 pt-8 mt-4">
       <img className="rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
@@ -58,7 +54,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
                 labelPlacement="floating"
                 value={selectedEventDate?.id}
                 onIonChange={(e) => {
-                  setSelectedEventDate(event.subEvents.find((eventDate: any) => eventDate.id === e.detail.value))
+                  setSelectedEventDate(event.subEvents.find((eventDate: any) => eventDate.id === e.detail.value));
                 }}
               >
                 {event.subEvents.map((eventDate: any) => (
@@ -69,7 +65,10 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
               </IonSelect> 
             </IonItem>
             <IonButton
-              style={{ width: "30%" }}
+              fill={selectedEventDate?.is_subscribed ? "outline" : "solid"}
+              color="success"
+              style={{ width: "40%" }}
+              // size="default"
               onClick={() => {
                 handleSubscribe("single");
               }}
@@ -82,34 +81,22 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
         )}
         <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">{event.title}</h2>
       </div>
-      <div className="pb-2">
-        <IonButton className="w-full rounded-lg"
-          onClick={() => {
-            handleSubscribe();
-          }}
-        >
-          {!subscribed && <FlowerIcon />}
-          {subscribed && <CheckMarkIcon />}
-          <p>{subscribed ? "Subscribed" : "Join"}</p>
-        </IonButton>
-      </div>
       <div className="p-4">
-        <p className="font-be-vietnam text-16 font-regular text-textBlueCard self-end">{selectedEventDate.address}</p>
-        <p className="font-be-vietnam text-14 font-regular text-green">{event.total_participants} participants</p>
+        <p className="text-grey-600 self-end">{selectedEventDate?.address}</p>
+        <p className="text-green-600">{selectedEventDate?.participants} participants</p>
       </div>
       {!eventIsMine && (
         <div className="p-4">
           <IonButton
-            expand="full"
-            color="primary"
+            fill={subscribedToAll ? "outline" : "solid"}
+            color="success"
+            // expand="full"
             onClick={() => {
               handleSubscribe("all");
             }}
           >
             {!subscribedToAll && <FlowerIcon />}
             {subscribedToAll && <CheckMarkIcon />}
-            {/* {subscribedToAll ? "You subscribed to all dates" : "Join all dates"}
-             */}
             {subscribedToAll && event.subEvents.length === 1 && "Subscribed"}
             {!subscribedToAll && event.subEvents.length === 1 && "Join"}
             {!subscribedToAll && event.subEvents.length > 1 && "Join all dates"}
@@ -118,8 +105,8 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
         </div>
       )}
       <div className="p-4 border-t-4">
-        <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">Description</h2>
-        <p className="font-be-vietnam text-16 font-regular p-2 self-end">{event.description}</p>
+        <h2 className="text-xl font-bold mb-2 mt-0 text-black">Description</h2>
+        <p className="text-purple-600 self-end">{event?.description}</p>
       </div>
       {eventIsMine && (
         <div className="p-4 border-t-4">
