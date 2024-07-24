@@ -6,8 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use App\Service\Token\TokenDecoder;
 use App\Entity\Relation;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Publication;
+use App\Crud\RelationCrud;
+use App\Config\Relation\Type;
 
 #[Route('/relation', name: 'relation_')]
 class RelationController extends AbstractController
@@ -17,12 +22,31 @@ class RelationController extends AbstractController
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(EntityManagerInterface $entityManager, Request $request)
     {
-        $relation = new Relation();
-        $relation
-            ->setUser1Id($request->get('user1Id'))
-            ->setUser2Id($request->get('user2Id'))
-            ->setType($request->get('type')); // see \App\Config\Relation\Type
+        $token_decoder = new TokenDecoder('secret');
+        $token = $token_decoder->token_verify($request->headers->get('token'));
+        if ($token == false) {
+          return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
 
+        $request_params = json_decode($request->getContent(), true);
+
+        $relation = new Relation();
+        $relation->setUser1Id($request_params['user1Id']);
+        $relation->setUser2Id($request_params['user2Id']);
+        switch ($request_params['type']) {
+            case 'friend':
+                $relation->setType(Type::Friend);
+                break;
+            case 'follower':
+                $relation->setType(Type::Follower);
+                break;
+            case 'blacklist':
+                $relation->setType(Type::Blacklist);
+                break;
+            default:
+                return new JsonResponse(['error' => 'Invalid type'], 400);
+        }
+    
         $entityManager->persist($relation);
         $entityManager->flush();
 
@@ -32,61 +56,19 @@ class RelationController extends AbstractController
         ], 201);
     }
 
-    #[Route('/{id}', name: 'getone', methods: ['GET'])]
-    public function get(EntityManagerInterface $entityManager, int $id)
+    #[Route('/filter', name: 'filter', methods: ['GET'])]
+    public function get(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, RelationCrud $relation_crud): JsonResponse
     {
-        $relation = $entityManager->getRepository(Relation::class)->find($id);
 
-        if (!$relation) {
-            return new JsonResponse([
-                'message' => 'Relation not found',
-            ], 404);
-        }
+      $token_decoder = new TokenDecoder('secret');
+      $token = $token_decoder->token_verify($request->headers->get('token'));
 
-        return new JsonResponse([
-            'id' => $relation->getId(),
-            'user1Id' => $relation->getUser1Id(),
-            'user2Id' => $relation->getUser2Id(),
-            'type' => $relation->getType(),
-        ]);
+      if ($token == false) {
+        return new JsonResponse(['error' => 'Unauthorized'], 401);
+      } else {
+        $request_params = $request->query->all();
+        return $relation_crud->getRelations($request_params, $entityManager, $client);
+      }
     }
-
-    #[Route('/{id}', name: 'deleteone', methods: ['DELETE'])]
-    public function delete(EntityManagerInterface $entityManager, int $id)
-    {
-        $relation = $entityManager->getRepository(Relation::class)->find($id);
-
-        if (!$relation) {
-            return new JsonResponse([
-                'message' => 'Relation not found',
-            ], 404);
-        }
-
-        $entityManager->remove($relation);
-        $entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Relation deleted',
-        ]);
-    }
-
-    #[Route('/{id}', name: 'updateone', methods: ['PUT'])]
-    public function update(EntityManagerInterface $entityManager, int $id, string $content)
-    {
-        $relation = $entityManager->getRepository(Relation::class)->find($id);
-
-        if (!$relation) {
-            return new JsonResponse([
-                'message' => 'Relation not found',
-            ], 404);
-        }
-
-        $relation->setLabel($content);
-
-        $entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Relation updated',
-        ]);
-    }
+ 
 }

@@ -83,7 +83,7 @@ const NewEvent: React.FC<{ previousView: any }> = ({ previousView }) => {
         onClick={() => {
           previousView(false);
         }}
-        // style={{ position: "absolute", top: "10px", left: "10px" }}
+        // className="absolute top-4 left-4 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300 transition-colors"
       >
         <BackArrowIcon color="black" />
       </a>

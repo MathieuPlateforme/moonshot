@@ -43,11 +43,11 @@ export const GUEST_MENU = [
 ]
 
 export const USER_MENU = [
-  {
-    title: 'Feed',
-    icon: FeedIcon,
-    link: ROUTES_PATH.HOME,
-  },
+  // {
+  //   title: 'Feed',
+  //   icon: FeedIcon,
+  //   link: ROUTES_PATH.HOME,
+  // },
   {
     title: 'Events',
     icon: EventIcon,
@@ -58,26 +58,26 @@ export const USER_MENU = [
   //   icon: CalendarIcon,
   //   // link: ROUTES_PATH.EVENTS,
   // },
-  {
-    title: 'Search',
-    icon: LoopIcon,
-    // link: ROUTES_PATH.EVENTS,
-  },
-  {
-    title: 'Notifications',
-    icon: NotifIcon,
-    // link: ROUTES_PATH.EVENTS,
-  },
-  {
-    title: 'Chat',
-    icon: ChatIcon,
-    // link: ROUTES_PATH.EVENTS,
-  },
-  {
-    title: 'Profile',
-    icon: ProfileIcon,
-    link: ROUTES_PATH.PROFILE,
-  },
+  // {
+  //   title: 'Search',
+  //   icon: LoopIcon,
+  //   // link: ROUTES_PATH.EVENTS,
+  // },
+  // {
+  //   title: 'Notifications',
+  //   icon: NotifIcon,
+  //   // link: ROUTES_PATH.EVENTS,
+  // },
+  // {
+  //   title: 'Chat',
+  //   icon: ChatIcon,
+  //   // link: ROUTES_PATH.EVENTS,
+  // },
+  // {
+  //   title: 'Profile',
+  //   icon: ProfileIcon,
+  //   link: ROUTES_PATH.PROFILE,
+  // },
   {
     title: 'Logout',
     icon: LogoutIcon,

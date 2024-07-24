@@ -25,8 +25,8 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
-    if(getRole()){
-      push(ROUTES_PATH.HOME);
+    if(getRole() === 'USER'){
+      push(ROUTES_PATH.EVENTS);
     }
   }, [token]);
 
@@ -51,7 +51,7 @@ const Login: React.FC = () => {
               <ArobaseIcon className="w-5 h-5 text-gray-400 ml-2" />
             </IonItem>
             <IonItem className="flex items-center border-b border-gray-300 py-2">
-              <IonInput placeholder="Password" value={password} onIonChange={(e) => setPassword(e.detail.value!)} className="w-full px-2 py-2 text-gray-700 focus:outline-none">
+              <IonInput type="password" placeholder="Password" value={password} onIonChange={(e) => setPassword(e.detail.value!)} className="w-full px-2 py-2 text-gray-700 focus:outline-none">
                 <IonInputPasswordToggle slot="end" className="w-8 h-12 text-gray-400 ml-2"></IonInputPasswordToggle>
               </IonInput>
             </IonItem>
