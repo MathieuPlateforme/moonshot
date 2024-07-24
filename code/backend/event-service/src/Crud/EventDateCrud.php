@@ -6,11 +6,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Event;
 use App\Entity\EventDate;
+use App\Entity\EventDateParticipants;
 
 //https://symfony.com/doc/current/service_container/request.html
 class EventDateCrud
 {
-    public function postEventDate(array $request_params, EntityManagerInterface $entityManager): JsonResponse
+    public function postEventDate(array $request_params, EntityManagerInterface $entityManager, int $user_id): JsonResponse
     {
         $new_event_date = new EventDate();
         $event = $entityManager->getRepository(Event::class)->find($request_params['event_id']);
@@ -20,6 +21,13 @@ class EventDateCrud
         $new_event_date->setAddress($request_params['address']);
         $new_event_date->setCreatedAt(new \DateTime());
         $entityManager->persist($new_event_date);
+        $entityManager->flush();
+
+        $participant = new EventDateParticipants();
+        $participant->setEventDate($new_event_date);
+        $participant->setUserId($user_id);
+        $participant->setCreatedAt(new \DateTime());
+        $entityManager->persist($participant);
         $entityManager->flush();
 
         return new JsonResponse([

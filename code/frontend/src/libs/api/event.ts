@@ -22,7 +22,7 @@ export const putEvent = async (event: Object) => {
 };
 
 export const delEvent = async (event_id: string) => {
-  // return await del({ url: `${VITE_REST_API}:8001/event/delete`, options: { params: { id: event_id } } });
+  return await del({ url: `${VITE_REST_API}:8001/event/delete`, data: { id: event_id } });
 };
 
 export const postEventDate = async (eventDate: Object) => {
@@ -36,6 +36,10 @@ export const putEventDate = async (eventDate: Object) => {
 export const delEventDate = async (eventDate_id: string) => {
   // return await del({ url: `${VITE_REST_API}:8001/eventDate/delete`, options: { params: { id: eventDate_id } } });
 }
+
+export const getEventParticipations = async (params: Object | null = null) => {
+  return await get({ url: `${VITE_REST_API}:8001/event/participations`, options: { params } });
+};
 
 export const postEventParticipant = async (eventParticipant: Object) => {
   return await post({ url: `${VITE_REST_API}:8001/event/participant/new`, data: { eventParticipant }, options: {} });
