@@ -86,10 +86,11 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
         <p className="text-green-600">{selectedEventDate?.participants} participants</p>
       </div>
       {!eventIsMine && (
-        <div className="p-4">
+        <div className="p-4 flex justify-center">
           <IonButton
             fill={subscribedToAll ? "outline" : "solid"}
             color="success"
+            style={{ width: "80%" }}
             // expand="full"
             onClick={() => {
               handleSubscribe("all");

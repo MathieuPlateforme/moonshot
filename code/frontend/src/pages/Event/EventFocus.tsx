@@ -116,7 +116,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
         }}
         style={{ position: "absolute", top: "10px", left: "10px" }}
       >
-        <BackArrowIcon color="green" />
+        <BackArrowIcon color="#75DA6D" />
       </a>
       {event && (
         <SingleEventCard
