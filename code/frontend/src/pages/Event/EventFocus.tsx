@@ -11,8 +11,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
   const [selectedEventDate, setSelectedEventDate] = React.useState<any>(null);
   const [eventParticipants, setEventParticipants] = React.useState<any>(null);
   const { getId } = useAuth();
-  const [subscribed, setSubscribed] = React.useState(false);
-  const [subscribedId, setSubscribedId] = React.useState("");
+  const [subscribedToAll, setSubscribedToAll] = React.useState(false);
   const [eventIsMine, setEventIsMine] = React.useState(false);
 
   const loadEvent = async () => {
@@ -20,31 +19,63 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
     eventRequest.then((response) => {
       setEvent(response.data[0]);
       setEventParticipants(response.data["participants"]);
-      setSelectedEventDate(response.data[0].subEvents[0]);
+      if (selectedEventDate === null) {
+        setSelectedEventDate(response.data[0].subEvents[0]);
+      } else {
+        setSelectedEventDate(response.data[0].subEvents.find((eventDate: any) => eventDate.id === selectedEventDate.id));
+      }
       if (response.data[0].user_id == getId()) {
         setEventIsMine(true);
       }
     });
   };
 
-  const handleSubscribe = async () => {
-    if (!subscribed) {
-      const eventParticipant = {
-        event_date_id: event.subEvents[0].id,
-      };
-      postEventParticipant(eventParticipant).then((response) => {
-        if (response.status === 201) {
-          loadEvent();
+  const handleSubscribe = async (target: string) => {
+    if (target == "single") {
+      if (selectedEventDate.is_subscribed) {
+        delEventParticipant(selectedEventDate.participation_id).then((response) => {
+          if (response.status === 200) {
+            loadEvent();
+            setSubscribedToAll(false);
+          }
+        });
+      } else {
+        const eventParticipant = {
+          event_date_id: selectedEventDate.id,
+        };
+        postEventParticipant(eventParticipant).then((response) => {
+          if (response.status === 201) {
+            loadEvent();
+          }
+        });
+      }
+    } else if (target == "all") {
+      if (subscribedToAll) {
+        for (const eventDate of event.subEvents) {
+          delEventParticipant(eventDate.participation_id).then((response) => {
+            if (response.status === 200) {
+              // loadEvent();
+            }
+          });
         }
-      });
-    } else {
-      delEventParticipant(subscribedId).then((response) => {
-        if (response.status === 200) {
-          setSubscribed(false);
-          loadEvent();
+        setSubscribedToAll(false);
+        loadEvent();
+      } else {
+        for (const eventDate of event.subEvents) {
+          if (!eventDate.is_subscribed) {
+            const eventParticipant = {
+              event_date_id: eventDate.id,
+            };
+            postEventParticipant(eventParticipant).then((response) => {
+              if (response.status === 201) {
+                // loadEvent();
+              }
+            });
+          }
         }
-      });
-    }
+        loadEvent();
+      }
+    } else return;
   };
 
   const handleDelete = async () => {
@@ -61,16 +92,21 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
     loadEvent();
   }, [event_id]);
 
-  useEffect(() => {
-    if (eventParticipants === null) return;
-    for (const participation of eventParticipants) {
-      if (participation.user_id == getId()) {
-        setSubscribed(true);
-        setSubscribedId(participation.id);
-        return;
+    useEffect(() => {
+    if(event === null) return;
+    let count = 0;
+    for(const eventDate of event.subEvents){
+      for(const participation of eventParticipants){
+        if(participation.event_date_id == eventDate.id && participation.user_id == getId()){
+          eventDate.participation_id = participation.id;
+          if(eventDate.is_subscribed == true){
+            count++;
+          }
+        }
       }
     }
-  }, [eventParticipants]);
+    if(count == event.subEvents.length) setSubscribedToAll(true);
+  }, [event]);
 
   return (
     <IonContent fullscreen>
@@ -88,7 +124,7 @@ const EventFocus: React.FC<{ event_id: string | null; previousView: any }> = ({ 
           selectedEventDate={selectedEventDate}
           setSelectedEventDate={setSelectedEventDate}
           eventParticipants={eventParticipants}
-          subscribed={subscribed}
+          subscribedToAll={subscribedToAll}
           handleSubscribe={handleSubscribe}
           handleDelete={handleDelete}
           eventIsMine={eventIsMine}

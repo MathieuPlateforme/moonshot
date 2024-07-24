@@ -24,9 +24,9 @@ interface SingleEventCardProps {
   eventParticipants: any;
   selectedEventDate: any;
   setSelectedEventDate: any;
-  subscribed: boolean;
+  subscribedToAll: boolean;
   eventIsMine: boolean;
-  handleSubscribe: () => void;
+  handleSubscribe: (target: string) => void;
   handleDelete: () => void;
 }
 
@@ -35,38 +35,56 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
   selectedEventDate,
   setSelectedEventDate,
   eventParticipants,
-  subscribed,
+  subscribedToAll,
   handleSubscribe,
   handleDelete,
   eventIsMine,
 }) => {
+  useEffect(() => {
+    console.log("selectedEventDate", selectedEventDate);
+    
+  }, [selectedEventDate]);
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
       <img className="w-full" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
       <div className="p-4">
-        {event.subEvents.length == 1 ? (
+        {event.subEvents.length === 1 ? (
           <p className="text-purple-600 mb-1">{event.subEvents[0].start_date}</p>
         ) : (
-          <IonList>
-            <IonItem>
+          <IonList style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <IonItem style={{ width: "50%" }}>
               <IonSelect
                 label="Dates"
                 labelPlacement="floating"
-                value={selectedEventDate.start_date}
+                value={selectedEventDate?.id}
                 onIonChange={(e) => {
-                  setSelectedEventDate(event.subEvents[e.detail.value - 1]);
+                  setSelectedEventDate(event.subEvents.find((eventDate: any) => eventDate.id === e.detail.value))
                 }}
               >
                 {event.subEvents.map((eventDate: any) => (
-                  <IonSelectOption key={eventDate.id} value={eventDate.id}>
-                    {eventDate.start_date}
+                  <IonSelectOption key={eventDate?.id} value={eventDate?.id}>
+                    {eventDate?.start_date}
                   </IonSelectOption>
                 ))}
-              </IonSelect>
+              </IonSelect> 
             </IonItem>
+            <IonButton
+              style={{ width: "30%" }}
+              onClick={() => {
+                handleSubscribe("single");
+              }}
+            >
+              {!selectedEventDate?.is_subscribed && <FlowerIcon />}
+              {selectedEventDate?.is_subscribed && <CheckMarkIcon />}
+              {selectedEventDate?.is_subscribed ? "Subscribed" : "Join"}
+            </IonButton>
           </IonList>
         )}
         <h2 className="text-xl font-bold mb-2 mt-0 text-black">{event.title}</h2>
+      </div>
+      <div className="p-4">
+        <p className="text-grey-600 self-end">{selectedEventDate?.address}</p>
+        <p className="text-green-600">{selectedEventDate?.participants} participants</p>
       </div>
       {!eventIsMine && (
         <div className="p-4">
@@ -74,22 +92,23 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
             expand="full"
             color="primary"
             onClick={() => {
-              handleSubscribe();
+              handleSubscribe("all");
             }}
           >
-            {!subscribed && <FlowerIcon />}
-            {subscribed && <CheckMarkIcon />}
-            <p>{subscribed ? "Subscribed" : "Join"}</p>
+            {!subscribedToAll && <FlowerIcon />}
+            {subscribedToAll && <CheckMarkIcon />}
+            {/* {subscribedToAll ? "You subscribed to all dates" : "Join all dates"}
+             */}
+            {subscribedToAll && event.subEvents.length === 1 && "Subscribed"}
+            {!subscribedToAll && event.subEvents.length === 1 && "Join"}
+            {!subscribedToAll && event.subEvents.length > 1 && "Join all dates"}
+            {subscribedToAll && event.subEvents.length > 1 && "Subscribed to all dates"}
           </IonButton>
         </div>
       )}
-      <div className="p-4">
-        <p className="text-grey-600 self-end">{selectedEventDate.address}</p>
-        <p className="text-green-600">{event.total_participants} participants</p>
-      </div>
       <div className="p-4 border-t-4">
         <h2 className="text-xl font-bold mb-2 mt-0 text-black">Description</h2>
-        <p className="text-purple-600 self-end">{event.description}</p>
+        <p className="text-purple-600 self-end">{event?.description}</p>
       </div>
       {eventIsMine && (
         <div className="p-4 border-t-4">

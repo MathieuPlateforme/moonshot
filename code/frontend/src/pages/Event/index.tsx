@@ -16,6 +16,7 @@ const EventFeed: React.FC = () => {
   const [calendarIsOpen, setCalendarIsOpen] = useState(false);
   const [searchIsOpen, setSearchIsOpen] = useState(false);
   const [newEventIsOpen, setNewEventIsOpen] = useState(false);
+  const [footerIsVisible, setFooterIsVisible] = useState(true);
   const [headerIsVisible, setHeaderIsVisible] = useState(true);
 
   return (
@@ -23,7 +24,7 @@ const EventFeed: React.FC = () => {
       <IonHeader>
         <div
           style={{
-            display: "flex",
+            display: headerIsVisible ? "flex" : "none",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
@@ -65,8 +66,8 @@ const EventFeed: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {view === "list" && <EventList headerIsVisible={setHeaderIsVisible} />}
-        {view === "user_events" && <UserEvents headerIsVisible={setHeaderIsVisible}/>}
+        {view === "list" && <EventList footerIsVisible={setFooterIsVisible} headerIsVisible={setHeaderIsVisible}/>}
+        {view === "user_events" && <UserEvents footerIsVisible={setFooterIsVisible} headerIsVisible={setHeaderIsVisible}/>}
         {view === "group_events" && <CommunityEvents />}
       </IonContent>
       <IonModal isOpen={calendarIsOpen}>
@@ -78,7 +79,7 @@ const EventFeed: React.FC = () => {
       <IonModal isOpen={newEventIsOpen}>
         <NewEvent previousView={setNewEventIsOpen}/>
       </IonModal>
-      <Header isVisible={headerIsVisible} />
+      <Header isVisible={footerIsVisible} />
     </IonPage>
   );
 };

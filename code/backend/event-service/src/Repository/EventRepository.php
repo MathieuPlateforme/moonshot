@@ -32,8 +32,8 @@ class EventRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('e');
 
         foreach ($params as $key => $value) {
-            $query->andWhere("e.$key LIKE :$key")
-            ->setParameter($key, '%' . $value . '%');
+            $query->andWhere("e.$key = :$key")
+            ->setParameter($key, $value);
         }
 
         if ($limit && $limit > 0) {

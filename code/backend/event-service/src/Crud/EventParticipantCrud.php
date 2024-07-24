@@ -15,17 +15,26 @@ class EventParticipantCrud
     public function postEventParticipant(array $request_params, int $user_id, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
     {
         $event_date = $entityManager->getRepository(EventDate::class)->find($request_params['event_date_id']);
-        $new_participant = new EventDateParticipants();
-        $new_participant->setEventDate($event_date);
-        $new_participant->setUserId($user_id);
-        $new_participant->setCreatedAt(new \DateTime());
-        $entityManager->persist($new_participant);
-        $entityManager->flush();
+        $today = new \DateTime();
 
-        return new JsonResponse([
-            'message' => 'Participant added',
-            'id' => $new_participant->getId(),
-        ], 201);
+        if ($event_date->getStartDate() > $today) {
+            $new_participant = new EventDateParticipants();
+            $new_participant->setEventDate($event_date);
+            $new_participant->setUserId($user_id);
+            $new_participant->setCreatedAt(new \DateTime());
+            $entityManager->persist($new_participant);
+            $entityManager->flush();
+
+            return new JsonResponse([
+                'message' => 'Participant added',
+                'id' => $new_participant->getId(),
+            ], 201);
+        }
+        else {
+            return new JsonResponse([
+                'message' => 'Event date has passed',
+            ], 400);
+        }
     }
 
     public function getEventDateParticipants(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse

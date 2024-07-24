@@ -5,7 +5,7 @@ import { getEvents } from "../../libs/api/event";
 import { useAuth } from "../../providers/AuthProvider";
 import EventFocus from "./EventFocus";
 
-const UserEvents: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => {
+const UserEvents: React.FC<{ footerIsVisible: any; headerIsVisible: any }> = ({ footerIsVisible, headerIsVisible }) => {
   const { getId } = useAuth();
   const [userEvents, setUserEvents] = React.useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
@@ -29,10 +29,10 @@ const UserEvents: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => 
       loadUserEvents();
     }
     if (e.currentY > e.startY) {
-      headerIsVisible(false);
+      footerIsVisible(false);
     }
     if (e.currentY < e.startY) {
-      headerIsVisible(true);
+      footerIsVisible(true);
     }
   };
 

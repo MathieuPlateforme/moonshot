@@ -4,7 +4,7 @@ import EventCard from "./components/EventCard";
 import { getEvents } from "../../libs/api/event";
 import EventFocus from "./EventFocus";
 
-const EventList: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => {
+const EventList: React.FC<{ footerIsVisible: any; headerIsVisible: any }> = ({ footerIsVisible, headerIsVisible }) => {
   const [allEvents, setAllEvents] = React.useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
   const [offset, setOffset] = React.useState(0);
@@ -27,9 +27,11 @@ const EventList: React.FC<{ headerIsVisible: any }> = ({ headerIsVisible }) => {
       loadEvents();
     }
     if (e.currentY > e.startY) {
+      footerIsVisible(false);
       headerIsVisible(false);
     }
     if (e.currentY < e.startY) {
+      footerIsVisible(true);
       headerIsVisible(true);
     }
   };
