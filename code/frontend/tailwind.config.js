@@ -51,6 +51,10 @@ module.exports = {
         '84': '21rem',
         '96': '24rem',
       },
+      boxShadow: {
+        'green': '0 2px 4px -1px rgba(10, 217, 68, 0.1), 0 2px 4px -1px rgba(10, 217, 68, 0.06)',
+        'blue-card': '4px 10px 12px 4px rgba(92, 89, 231, 0.1), 4px 6px 8px 2px rgba(92, 89, 231, 0.06)',
+      },
     },
   },
   variants: {
@@ -62,5 +66,41 @@ module.exports = {
       cursor: ['disabled'],
     },
   },
-  plugins: [],
-}
+  plugins: [
+    function({ addComponents, theme }) {
+      addComponents({
+        '.card-title': {
+          color: theme('colors.black'),
+          fontSize: theme('fontSize.18'),
+          fontWeight: theme('fontWeight.bold'),
+          fontFamily: theme('fontFamily.be-vietnam'),
+        },
+        '.card-description': {
+          color: theme('colors.black'),
+          fontSize: theme('fontSize.16'),
+          fontWeight: theme('fontWeight.regular'),
+          fontFamily: theme('fontFamily.be-vietnam'),
+        },
+        '.card-date': {
+          color: theme('colors.textBlueCard'),
+          fontSize: theme('fontSize.14'),
+          fontWeight: theme('fontWeight.regular'),
+          fontFamily: theme('fontFamily.be-vietnam'),
+          fontStyle: 'italic',
+        },
+        '.card-adress': {
+          color: theme('colors.textBlueCard'),
+          fontSize: theme('fontSize.16'),
+          fontWeight: theme('fontWeight.regular'),
+          fontFamily: theme('fontFamily.be-vietnam'),
+        },
+        'card-part': {
+          color: theme('colors.green'),
+          fontSize: theme('fontSize.14'),
+          fontWeight: theme('fontWeight.regular'),
+          fontFamily: theme('fontFamily.be-vietnam'),
+        },
+    });
+    },
+  ],
+};

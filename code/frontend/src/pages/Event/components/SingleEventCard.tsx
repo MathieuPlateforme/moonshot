@@ -65,7 +65,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
             </IonItem>
           </IonList>
         )}
-        <h2 className="font-be-vietnam font-bold text-18 mb-2 mt-0 text-black">{event.title}</h2>
+        <h2 className="card-title mb-2 mt-0">{event.title}</h2>
       </div>
       <div className="pb-2">
         <IonButton className="w-full rounded-lg"
