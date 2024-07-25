@@ -58,21 +58,21 @@ export const USER_MENU = [
   //   icon: CalendarIcon,
   //   // link: ROUTES_PATH.EVENTS,
   // },
-  // {
-  //   title: 'Search',
-  //   icon: LoopIcon,
-  //   // link: ROUTES_PATH.EVENTS,
-  // },
-  // {
-  //   title: 'Notifications',
-  //   icon: NotifIcon,
-  //   // link: ROUTES_PATH.EVENTS,
-  // },
-  // {
-  //   title: 'Chat',
-  //   icon: ChatIcon,
-  //   // link: ROUTES_PATH.EVENTS,
-  // },
+  {
+    title: 'Search',
+    icon: LoopIcon,
+    // link: ROUTES_PATH.EVENTS,
+  },
+  {
+    title: 'Notifications',
+    icon: NotifIcon,
+    // link: ROUTES_PATH.EVENTS,
+  },
+  {
+    title: 'Chat',
+    icon: ChatIcon,
+    // link: ROUTES_PATH.EVENTS,
+  },
   // {
   //   title: 'Profile',
   //   icon: ProfileIcon,
