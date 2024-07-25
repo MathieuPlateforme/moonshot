@@ -3,27 +3,173 @@
   "name": "Spotty API Gateway",
   "endpoints": [
     {
-      "endpoint": "/login",
+      "endpoint": "/auth-service/login",
       "method": "POST",
       "output_encoding": "no-op",
       "backend": [
         {
           "url_pattern": "/login",
           "host": [
-            "http://hello-world-api:8000"
+            "http://auth-service:8081"
           ]
         }
       ]
     },
     {
-      "endpoint": "/register",
+      "endpoint": "/auth-service/refresh",
       "method": "POST",
       "output_encoding": "no-op",
       "backend": [
         {
-          "url_pattern": "/register",
+          "url_pattern": "/refresh",
           "host": [
-            "http://hello-world-api:8000"
+            "http://auth-service:8081"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/auth-service/health",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/health",
+          "host": [
+            "http://auth-service:8081"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/health",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/health",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/users",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/users",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/users",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/users",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/users/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/users/{id}",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/users/{id}",
+      "method": "PUT",
+      "backend": [
+        {
+          "url_pattern": "/users/{id}",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/users/{id}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "url_pattern": "/users/{id}",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/addresses",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/addresses",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/addresses",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/addresses",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/addresses/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/addresses/{id}",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/addresses/{id}",
+      "method": "PUT",
+      "backend": [
+        {
+          "url_pattern": "/addresses/{id}",
+          "host": [
+            "http://user-service:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/user-service/addresses/{id}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "url_pattern": "/addresses/{id}",
+          "host": [
+            "http://user-service:8000"
           ]
         }
       ]

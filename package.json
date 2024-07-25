@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jwt-decode": "^4.0.0",
+    "react-google-button": "^0.8.0"
+  }
+}
