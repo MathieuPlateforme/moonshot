@@ -64,7 +64,7 @@ class PublicationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'getone', methods: ['GET'])]
-    public function get(EntityManagerInterface $entityManager, int $id)
+    public function get(EntityManagerInterface $entityManager, HttpClientInterface $client, int $id)
     {
         $publication = $entityManager->getRepository(Publication::class)->find($id);
 
@@ -74,6 +74,9 @@ class PublicationController extends AbstractController
             ], 404);
         }
 
+        $file_request = new RequestService($client);
+        $file_response = $file_request->getMedia(['table' => 'publication', 'id' => $publication->getId()]);
+
         return new JsonResponse([
             'id' => $publication->getId(),
             'content' => $publication->getContent(),
@@ -81,6 +84,7 @@ class PublicationController extends AbstractController
             'views' => $publication->getViews(),
             'authorId' => $publication->getAuthorId(),
             'eventId' => $publication->getEventId(),
+            'media' => $file_response
         ]);
     }
 

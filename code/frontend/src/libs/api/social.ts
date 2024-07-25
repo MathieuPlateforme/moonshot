@@ -33,12 +33,15 @@ export const getComments = async (params: Object | null = null) => {
   return await get({ url: `${VITE_REST_API}:8003/comment/list`, options: { params } });
 }
 
-export const getPublicationComments = async (comment: Object) => {
-  const url = `${VITE_REST_API}:8003/publication/${comment.publication_id}/comments`;
+export const getPublicationComments = async (req: Object) => {
+  const url = `${VITE_REST_API}:8003/publication/${req.publication_id}/comments`;
   return await get({ url });
 }
 
-
+export const postComment = async (req: Object) => {
+  console.log("POSTCOMMENT", req);
+  return await post({ url: `${VITE_REST_API}:8003/comment/new`, data: req , options: {} });
+}
 
 /***** SOCIAL *****/
 

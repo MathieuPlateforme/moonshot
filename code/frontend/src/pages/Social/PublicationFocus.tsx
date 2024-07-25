@@ -1,19 +1,31 @@
 import React, { useEffect } from "react";
 import { IonContent } from "@ionic/react";
 import SinglePublicationCard from "./components/SinglePublicationCard";
-import { getPublication , getPublicationComments} from "../../libs/api/social";
+import { getPublication , getPublicationComments, postComment} from "../../libs/api/social";
 import { BackArrowIcon } from "../../icons/BackArrowIcon";
 import { useAuth } from "../../providers/AuthProvider";
+import { post } from "@/libs/utils";
 
 const PublicationFocus: React.FC<{ publication_id: string | null; previousView: any }> = ({ publication_id, previousView }) => {
   const [publication, setPublication] = React.useState<any>(null);
   const [comments, setComments] = React.useState<any>([]);
+  const [commentContent, setCommentContent] = React.useState("");
   const [selectedPublicationDate, setSelectedPublicationDate] = React.useState<any>(null);
   const [publicationParticipants, setPublicationParticipants] = React.useState<any>(null);
   const { getId } = useAuth();
   const userId = getId();
   const [subscribed, setSubscribed] = React.useState(false);
   const [subscribedId, setSubscribedId] = React.useState("");
+
+  const sendComment = async (comment: string) => {
+    console.log("newcom", comment);
+    try {
+      const response = await postComment({ content: comment, authorId: 80, publication: publication, publication_id: publication_id });
+      console.log("API response", response); 
+    } catch (error) {
+      console.error("Error posting comment", error);
+    }
+  };
 
   const loadPublication = async () => {
     try {
@@ -67,7 +79,7 @@ const PublicationFocus: React.FC<{ publication_id: string | null; previousView: 
       {publication && (
         <SinglePublicationCard
           publication={publication}
-          // handleSubscribe={handleSubscribe}
+          sendComment={sendComment}
           authorId={userId}
           // userId={userId}
           comments={comments}
