@@ -4,7 +4,7 @@ import SinglePublicationCard from "./components/SinglePublicationCard";
 import { getPublication , getPublicationComments, postComment} from "../../libs/api/social";
 import { BackArrowIcon } from "../../icons/BackArrowIcon";
 import { useAuth } from "../../providers/AuthProvider";
-import { post } from "@/libs/utils";
+// import { post } from "@/libs/utils";
 
 const PublicationFocus: React.FC<{ publication_id: string | null; previousView: any }> = ({ publication_id, previousView }) => {
   const [publication, setPublication] = React.useState<any>(null);

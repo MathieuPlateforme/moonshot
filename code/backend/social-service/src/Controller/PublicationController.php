@@ -76,6 +76,7 @@ class PublicationController extends AbstractController
 
         $file_request = new RequestService($client);
         $file_response = $file_request->getMedia(['table' => 'publication', 'id' => $publication->getId()]);
+        $user = $file_request->getUser($publication->getAuthorId());
 
         return new JsonResponse([
             'id' => $publication->getId(),
@@ -84,7 +85,9 @@ class PublicationController extends AbstractController
             'views' => $publication->getViews(),
             'authorId' => $publication->getAuthorId(),
             'eventId' => $publication->getEventId(),
-            'media' => $file_response
+            'media' => $file_response,
+            'createdAt' => $publication->getCreatedAt(),
+            'author' => $user
         ]);
     }
 

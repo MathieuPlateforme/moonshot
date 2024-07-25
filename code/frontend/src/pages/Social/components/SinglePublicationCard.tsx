@@ -7,7 +7,11 @@ interface SinglePublicationCardProps {
   publication: {
     id: number;
     content: string;
-    createdAt: string;
+    createdAt: {
+      date: string;
+      timezone_type: number;
+      timezone: string;
+    };
     media: {
       id: number;
       url: string;
@@ -16,6 +20,17 @@ interface SinglePublicationCardProps {
     views: number;
     comments: any[];
     authorId: number;
+    author: {
+      id: number;
+      email: string;
+      firstname: string;
+      lastname: string;
+      media: {
+        id: number;
+        url: string;
+        file: string;
+      };
+    };
   };
   sendComment: (comment: string) => void;
   authorId: string;
@@ -31,12 +46,16 @@ const SinglePublicationCard: React.FC<SinglePublicationCardProps> = ({
   const inputRef = useRef<HTMLIonInputElement>(null);
 
   useEffect(() => {
+    console.log("Publication", publication);
+    
   }, [publication]);
   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
       <img className="w-full" src={`data:image/jpeg;base64,${publication?.media?.file}`} alt="Publication" />
-      <p className="p-4 m-5">Écrit par {publication?.authorId} le {publication?.createdAt}</p>
+      <p className="p-4 m-5">Écrit par {publication.author.firstname}
+         {/* le {publication?.createdAt?.date} */}
+         </p>
       <div className="p-4">
         {publication?.content}
 

@@ -72,7 +72,7 @@ const PublicationCard: React.FC<PublicationCardProps> = ({ publication, onButton
           <div className="p-4">
             <p className="text-purple-600 mb-1">{publication.createdAt}</p>
             <h2 className="text-xl font-bold mb-2 mt-0 text-black">{publication.content}</h2>
-            <p className="text-purple-600 self-end">Écrit par {publication.authorId}</p>
+            <p className="text-purple-600 self-end">Écrit par {publication.author.firstname}</p>
             <p className="text-green-600">{publication.views} vues</p>
             <p className="text-green-600">{publication.nbComments} commentaires</p>
           </div>
