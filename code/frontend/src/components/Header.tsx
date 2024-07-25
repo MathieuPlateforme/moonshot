@@ -35,17 +35,17 @@ const Header: React.FC<HeaderProps> = ({isVisible}) => {
 
   return (
     <header className={headerClassName}>
-      <nav className="container mx-auto px-4 py-2">
-        <ul className="flex items-center">
+      <nav className="container px-4 py-2">
+        <ul className="flex items-center justify-between">
           {menu.map((item: any, index: number) => (
             <li key={index} className="mr-4">
               {item?.link ? (
                 <a href={item.link} className="text-white hover:text-gray-300">
-                  {item.icon && <item.icon className="w-6 h-6" />}
+                  {item.icon && <item.icon className="w-8 h-8" />}
                 </a>
               ) : (
                 <a onClick={() => handleAction(item.action)} className="text-white hover:text-gray-300">
-                  {item.icon && <item.icon className="w-6 h-6" />}
+                  {item.icon && <item.icon className="w-8 h-8" />}
                 </a>
               )}
             </li>

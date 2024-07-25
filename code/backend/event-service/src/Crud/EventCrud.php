@@ -40,7 +40,7 @@ class EventCrud
         }
     }
 
-    public function getEvent(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    public function getEvent(array $request_params, EntityManagerInterface $entityManager, HttpClientInterface $client, int $user_id): JsonResponse
     {
         $load_participants = false;
         $limit = 0;
@@ -62,8 +62,8 @@ class EventCrud
             unset($request_params['participants']);
         }
 
-        if (count($request_params) > 0) {       
-            $events = $entityManager->getRepository(Event::class)->findBy($request_params);
+        if (count($request_params) > 0) {
+            $events = $entityManager->getRepository(Event::class)->FindAllWithParams($request_params, $limit, $offset);
         } else {
             $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
         }
@@ -73,30 +73,52 @@ class EventCrud
             $file_request = new RequestService($client);
             $file_response = $file_request->getMedia(['table' => 'event', 'id' => $event->getId()]);
             $event_dates = $event->getEventDates();
+            // if(count($event_dates) == 0){
+            //     continue;
+            // }
             $subEvents = [];
             $total_participants = 0;
+            $today_date = new \DateTime();
             foreach ($event_dates as $event_date) {
-                $participants = $event_date->getEventDateParticipants();
-                $total_participants += count($participants);
-                $subEvents[] = [
-                    'id' => $event_date->getId(),
-                    'start_date' => $event_date->getStartDate()->format('Y-m-d H:i'),
-                    'end_date' => $event_date->getEndDate()->format('Y-m-d H:i'),
-                    'address' => $event_date->getAddress(),
-                    'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
-                    'participants' => count($participants),
-                ];
-                if($load_participants){               
+                if ($event_date->getStartDate() > $today_date) {
+                    $participants = $event_date->getEventDateParticipants();
+                    $user_is_subscribed = false;
                     foreach ($participants as $participant) {
-                        $participants_list[] = [
-                            'id' => $participant->getId(),
-                            'user_id' => $participant->getUserId(),
-                            'event_date_id' => $participant->getEventDate()->getId(),
-                            'created_at' => $participant->getCreatedAt()->format('Y-m-d H:i'),
-                        ];
+                        if ($participant->getUserId() == $user_id) {
+                            $user_is_subscribed = true;
+                        }
+                    }
+                    $total_participants += count($participants);
+                    $subEvents[] = [
+                        'id' => $event_date->getId(),
+                        'start_date' => $event_date->getStartDate()->format('Y-m-d H:i'),
+                        'end_date' => $event_date->getEndDate()->format('Y-m-d H:i'),
+                        'address' => $event_date->getAddress(),
+                        'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
+                        'is_subscribed' => $user_is_subscribed,
+                        'participants' => count($participants),
+                    ];
+                    if ($load_participants) {
+                        foreach ($participants as $participant) {
+                            $participants_list[] = [
+                                'id' => $participant->getId(),
+                                'user_id' => $participant->getUserId(),
+                                'event_date_id' => $participant->getEventDate()->getId(),
+                                'created_at' => $participant->getCreatedAt()->format('Y-m-d H:i'),
+                            ];
+                        }
                     }
                 }
             }
+
+            if (count($subEvents) > 1) {
+                usort($subEvents, function ($a, $b) {
+                    $aStartDate = new \DateTime($a['start_date']);
+                    $bStartDate = new \DateTime($b['start_date']);
+                    return $aStartDate <=> $bStartDate;
+                });
+            }
+
             $eventData[] = [
                 'id' => $event->getId(),
                 'type' => $event->getType()->getName(),
@@ -110,10 +132,25 @@ class EventCrud
                 'total_participants' => $total_participants,
                 'offset' => $offset,
             ];
-            if($load_participants){
+            if ($load_participants) {
                 $eventData['participants'] = $participants_list;
             }
         }
+
+        // foreach($eventData as $event){
+        //     if(count($event['subEvents']) == 0){
+        //         unset($event);
+        //     }
+        // }
+
+        // if (count($eventData) > 2) {
+        //     usort($eventData, function ($a, $b) {
+        //         $aStartDate = new \DateTime($a['subEvents'][0]['start_date']);
+        //         $bStartDate = new \DateTime($b['subEvents'][0]['start_date']);
+        //         return $aStartDate <=> $bStartDate;
+        //     });
+        // }
+
         return new JsonResponse($eventData, 200);
     }
 
@@ -140,7 +177,7 @@ class EventCrud
         }
 
         // if (count($request_params) > 0) {       
-            $events = $entityManager->getRepository(Event::class)->FindAllWithAutoComplete($request_params, $limit, $offset);
+        $events = $entityManager->getRepository(Event::class)->FindAllWithAutoComplete($request_params, $limit, $offset);
         // } else {
         //     $events = $entityManager->getRepository(Event::class)->findAllWithLimitAndOffset($limit, $offset);
         // }
@@ -163,7 +200,7 @@ class EventCrud
                     'created_at' => $event_date->getCreatedAt()->format('Y-m-d H:i'),
                     'participants' => count($participants),
                 ];
-                if($load_participants){               
+                if ($load_participants) {
                     foreach ($participants as $participant) {
                         $participants_list[] = [
                             'id' => $participant->getId(),
@@ -187,10 +224,35 @@ class EventCrud
                 'total_participants' => $total_participants,
                 'offset' => $offset,
             ];
-            if($load_participants){
+            if ($load_participants) {
                 $eventData['participants'] = $participants_list;
             }
         }
         return new JsonResponse($eventData, 200);
+    }
+
+    public function deleteEvent(int $event_id, EntityManagerInterface $entityManager, HttpClientInterface $client): JsonResponse
+    {
+        $event = $entityManager->getRepository(Event::class)->find($event_id);
+        if ($event) {
+            $file_request = new RequestService($client);
+            $file_response = $file_request->deleteMedia($event_id);
+            if ($file_response['status'] !== 'ok') {
+                return new JsonResponse([
+                    'message' => 'Error deleting media',
+                    'path' => 'src/Controller/EventController.php',
+                ], 500);
+            } else {
+                $entityManager->remove($event);
+                $entityManager->flush();
+                return new JsonResponse([
+                    'message' => 'Event deleted',
+                ], 200);
+            }
+        } else {
+            return new JsonResponse([
+                'message' => 'Event not found',
+            ], 404);
+        }
     }
 }

@@ -37,7 +37,20 @@ class EventController extends AbstractController
             return new JsonResponse(['error' => 'Unauthorized'], 401);
         } else {
             $request_params = $request->query->all();
-            return $event_crud->getEvent($request_params, $entityManager, $client);
+            return $event_crud->getEvent($request_params, $entityManager, $client, $token['id']);
+        }
+    }
+
+    #[Route('/event/delete', name: 'app_delete_event')]
+    public function deleteEvent(EntityManagerInterface $entityManager, Request $request, HttpClientInterface $client, EventCrud $event_crud): JsonResponse
+    {
+        $token_decoder = new TokenDecoder('secret');
+        $token = $token_decoder->token_verify($request->headers->get('token'));
+        if ($token == false) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        } else {
+            $request_params = json_decode($request->getContent(), true);
+            return $event_crud->deleteEvent($request_params['id'], $entityManager, $client);
         }
     }
 

@@ -31,7 +31,6 @@ class MediaController extends AbstractController
         $data = base64_decode($file);
         $filename = uniqid() . '.png';
         $path = '../assets/' . $media_table . '_medias/' . $filename;
-        // $path = $this->getParameter('kernel.project_dir/assets/' . $media_table . '_medias/' . $filename);
         file_put_contents($path, $data);
 
         switch ($media_table) {
@@ -90,13 +89,8 @@ class MediaController extends AbstractController
     public function getMedia(Request $request, EntityManagerInterface $entityManager)
     {
         $params = $request->query->all();
-        // return $this->json($params);
         $media_table = $params['table'];
         $media_id = $params['id'];
-        // return $this->json([
-        //     'table' => $media_table,
-        //     'id' => $media_id,
-        // ]);
 
         switch ($media_table) {
             case 'publication':
@@ -119,6 +113,39 @@ class MediaController extends AbstractController
             'id' => $media->getId(),
             'url' => $media->getUrl(),
             'file' => base64_encode(fread($fileHandler, filesize('../assets/' . $media_table . '_medias/' . $media->getUrl()))),
+        ], 200);
+    }
+
+    #[Route('/media/delete', methods: ['DELETE'])]
+    public function deleteMedia(Request $request, EntityManagerInterface $entityManager)
+    {
+        $request_params = json_decode($request->getContent(), true);
+        $media_table = $request_params['table'];
+        $media_id = $request_params['id'];
+
+        switch ($media_table) {
+            case 'publication':
+                $media = $entityManager->getRepository(PublicationMedia::class)->findOneBy(['publication_id' => $media_id]);
+                break;
+            case 'event':
+                $media = $entityManager->getRepository(EventMedia::class)->findOneBy(['event_id' => $media_id]);
+                break;
+            case 'user':
+                $media = $entityManager->getRepository(UserMedia::class)->findOneBy(['user_id' => $media_id]);
+                break;
+            case 'chat':
+                $media = $entityManager->getRepository(ChatMedia::class)->find($media_id);
+                break;
+        }
+
+        $path = '../assets/' . $media_table . '_medias/' . $media->getUrl();
+        unlink($path);
+
+        $entityManager->remove($media);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'status' => 'ok',
         ], 200);
     }
 }

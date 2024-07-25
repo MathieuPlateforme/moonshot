@@ -44,6 +44,7 @@ pub async fn create_user(user_dto: web::Json<CreateUserDto>) -> impl Responder {
         email: user_dto.email.clone(),
         username: user_dto.username.clone(),
         password: user_dto.password.clone(),
+        role: user_dto.role.clone(),
         user_id: user.user_id,
     };
 
@@ -117,6 +118,7 @@ pub async fn update_user(path: web::Path<(uuid::Uuid,)>, user_dto: web::Json<Upd
         email: user_dto.email.clone().unwrap_or("".to_string()),
         username: user_dto.username.clone().unwrap_or("".to_string()),
         password: user_dto.password.clone().unwrap_or("".to_string()),
+        role: user_dto.role.clone().unwrap_or("".to_string()),
         user_id,
     };
 
@@ -142,7 +144,7 @@ pub async fn delete_user(path: web::Path<(uuid::Uuid,)>) -> impl Responder {
     let user_id = path.into_inner().0;
     let result = diesel::delete(users::table.find(user_id)).execute(&mut connection);
 
-    let payload = serde_json::to_string(&user_id).unwrap();
+    let payload = serde_json::to_string(&json!({"user_id": user_id.to_string()})).unwrap();
     let channel = setup_rabbitmq().await.expect("Failed to connect to RabbitMQ");
     let _confirmation = channel.basic_publish(
         EXCHANGE_NAME,

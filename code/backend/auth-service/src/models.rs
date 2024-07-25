@@ -21,17 +21,17 @@ impl fmt::Display for Role {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct User {
     #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
     pub id: Option<ObjectId>,
+    pub user_id: String,
     pub username: String,
     pub hashed_password: String,
     pub email: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub is_active: bool,
-    pub role: Role,
+    pub created_at: Option<DateTime<Utc>>,
+    pub updated_at: Option<DateTime<Utc>>,
+    pub role: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -44,4 +44,12 @@ pub struct TokenRequest {
 pub struct TokenResponse {
     pub access_token: String,
     pub refresh_token: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct UserData {
+    pub user_id: String,
+    pub username: String,
+    pub email: String,
+    pub role: String,
 }

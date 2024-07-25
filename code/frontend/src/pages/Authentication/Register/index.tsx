@@ -1,6 +1,6 @@
 //RegisterForm
 
-import React from "react";
+import React, { useEffect } from "react";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonList, IonInputPasswordToggle } from "@ionic/react";
 import { ArobaseIcon } from '../../../icons/ArobaseIcon';
 import { CalendarIcon } from '../../../icons/CalendarIcon';
@@ -19,18 +19,17 @@ const Register: React.FC = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const { getRole } = useAuth();
   const { push } = useHistory();
 
-  if (getRole() === 'USER') {
-    push(ROUTES_PATH.HOME);
-  }
 
   const { VITE_REST_API } = import.meta.env;
 
   const handleRegister = async () => {
     const registerRequest = await post({ url: `${VITE_REST_API}:8000/register`, data: { firstName, lastName, email, username, password }, options: {} });
-    console.log(registerRequest);
+
+    if(registerRequest.status === 201){
+      push(ROUTES_PATH.LOGIN);
+    }
   };
 
   const handleGoogleRegister = () => {
