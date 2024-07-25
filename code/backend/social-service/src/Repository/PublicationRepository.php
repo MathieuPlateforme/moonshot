@@ -19,11 +19,12 @@ class PublicationRepository extends ServiceEntityRepository
     public function findAllWithLimitAndOffset(int $limit, int $offset): array
     {
         $query = $this->createQueryBuilder('e')
+            ->andWhere('e.status = :status')
+            ->setParameter('status', 'published')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
         $request = $query->getQuery();
-
         return $request->execute();
     }
 }

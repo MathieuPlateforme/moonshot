@@ -33,8 +33,6 @@ interface PublicationCardProps {
 }
 
 const PublicationCard: React.FC<PublicationCardProps> = ({ publication, onButtonClick }) => {
-  if (publication.status === "published") {
-    // ! probably best to do it at the request
     if (publication.eventId === null) {
       return (
         <div
@@ -81,7 +79,6 @@ const PublicationCard: React.FC<PublicationCardProps> = ({ publication, onButton
         </div>
       );
     }
-  }
 };
 
 export default PublicationCard;
