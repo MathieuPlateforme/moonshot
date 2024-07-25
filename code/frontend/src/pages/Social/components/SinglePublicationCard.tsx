@@ -8,11 +8,11 @@ interface SinglePublicationCardProps {
     id: number;
     content: string;
     createdAt: string;
-    // media: {
-    //   id: number;
-    //   url: string;
-    //   file: string;
-    // } | null;
+    media: {
+      id: number;
+      url: string;
+      file: string;
+    } | null;
     views: number;
     comments: any[];
     authorId: number;
@@ -35,7 +35,7 @@ const SinglePublicationCard: React.FC<SinglePublicationCardProps> = ({
   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 max-w-md">
-      {/* <img className="w-full" src={`data:image/jpeg;base64,${publication?.media?.file}`} alt="Publication" /> */}
+      <img className="w-full" src={`data:image/jpeg;base64,${publication?.media?.file}`} alt="Publication" />
       <p className="p-4 m-5">Écrit par {publication?.authorId} le {publication?.createdAt}</p>
       <div className="p-4">
         {publication?.content}

@@ -24,7 +24,7 @@ const PublicationFocus: React.FC<{ publication_id: string | null; previousView: 
       console.log("API response", response); 
     } catch (error) {
       console.error("Error posting comment", error);
-    }  
+    }
   };
 
   const loadPublication = async () => {
