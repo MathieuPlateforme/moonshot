@@ -65,7 +65,7 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
       <img className="rounded-2xl" src={`data:image/jpeg;base64,${event.media.file}`} alt="Event" />
       <div className="p-4">
         {event.subEvents.length == 1 ? (
-          <p className="mb-1 font-be-vietnam text-14 font-regular italic text-textBlueCard">{event.subEvents[0].start_date}</p>
+          <p className="mb-1 card-date">{event.subEvents[0].start_date}</p>
         ) : (
           <IonList style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
             <IonItem style={{ width: "50%" }}>
@@ -103,14 +103,14 @@ const SingleEventCard: React.FC<SingleEventCardProps> = ({
       </div>
       <div className="p-4">
         <p
-          className="text-grey-600 self-end"
+          className="card-adress"
           onClick={() => {
             setIsOpen(true);
           }}
         >
           {selectedEventDate?.address}
         </p>
-        <p className="text-green-600">{selectedEventDate?.participants} participants</p>
+        <p className="font-be-vietnam text-14 font-regular text-green">{selectedEventDate?.participants} participants</p>
       </div>
       {!eventIsMine && (
         <div className="p-4 flex justify-center">
